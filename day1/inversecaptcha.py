@@ -9,17 +9,20 @@ def part1():
 		if d == DATA[i - 1]:
 			total += int(d)
 
-	print(total)
+	return total
+
 
 def part2():
 	total = 0
+	half = len(DATA) // 2
 
 	for i, d in enumerate(DATA):
-		if d == DATA[(i + len(DATA) // 2) % len(DATA)]:
+		if d == DATA[(i + half) % len(DATA)]:
 			total += int(d)
 
-	print(total)
+	return total
+
 
 if __name__ == '__main__':
-	part1()
-	part2()
+	print("Part 1: {}".format(part1()))
+	print("Part 2: {}".format(part2()))
