@@ -39,7 +39,7 @@ def part1():
 def get_row_quotient(row):
     for i, v1 in enumerate(row, start=1):
         for v2 in row[i:]:
-            small, big = sorted((v1, v2))
+            small, big = sorted((v1, v2), key=abs)
             q = big / small
             if q.is_integer():
                 return int(q)
