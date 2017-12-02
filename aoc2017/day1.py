@@ -3,26 +3,26 @@ DATA = "522883333635584854991545936673798259831295958381745562154597678479248946
 
 
 def part1():
-	total = 0
+    total = 0
 
-	for i, d in enumerate(DATA):
-		if d == DATA[i - 1]:
-			total += int(d)
+    for i, d in enumerate(DATA):
+        if d == DATA[i - 1]:
+            total += int(d)
 
-	return total
+    return total
 
 
 def part2():
-	total = 0
-	half = len(DATA) // 2
+    total = 0
+    half = len(DATA) // 2
 
-	for i, d in enumerate(DATA):
-		if d == DATA[(i + half) % len(DATA)]:
-			total += int(d)
+    for i, d in enumerate(DATA):
+        if d == DATA[(i + half) % len(DATA)]:
+            total += int(d)
 
-	return total
+    return total
 
 
 if __name__ == '__main__':
-	print("Part 1: {}".format(part1()))
-	print("Part 2: {}".format(part2()))
+    print("Part 1: {}".format(part1()))
+    print("Part 2: {}".format(part2()))
