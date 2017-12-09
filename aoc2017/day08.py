@@ -1013,6 +1013,7 @@ def get_data():
         data.append(line)
     return data
 
+
 CMP_FNS = {
     '==': lambda a, b: a == b,
     '!=': lambda a, b: a != b,
@@ -1047,4 +1048,3 @@ def do_work():
 if __name__ == '__main__':
     print("Part 1: {}".format(do_work()))
     print("Part 2: {}".format(GLOBAL_MAX))
-
