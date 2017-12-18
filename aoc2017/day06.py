@@ -1,8 +1,8 @@
-DATA = "4	10	4	1	8	4	9	14	5	1	14	15	0	15	3	5"
+from aoc2017.util import load_data
 
 
 def get_data():
-    return [int(i) for i in DATA.split('\t')]
+    return [int(i) for i in load_data(6)[0].split('\t')]
 
 
 def part1():

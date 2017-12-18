@@ -1,4 +1,4 @@
-STEP = 312
+from aoc2017.util import load_data
 
 
 class Node:
@@ -32,25 +32,31 @@ class SpinLock:
             self.curr = self.curr.next_node
 
 
+def get_data():
+    return int(load_data(17)[0])
+
+
 def part1():
+    step = get_data()
     spinlock = SpinLock()
 
     max_val = 2017
     for i in range(1, max_val + 1):
         spinlock.insert(i)
         if i != max_val:
-            spinlock.skip(STEP)
+            spinlock.skip(step)
 
     return spinlock.curr.next_node.value
 
 
 def part2():
+    step = get_data()
     curr = 0
     val = 0
     for i in range(1, 50000000 + 1):
         if curr == 0:
             val = i
-        curr = (curr + STEP + 1) % (i + 1)
+        curr = (curr + step + 1) % (i + 1)
     return val
 
 
