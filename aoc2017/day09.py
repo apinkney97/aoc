@@ -1,12 +1,13 @@
 import re
 
+from aoc2017.util import load_data
+
 CANCEL_RE = re.compile('!.')
 GARBAGE_RE = re.compile('<[^>]*>')
 
 
 def get_data():
-    with open('day09.data') as f:
-        return f.readline().strip()
+    return load_data(9)[0]
 
 
 def part1():

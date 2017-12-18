@@ -1,6 +1,10 @@
 from functools import reduce
 
-DATA = "70,66,255,2,48,0,54,48,80,141,244,254,160,108,1,41"
+from aoc2017.util import load_data
+
+
+def get_data():
+    return load_data(10)[0]
 
 
 def circular_slice(l, start, length):
@@ -46,12 +50,12 @@ def knot_hash(data):
 
 def part1():
     list_ = list(range(256))
-    knot_hash_round(list_, (int(i) for i in DATA.split(',')))
+    knot_hash_round(list_, (int(i) for i in get_data().split(',')))
     return list_[0] * list_[1]
 
 
 def part2():
-    return knot_hash(DATA)
+    return knot_hash(get_data())
 
 
 if __name__ == '__main__':

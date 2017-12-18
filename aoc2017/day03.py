@@ -1,5 +1,7 @@
 from math import sqrt, ceil
 
+from aoc2017.util import load_data
+
 
 def part1(num):
     """
@@ -119,6 +121,6 @@ def part2(target):
 
 
 if __name__ == '__main__':
-    input_val = 368078
+    input_val = int(load_data(3)[0])
     print("Part 1: {}".format(part1(input_val)))
     print("Part 2: {}".format(part2(input_val)))

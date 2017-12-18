@@ -1,5 +1,5 @@
-A_START = 783
-B_START = 325
+from aoc2017.util import load_data
+
 MUL_A = 16807
 MUL_B = 48271
 MOD = 2147483647
@@ -14,9 +14,9 @@ def gen(start, mul, mod=1):
             yield val
 
 
-def part1():
-    a_gen = gen(A_START, MUL_A)
-    b_gen = gen(B_START, MUL_B)
+def part1(a_start, b_start):
+    a_gen = gen(a_start, MUL_A)
+    b_gen = gen(b_start, MUL_B)
     count = 0
     for _ in range(40000000):
         if next(a_gen) & MASK == next(b_gen) & MASK:
@@ -24,9 +24,9 @@ def part1():
     return count
 
 
-def part2():
-    a_gen = gen(A_START, MUL_A, 4)
-    b_gen = gen(B_START, MUL_B, 8)
+def part2(a_start, b_start):
+    a_gen = gen(a_start, MUL_A, 4)
+    b_gen = gen(b_start, MUL_B, 8)
     count = 0
     for _ in range(5000000):
         if next(a_gen) & MASK == next(b_gen) & MASK:
@@ -35,5 +35,6 @@ def part2():
 
 
 if __name__ == '__main__':
-    print("Part 1: {}".format(part1()))
-    print("Part 2: {}".format(part2()))
+    a, b = (int(line.rsplit(' ', 1)[1]) for line in load_data(15))
+    print("Part 1: {}".format(part1(a, b)))
+    print("Part 2: {}".format(part2(a, b)))
