@@ -111,11 +111,14 @@ class AsyncDuetPlayer(DuetPlayer):
         if self.other.is_waiting and self.queue.empty() and self.other.queue.empty():
             self.other.queue.put_nowait(deadlock_sentinel)
             return False
+
         self.is_waiting = True
         val = await self.queue.get()
         self.is_waiting = False
+
         if val is deadlock_sentinel:
             return False
+
         self.registers[reg] = val
         return True
 
@@ -124,11 +127,13 @@ class AsyncDuetPlayer(DuetPlayer):
             inst, arg1, arg2 = self.get_instruction()
 
             handler = getattr(self, 'handle_' + inst)
+            res = handler(arg1, arg2)
+
             if inst in {'rcv', 'snd'}:
-                if not await handler(arg1, arg2):
-                    break
-            else:
-                handler(arg1, arg2)
+                res = await res
+
+            if not res:
+                break
 
             self.program_counter += 1
 
