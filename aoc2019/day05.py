@@ -1,7 +1,14 @@
+import asyncio
 from enum import Enum, auto
 from typing import Callable, List, Mapping, NamedTuple, Optional, Tuple
 
 from aoc2019 import utils
+
+
+class RunState(Enum):
+    NOT_STARTED = auto()
+    RUNNING = auto()
+    TERMINATED = auto()
 
 
 class ParameterMode(Enum):
@@ -67,11 +74,12 @@ class BadOpCode(Exception):
 
 
 class IntCodeProcessor:
-    def __init__(self, initial_memory: List[int], auto_input: List[int] = None):
-        self._auto_input = list(reversed(auto_input or []))
-        self._output = []
+    def __init__(self, initial_memory: List[int]):
+        self._input = asyncio.Queue()
+        self._output = asyncio.Queue()
         self._ip = 0
         self._memory = initial_memory[:]
+        self._state = RunState.NOT_STARTED
 
     @staticmethod
     def decode_opcode(encoded_opcode: int) -> Tuple[int, List[ParameterMode]]:
@@ -85,6 +93,12 @@ class IntCodeProcessor:
             modes.append(ParameterMode(mode))
 
         return opcode, modes
+
+    async def input(self, val):
+        await self._input.put(val)
+
+    async def output(self):
+        return await self._output.get()
 
     def _parse_args(self, args: List[int], modes: List[ParameterMode]) -> List[int]:
         return [
@@ -105,21 +119,26 @@ class IntCodeProcessor:
         else:
             self._ip += len(op.params) + 1
 
-    def _handle_io(self, op: Operation, parsed_args: List[int]) -> Optional[int]:
+    async def _handle_io(self, op: Operation, parsed_args: List[int]) -> Optional[int]:
         if op.name == "INPUT":
-            if self._auto_input:
-                return self._auto_input.pop()
-            else:
-                return int(input("Enter a value: ").strip())
+            print("Awaiting input")
+            return await self._input.get()
 
         if op.name == "PRINT":
             print(*parsed_args)
-            self._output.append(parsed_args[0])
+            await self._output.put(parsed_args[0])
             return None
 
         raise Exception(f"Unhandled IO operation {op.name}")
 
-    def run(self, noun: int = None, verb: int = None):
+    async def run(self, noun: int = None, verb: int = None):
+        if self._state is not RunState.NOT_STARTED:
+            raise Exception(
+                f"Can't run {type(self).__name__} in state {self._state.name}"
+            )
+
+        self._state = RunState.RUNNING
+
         if noun is not None:
             self._memory[1] = noun
         if verb is not None:
@@ -136,8 +155,8 @@ class IntCodeProcessor:
 
             if opcode == 99:
                 print("HALT")
-                if self._auto_input:
-                    print(f"WARNING: unused input: {list(reversed(self._auto_input))}")
+                if not self._input.empty():
+                    print(f"WARNING: unused input: {self._input}")
                 break
 
             if opcode in JUMP_OPCODES:
@@ -145,7 +164,7 @@ class IntCodeProcessor:
                 continue
 
             if opcode in IO_OPCODES:
-                result = self._handle_io(op, parsed_args)
+                result = await self._handle_io(op, parsed_args)
 
             else:
                 result = op.func(*parsed_args)
@@ -157,30 +176,37 @@ class IntCodeProcessor:
 
             self._ip += len(op.params) + 1
 
-        if len(self._output) == 0:
+        if self._output.empty():
             print("WARN: No output")
-            return None
 
-        if len(self._output) > 1:
+        elif self._output.qsize() > 1:
             print("WARN: Multiple output values")
 
-        return self._output[-1]
+        value = None
+
+        while not self._output.empty():
+            value = self._output.get_nowait()
+
+        self._state = RunState.TERMINATED
+        return value
 
 
-def intcode_eval(
+async def intcode_eval(
     auto_input: List[int] = None, noun: int = None, verb: int = None
 ) -> int:
     memory = [int(i) for i in utils.load_data(5)[0].split(",")]
-    t = IntCodeProcessor(memory, auto_input)
-    return t.run(noun, verb)
+    t = IntCodeProcessor(memory)
+    for i in auto_input:
+        await t.input(i)
+    return await t.run(noun, verb)
 
 
 def part1():
-    return intcode_eval([1])
+    return asyncio.run(intcode_eval([1]))
 
 
 def part2():
-    return intcode_eval([5])
+    return asyncio.run(intcode_eval([5]))
 
 
 def main() -> None:
