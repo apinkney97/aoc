@@ -147,7 +147,7 @@ class IntCodeProcessor:
 
         raise Exception(f"Unhandled IO operation {op.name}")
 
-    async def run(self, noun: int = None, verb: int = None):
+    async def run(self, noun: int = None, verb: int = None, return_last_output=False):
         if self._state is not RunState.NOT_STARTED:
             raise Exception(
                 f"Can't run {type(self).__name__} in state {self._state.name}"
@@ -192,6 +192,11 @@ class IntCodeProcessor:
 
             self._ip += len(op.params) + 1
 
+        self._state = RunState.TERMINATED
+
+        if not return_last_output:
+            return None
+
         if self._output.empty():
             self.log("WARN: No output")
 
@@ -203,18 +208,16 @@ class IntCodeProcessor:
         while not self._output.empty():
             value = self._output.get_nowait()
 
-        self._state = RunState.TERMINATED
         return value
 
 
-async def intcode_eval(
-    auto_input: List[int] = None, noun: int = None, verb: int = None
-) -> int:
+async def intcode_eval(auto_input: List[int] = None) -> int:
     memory = [int(i) for i in utils.load_data(5)[0].split(",")]
-    t = IntCodeProcessor(memory)
+    processor = IntCodeProcessor(memory)
+
     for i in auto_input:
-        await t.input(i)
-    return await t.run(noun, verb)
+        await processor.input(i)
+    return await processor.run(return_last_output=True)
 
 
 def part1():
