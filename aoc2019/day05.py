@@ -74,12 +74,21 @@ class BadOpCode(Exception):
 
 
 class IntCodeProcessor:
+    __instance_counter = 0
+
     def __init__(self, initial_memory: List[int]):
+        cls = type(self)
+        self.id = cls.__instance_counter
+        cls.__instance_counter += 1
         self._input = asyncio.Queue()
         self._output = asyncio.Queue()
         self._ip = 0
         self._memory = initial_memory[:]
         self._state = RunState.NOT_STARTED
+
+    @property
+    def state(self):
+        return self._state
 
     @staticmethod
     def decode_opcode(encoded_opcode: int) -> Tuple[int, List[ParameterMode]]:
@@ -93,6 +102,9 @@ class IntCodeProcessor:
             modes.append(ParameterMode(mode))
 
         return opcode, modes
+
+    def log(self, *args):
+        print(f"{self.id:4d}:", *args)
 
     async def input(self, val):
         await self._input.put(val)
@@ -121,11 +133,15 @@ class IntCodeProcessor:
 
     async def _handle_io(self, op: Operation, parsed_args: List[int]) -> Optional[int]:
         if op.name == "INPUT":
-            print("Awaiting input")
-            return await self._input.get()
+            if self._input.empty():
+                self.log("Awaiting input")
+
+            val = await self._input.get()
+            self.log("<--", val)
+            return val
 
         if op.name == "PRINT":
-            print(*parsed_args)
+            self.log("-->", *parsed_args)
             await self._output.put(parsed_args[0])
             return None
 
@@ -154,9 +170,9 @@ class IntCodeProcessor:
             parsed_args = self._parse_args(args, modes)
 
             if opcode == 99:
-                print("HALT")
+                self.log("HALT")
                 if not self._input.empty():
-                    print(f"WARNING: unused input: {self._input}")
+                    self.log(f"WARNING: unused input: {self._input}")
                 break
 
             if opcode in JUMP_OPCODES:
@@ -177,10 +193,10 @@ class IntCodeProcessor:
             self._ip += len(op.params) + 1
 
         if self._output.empty():
-            print("WARN: No output")
+            self.log("WARN: No output")
 
         elif self._output.qsize() > 1:
-            print("WARN: Multiple output values")
+            self.log("WARN: Multiple output values")
 
         value = None
 
