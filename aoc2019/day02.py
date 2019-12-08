@@ -2,7 +2,6 @@ import operator
 
 from aoc2019 import utils
 
-
 OPCODES = {
     1: (4, operator.add),
     2: (4, operator.mul),

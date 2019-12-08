@@ -1,37 +1,45 @@
 import asyncio
-from itertools import permutations
+from itertools import cycle, permutations
 
 from aoc2019 import utils
-from aoc2019.day05 import IntCodeProcessor
+from aoc2019.day05 import IntCodeProcessor, RunState
 
 
 async def intcode_eval(phase_settings) -> int:
     memory = [int(i) for i in utils.load_data(7)[0].split(",")]
-    processors = [IntCodeProcessor(memory) for _ in phase_settings]
+    processors = []
+
+    for phase_setting in phase_settings:
+        processor = IntCodeProcessor(memory)
+        processors.append(processor)
+        asyncio.create_task(processor.run())
+        await processor.input(phase_setting)
 
     output = 0
-    for processor, phase_setting in zip(processors, phase_settings):
-        await processor.input(phase_setting)
+    for processor in cycle(processors):
+        print(processor.state)
+        if processor.state is RunState.TERMINATED:
+            break
         await processor.input(output)
-        output = await processor.run()
+        output = await processor.output()
 
     return output
 
 
-def get_phase_settings():
-    return permutations(range(5), 5)
-
-
 def part1():
     max_ = None
-    for phase_settings in get_phase_settings():
+    for phase_settings in permutations(range(5), 5):
         max_ = utils.safe_max(max_, asyncio.run(intcode_eval(phase_settings)))
 
     return max_
 
 
 def part2():
-    pass
+    max_ = None
+    for phase_settings in permutations(range(5, 10), 5):
+        max_ = utils.safe_max(max_, asyncio.run(intcode_eval(phase_settings)))
+
+    return max_
 
 
 def main() -> None:
