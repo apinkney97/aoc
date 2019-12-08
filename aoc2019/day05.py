@@ -76,7 +76,7 @@ class BadOpCode(Exception):
 class IntCodeProcessor:
     __instance_counter = 0
 
-    def __init__(self, initial_memory: List[int]):
+    def __init__(self, initial_memory: List[int], verbose=False):
         cls = type(self)
         self.id = cls.__instance_counter
         cls.__instance_counter += 1
@@ -85,6 +85,7 @@ class IntCodeProcessor:
         self._ip = 0
         self._memory = initial_memory[:]
         self._state = RunState.NOT_STARTED
+        self._verbose = verbose
 
     @property
     def state(self):
@@ -104,7 +105,8 @@ class IntCodeProcessor:
         return opcode, modes
 
     def log(self, *args):
-        print(f"{self.id:4d}:", *args)
+        if self._verbose:
+            print(f"{self.id:4d}:", *args)
 
     async def input(self, val):
         await self._input.put(val)

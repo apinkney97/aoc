@@ -17,7 +17,6 @@ async def intcode_eval(phase_settings) -> int:
 
     output = 0
     for processor in cycle(processors):
-        print(processor.state)
         if processor.state is RunState.TERMINATED:
             break
         await processor.input(output)
