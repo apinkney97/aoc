@@ -1,9 +1,8 @@
 from collections import Counter
 from typing import List, Optional
 
-from more_itertools import chunked
-
 from aoc2019 import utils
+from more_itertools import chunked
 
 
 def part1():

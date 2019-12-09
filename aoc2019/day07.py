@@ -2,7 +2,7 @@ import asyncio
 from itertools import cycle, permutations
 
 from aoc2019 import utils
-from aoc2019.day05 import IntCodeProcessor, RunState
+from aoc2019.intcode import IntCodeProcessor, RunState
 
 
 async def intcode_eval(phase_settings) -> int:
