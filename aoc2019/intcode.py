@@ -128,8 +128,8 @@ class IntCodeProcessor:
         cls.__instance_counter += 1
         self._input = asyncio.Queue()
         self._output = asyncio.Queue()
-        self._ip = 0
-        self._rb = 0
+        self._pc = 0
+        self._sp = 0
         self._memory = Memory(initial_memory)
         self._state = RunState.NOT_STARTED
         self._verbosity = verbosity
@@ -139,7 +139,7 @@ class IntCodeProcessor:
         return self._state
 
     def dump_state(self) -> str:
-        return f"{self._ip=} {self._rb=} {len(self._memory)=} {self._state=}"
+        return f"{self._pc=} {self._sp=} {len(self._memory)=} {self._state=}"
 
     def decode_opcode(self, encoded_opcode: int) -> Tuple[OpSpec, List[ParameterMode]]:
         encoded_modes, opcode = divmod(encoded_opcode, 100)
@@ -170,13 +170,13 @@ class IntCodeProcessor:
     def _get_param_addresses(self, modes: List[ParameterMode]) -> List[int]:
         # Given the parameter modes, returns the addresses that should be read from or written to
         param_addrs = []
-        for addr, mode in enumerate(modes, start=self._ip + 1):
+        for addr, mode in enumerate(modes, start=self._pc + 1):
             if mode is ParameterMode.IMMEDIATE:
                 parsed_arg = addr
             elif mode is ParameterMode.POSITION:
                 parsed_arg = self._memory[addr]
             elif mode is ParameterMode.RELATIVE:
-                parsed_arg = self._memory[addr] + self._rb
+                parsed_arg = self._memory[addr] + self._sp
             else:
                 raise Exception(f"Unhandled parameter mode: {mode.name}")
 
@@ -195,9 +195,9 @@ class IntCodeProcessor:
             do_jump = check != 0
 
         if do_jump:
-            self._ip = jump_to
+            self._pc = jump_to
         else:
-            self._ip += len(op_spec.params) + 1
+            self._pc += len(op_spec.params) + 1
 
     async def _handle_io(
         self, op_spec: OpSpec, param_addrs: List[int]
@@ -228,7 +228,7 @@ class IntCodeProcessor:
         if self._verbosity < 2:
             return
 
-        args = self._memory[self._ip + 1 : self._ip + len(op_spec.params) + 1]
+        args = self._memory[self._pc + 1 : self._pc + len(op_spec.params) + 1]
         formatted_args = []
         for arg, arg_mode in zip(args, arg_modes):
             if arg_mode is ParameterMode.IMMEDIATE:
@@ -238,12 +238,12 @@ class IntCodeProcessor:
             elif arg_mode is ParameterMode.RELATIVE:
                 formatted_args.append(f"<{arg}>")
 
-        formatted_args = "(" + ", ".join(formatted_args) + ")"
+        formatted_args = ", ".join(formatted_args)
         arg_vals = ", ".join(str(self._memory[addr]) for addr in param_addrs)
 
         self.log(
-            f"ip: {self._ip:5d} rb: {self._rb:5d}   op: {encoded_opcode:5d}  {op_spec.type.name:4s}"
-            f"   {formatted_args:30s}   {str(param_addrs):30s}   {arg_vals}",
+            f"PC {self._pc:5d} SP: {self._sp:5d}   op: {encoded_opcode:5d}   {op_spec.type.name:4s}"
+            f"{formatted_args:30s}   {str(param_addrs):30s}   {arg_vals}",
             verbosity=2,
         )
 
@@ -261,7 +261,7 @@ class IntCodeProcessor:
             self._memory[2] = verb
 
         while True:
-            encoded_opcode = self._memory[self._ip]
+            encoded_opcode = self._memory[self._pc]
             op_spec, modes = self.decode_opcode(encoded_opcode)
 
             param_addrs = self._get_param_addresses(modes)
@@ -284,7 +284,7 @@ class IntCodeProcessor:
                 result = await self._handle_io(op_spec, param_addrs)
 
             elif op_spec.type is Op.ROF:
-                self._rb += self._memory[param_addrs[0]]
+                self._sp += self._memory[param_addrs[0]]
 
             else:
                 result = op_spec.func(*(self._memory[addr] for addr in param_addrs))
@@ -295,7 +295,7 @@ class IntCodeProcessor:
                         self._memory[addr] = result
                         self.log(f"Setting mem[{addr}] == {result}", verbosity=3)
 
-            self._ip += len(op_spec.params) + 1
+            self._pc += len(op_spec.params) + 1
 
         self._state = RunState.TERMINATED
 
