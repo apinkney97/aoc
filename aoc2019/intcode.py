@@ -6,6 +6,7 @@ from typing import Callable, List, Mapping, NamedTuple, Optional, Tuple, Union
 class RunState(Enum):
     NOT_STARTED = auto()
     RUNNING = auto()
+    AWAITING_INPUT = auto()
     TERMINATED = auto()
 
 
@@ -126,8 +127,8 @@ class IntCodeProcessor:
         cls = type(self)
         self.id = cls.__instance_counter
         cls.__instance_counter += 1
-        self._input = asyncio.Queue()
-        self._output = asyncio.Queue()
+        self._stdin = asyncio.Queue()
+        self._stdout = asyncio.Queue()
         self._pc = 0
         self._sp = 0
         self._memory = Memory(initial_memory)
@@ -162,10 +163,10 @@ class IntCodeProcessor:
             print(f"{self.id:4d}:", *args)
 
     async def input(self, val):
-        await self._input.put(val)
+        await self._stdin.put(val)
 
     async def output(self):
-        return await self._output.get()
+        return await self._stdout.get()
 
     def _get_param_addresses(self, modes: List[ParameterMode]) -> List[int]:
         # Given the parameter modes, returns the addresses that should be read from or written to
@@ -203,20 +204,26 @@ class IntCodeProcessor:
         self, op_spec: OpSpec, param_addrs: List[int]
     ) -> Optional[int]:
         if op_spec.type is Op.INP:
-            if self._input.empty():
+            if self._stdin.empty():
                 self.log("Awaiting input")
 
-            val = await self._input.get()
+            self._state = RunState.AWAITING_INPUT
+            val = await self._stdin.get()
+            self._state = RunState.RUNNING
+
             self.log("<--", val)
             return val
 
         if op_spec.type is Op.PRT:
             val = self._memory[param_addrs[0]]
             self.log("-->", val)
-            await self._output.put(val)
+            await self._stdout.put(val)
             return None
 
         raise Exception(f"Unhandled IO operation {op_spec.type.name}")
+
+    def has_output(self):
+        return not self._stdout.empty()
 
     def log_instruction(
         self,
@@ -270,8 +277,8 @@ class IntCodeProcessor:
 
             if op_spec.type is Op.HLT:
                 self.log("HALT")
-                if not self._input.empty():
-                    self.log(f"WARNING: unused input: {self._input}")
+                if not self._stdin.empty():
+                    self.log(f"WARNING: unused input: {self._stdin}")
                 break
 
             if op_spec.type in {Op.JEZ, Op.JNZ}:
@@ -302,15 +309,15 @@ class IntCodeProcessor:
         if not return_last_output:
             return None
 
-        if self._output.empty():
+        if self._stdout.empty():
             self.log("WARN: No output")
 
-        elif self._output.qsize() > 1:
+        elif self._stdout.qsize() > 1:
             self.log("WARN: Multiple output values")
 
         value = None
 
-        while not self._output.empty():
-            value = self._output.get_nowait()
+        while not self._stdout.empty():
+            value = self._stdout.get_nowait()
 
         return value
