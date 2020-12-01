@@ -1,4 +1,4 @@
-from math import sqrt, ceil
+from math import ceil, sqrt
 
 from aoc2017.util import load_data
 
@@ -23,7 +23,7 @@ def part1(num):
     layer = range(lower_bound + 1, upper_bound + 1)
     segment_len = side_len - 1
     for i in range(4):
-        segment = layer[i*segment_len:i*segment_len + segment_len]
+        segment = layer[i * segment_len : i * segment_len + segment_len]
         if num in segment:
             break
 
@@ -120,7 +120,7 @@ def part2(target):
         sl += 0.5
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     input_val = int(load_data(3)[0])
     print("Part 1: {}".format(part1(input_val)))
     print("Part 2: {}".format(part2(input_val)))

@@ -60,6 +60,6 @@ def part2():
     return val
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     print("Part 1: {}".format(part1()))
     print("Part 2: {}".format(part2()))

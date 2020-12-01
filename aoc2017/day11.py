@@ -6,12 +6,12 @@ for providing some insight into hex grids!
 from aoc2017.util import load_data
 
 DIRS = {
-    'n': (0, 1),
-    's': (0, -1),
-    'ne': (1, 0),
-    'se': (1, -1),
-    'nw': (-1, 1),
-    'sw': (-1, 0),
+    "n": (0, 1),
+    "s": (0, -1),
+    "ne": (1, 0),
+    "se": (1, -1),
+    "nw": (-1, 1),
+    "sw": (-1, 0),
 }
 
 GLOBAL_MAX = 0
@@ -28,7 +28,7 @@ def part1():
     global GLOBAL_MAX
     x = 0
     y = 0
-    for d in load_data(11)[0].split(','):
+    for d in load_data(11)[0].split(","):
         dx, dy = DIRS[d]
         x += dx
         y += dy
@@ -39,6 +39,6 @@ def part1():
     return hex_dist(x, y)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     print("Part 1: {}".format(part1()))
     print("Part 2: {}".format(GLOBAL_MAX))

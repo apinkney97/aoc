@@ -12,7 +12,7 @@ def get_next_pos(path, been, curr, prev):
     x, y = curr
     prev_x, prev_y = prev
 
-    if path[x][y] != '+':
+    if path[x][y] != "+":
         next_x = 2 * x - prev_x
         next_y = 2 * y - prev_y
         if not is_valid_pos(path, next_x, next_y):
@@ -23,9 +23,9 @@ def get_next_pos(path, been, curr, prev):
         if not is_valid_pos(path, next_x, next_y):
             continue
         val = path[next_x][next_y]
-        if val != ' ' and (next_x, next_y) not in been:
+        if val != " " and (next_x, next_y) not in been:
             return next_x, next_y
-        
+
     raise NoPathFoundError
 
 
@@ -46,7 +46,7 @@ def follow_path():
     #  ]
 
     for i, c in enumerate(path[0]):
-        if c == '|':
+        if c == "|":
             curr = 0, i
             prev = -1, i
             break
@@ -61,17 +61,17 @@ def follow_path():
         val = path[curr[0]][curr[1]]
         if val in string.ascii_letters:
             letters.append(val)
-        elif val == ' ':
+        elif val == " ":
             break
         steps += 1
         been.add(curr)
         next_pos = get_next_pos(path, been, curr, prev)
         prev = curr
         curr = next_pos
-    return ''.join(letters), steps
+    return "".join(letters), steps
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     part1, part2 = follow_path()
     print("Part 1: {}".format(part1))
     print("Part 2: {}".format(part2))

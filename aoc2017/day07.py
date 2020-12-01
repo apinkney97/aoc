@@ -6,10 +6,10 @@ from aoc2017.util import load_data
 def get_data():
     data = {}
     for line in load_data(7):
-        bits = line.split(' ')
+        bits = line.split(" ")
         name = bits[0]
         weight = int(bits[1][1:-1])
-        children = sorted(n.strip(',') for n in bits[3:])
+        children = sorted(n.strip(",") for n in bits[3:])
         data[name] = weight, children
 
     return data
@@ -39,10 +39,10 @@ class Node:
         return self.weight + sum(k.total_weight() for k in self.kids)
 
     def __repr__(self):
-        return 'Node({!r}, {!r})'.format(self.name, self.weight)
+        return "Node({!r}, {!r})".format(self.name, self.weight)
 
     def print_tree(self, indent=0):
-        print((' ' * indent) + repr(self) + ('' if self.is_balanced() else '*****'))
+        print((" " * indent) + repr(self) + ("" if self.is_balanced() else "*****"))
         for kid in self.kids:
             kid.print_tree(indent + 1)
 
@@ -100,5 +100,5 @@ def main():
     print("Part 2: {}".format(part2(data)))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

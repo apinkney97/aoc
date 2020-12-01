@@ -3,7 +3,7 @@ from aoc2017.util import load_data
 MUL_A = 16807
 MUL_B = 48271
 MOD = 2147483647
-MASK = 2**16 - 1
+MASK = 2 ** 16 - 1
 
 
 def gen(start, mul, mod=1):
@@ -34,7 +34,7 @@ def part2(a_start, b_start):
     return count
 
 
-if __name__ == '__main__':
-    a, b = (int(line.rsplit(' ', 1)[1]) for line in load_data(15))
+if __name__ == "__main__":
+    a, b = (int(line.rsplit(" ", 1)[1]) for line in load_data(15))
     print("Part 1: {}".format(part1(a, b)))
     print("Part 2: {}".format(part2(a, b)))

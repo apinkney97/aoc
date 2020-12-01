@@ -25,12 +25,12 @@ def part2():
     count = 0
     while 0 <= index < len(data):
         val = data[index]
-        data[index] += (1 if val < 3 else -1)
+        data[index] += 1 if val < 3 else -1
         index += val
         count += 1
     return count
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     print("Part 1: {}".format(part1()))
     print("Part 2: {}".format(part2()))
