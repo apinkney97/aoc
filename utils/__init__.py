@@ -1,12 +1,19 @@
 import os
-from typing import List
+from typing import Callable, List, Optional, TypeVar, Union
+
+T = TypeVar("T")
 
 
-def load_data(day: int, strip: bool = True) -> List[str]:
+def load_data(
+    day: int, strip: bool = True, fn: Optional[Callable[[str], T]] = None
+) -> Union[List[T], List[str]]:
     with open(os.path.join("data", f"day{day:02d}.data")) as f:
+        data = f.readlines()
         if strip:
-            return [l.strip() for l in f.readlines()]
-        return f.readlines()
+            data = [line.strip() for line in data]
+        if fn is not None:
+            data = [fn(line) for line in data]
+        return data
 
 
 def _safe_cmp(*args, cmp_fn):
