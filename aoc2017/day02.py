@@ -2,17 +2,14 @@ from aoc2017.util import load_data
 
 
 def get_data():
-    return [
-        [int(i) for i in line.split('\t') if i]
-        for line in load_data(2)
-    ]
+    return [[int(i) for i in line.split("\t") if i] for line in load_data(2)]
 
 
 def part1():
     total = 0
     data = get_data()
     for row in data:
-        total += (max(row) - min(row))
+        total += max(row) - min(row)
     return total
 
 
@@ -34,6 +31,6 @@ def part2():
     return total
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     print("Part 1: {}".format(part1()))
     print("Part 2: {}".format(part2()))

@@ -1,5 +1,6 @@
 from setuptools import find_packages, setup
 
 setup(
-    name="aoc", packages=find_packages(),
+    name="aoc",
+    packages=find_packages(),
 )

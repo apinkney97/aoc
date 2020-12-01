@@ -16,7 +16,7 @@ def get_instructions():
             return val
 
     for line in load_data(18):
-        instructions.append(tuple(try_int(v) for v in line.split(' ')))
+        instructions.append(tuple(try_int(v) for v in line.split(" ")))
 
     return instructions
 
@@ -28,8 +28,8 @@ class DuetPlayer:
         self.program_counter = 0
         self.last_played = None
 
-        self.resolve_arg_1 = {'snd', 'rcv', 'jgz'}
-        self.resolve_arg_2 = {'set', 'add', 'mul', 'mod', 'jgz'}
+        self.resolve_arg_1 = {"snd", "rcv", "jgz"}
+        self.resolve_arg_2 = {"set", "add", "mul", "mod", "jgz"}
 
     def resolve(self, val_or_reg):
         if isinstance(val_or_reg, int):
@@ -61,7 +61,7 @@ class DuetPlayer:
 
     def handle_jgz(self, val, offset):
         if val > 0:
-            self.program_counter += (offset - 1)
+            self.program_counter += offset - 1
         return True
 
     def get_instruction(self):
@@ -78,13 +78,16 @@ class DuetPlayer:
         while True:
             inst, arg1, arg2 = self.get_instruction()
 
-            handler = getattr(self, 'handle_' + inst)
+            handler = getattr(self, "handle_" + inst)
             if not handler(arg1, arg2):
                 break
 
             self.program_counter += 1
 
-            if self.program_counter >= len(self.instructions) or self.program_counter < 0:
+            if (
+                self.program_counter >= len(self.instructions)
+                or self.program_counter < 0
+            ):
                 break
 
 
@@ -94,9 +97,9 @@ deadlock_sentinel = object()
 class AsyncDuetPlayer(DuetPlayer):
     def __init__(self, instructions, p, queue, other):
         super().__init__(instructions)
-        self.resolve_arg_1 = {'snd', 'jgz'}
+        self.resolve_arg_1 = {"snd", "jgz"}
         self.id = p
-        self.registers['p'] = p
+        self.registers["p"] = p
         self.queue = queue
         self.other = other
         self.send_count = 0
@@ -126,10 +129,10 @@ class AsyncDuetPlayer(DuetPlayer):
         while True:
             inst, arg1, arg2 = self.get_instruction()
 
-            handler = getattr(self, 'handle_' + inst)
+            handler = getattr(self, "handle_" + inst)
             res = handler(arg1, arg2)
 
-            if inst in {'rcv', 'snd'}:
+            if inst in {"rcv", "snd"}:
                 res = await res
 
             if not res:
@@ -137,7 +140,10 @@ class AsyncDuetPlayer(DuetPlayer):
 
             self.program_counter += 1
 
-            if self.program_counter >= len(self.instructions) or self.program_counter < 0:
+            if (
+                self.program_counter >= len(self.instructions)
+                or self.program_counter < 0
+            ):
                 break
 
 
@@ -161,7 +167,7 @@ async def part2():
     return dp1.send_count
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     print("Part 1: {}".format(part1()))
     print("Part 2: {}".format(event_loop.run_until_complete(part2())))
     event_loop.close()

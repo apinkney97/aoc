@@ -2,7 +2,7 @@ from aoc2017.util import load_data
 
 
 def get_data():
-    return [int(i) for i in load_data(6)[0].split('\t')]
+    return [int(i) for i in load_data(6)[0].split("\t")]
 
 
 def part1():
@@ -45,6 +45,6 @@ def part2():
         seen[state] = len(seen)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     print("Part 1: {}".format(part1()))
     print("Part 2: {}".format(part2()))

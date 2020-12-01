@@ -55,7 +55,11 @@ OPERATIONS: List[OpSpec] = [
         params=[ParameterDirection.IN, ParameterDirection.IN, ParameterDirection.OUT],
         func=lambda *args: args[0] * args[1],
     ),
-    OpSpec(type=Op.INP, params=[ParameterDirection.OUT], func=nop,),
+    OpSpec(
+        type=Op.INP,
+        params=[ParameterDirection.OUT],
+        func=nop,
+    ),
     OpSpec(type=Op.PRT, params=[ParameterDirection.IN], func=nop),
     OpSpec(
         type=Op.JNZ, params=[ParameterDirection.IN, ParameterDirection.IN], func=nop

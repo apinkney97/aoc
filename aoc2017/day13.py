@@ -4,13 +4,13 @@ from aoc2017.util import load_data
 def get_data():
     data = {}
     for line in load_data(13):
-        layer, depth = line.split(': ')
+        layer, depth = line.split(": ")
         data[int(layer)] = int(depth)
     return data
 
 
 def get_scanner_pos(depth, t):
-    t %= (2 * depth - 2)
+    t %= 2 * depth - 2
     if t < depth:
         return t
     return depth - (t % depth) - 2
@@ -38,6 +38,6 @@ def part2():
         delay += 1
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     print("Part 1: {}".format(part1()))
     print("Part 2: {}".format(part2()))

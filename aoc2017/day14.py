@@ -3,7 +3,7 @@ from aoc2017.util import load_data
 
 
 def get_grid():
-    hashes = [knot_hash(load_data(14)[0] + '-' + str(i)) for i in range(128)]
+    hashes = [knot_hash(load_data(14)[0] + "-" + str(i)) for i in range(128)]
     return [list(bin(int(h, 16))[2:].zfill(128)) for h in hashes]
 
 
@@ -11,7 +11,7 @@ def part1():
     grid = get_grid()
     ones = 0
     for row in grid:
-        ones += row.count('1')
+        ones += row.count("1")
     return ones
 
 
@@ -28,7 +28,7 @@ def get_neighbours(i, j):
     return neighbours
 
 
-def flood_fill(grid, i, j, fill='0'):
+def flood_fill(grid, i, j, fill="0"):
     to_expand = {(i, j)}
     match = grid[i][j]
     while to_expand:
@@ -44,12 +44,12 @@ def part2():
     groups = 0
     for i in range(128):
         for j in range(128):
-            if grid[i][j] == '1':
+            if grid[i][j] == "1":
                 flood_fill(grid, i, j)
                 groups += 1
     return groups
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     print("Part 1: {}".format(part1()))
     print("Part 2: {}".format(part2()))
