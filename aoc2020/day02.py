@@ -3,15 +3,14 @@ from operator import xor
 
 import utils
 
-DATA = utils.load_data(2)
-
 LINE_RE = re.compile(r"^(?P<lower>\d+)-(?P<upper>\d+) (?P<letter>.): (?P<password>.*)$")
+
+DATA = utils.load_data(2, fn=LINE_RE.match)
 
 
 def part1() -> int:
     valid = 0
-    for line in DATA:
-        match = LINE_RE.match(line)
+    for match in DATA:
         lower = int(match["lower"])
         upper = int(match["upper"])
         letter = match["letter"]
@@ -23,8 +22,7 @@ def part1() -> int:
 
 def part2() -> int:
     valid = 0
-    for line in DATA:
-        match = LINE_RE.match(line)
+    for match in DATA:
         pos_1 = int(match["lower"]) - 1
         pos_2 = int(match["upper"]) - 1
         letter = match["letter"]
