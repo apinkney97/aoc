@@ -1,7 +1,10 @@
 import os
+from functools import reduce
+from operator import mul
 from typing import Callable, List, Optional, TypeVar, Union
 
 T = TypeVar("T")
+TNum = TypeVar("TNum", int, float)
 
 
 def load_data(
@@ -16,7 +19,9 @@ def load_data(
         return data
 
 
-def _safe_cmp(*args, cmp_fn):
+def _safe_cmp(
+    *args: Optional[TNum], cmp_fn: Callable[[TNum, TNum], TNum]
+) -> Optional[TNum]:
     val = None
     for arg in args:
         if arg is None:
@@ -28,9 +33,13 @@ def _safe_cmp(*args, cmp_fn):
     return val
 
 
-def safe_min(*args):
+def safe_min(*args: Optional[TNum]) -> Optional[TNum]:
     return _safe_cmp(*args, cmp_fn=min)
 
 
-def safe_max(*args):
+def safe_max(*args: Optional[TNum]) -> Optional[TNum]:
     return _safe_cmp(*args, cmp_fn=max)
+
+
+def product(*args: TNum) -> TNum:
+    return reduce(mul, args)
