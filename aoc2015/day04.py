@@ -5,9 +5,10 @@ import utils
 
 DATA = utils.load_data(4)
 
+
 def find_hash(leading_zeros):
     key = DATA[0]
-    match = '0' * leading_zeros
+    match = "0" * leading_zeros
     for i in count():
         if md5(f"{key}{i}".encode()).hexdigest().startswith(match):
             return i
