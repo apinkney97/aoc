@@ -8,9 +8,14 @@ TNum = TypeVar("TNum", int, float)
 
 
 def load_data(
-    day: int, strip: bool = True, fn: Optional[Callable[[str], T]] = None
+    day: int,
+    strip: bool = True,
+    *,
+    fn: Optional[Callable[[str], T]] = None,
+    example: bool = False,
 ) -> Union[List[T], List[str]]:
-    with open(os.path.join("data", f"day{day:02d}.data")) as f:
+    suffix = "-example" if example else ""
+    with open(os.path.join("data", f"day{day:02d}{suffix}.data")) as f:
         data = f.readlines()
         if strip:
             data = [line.strip() for line in data]
