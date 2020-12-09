@@ -24,19 +24,17 @@ def part1() -> int:
 def part2() -> int:
     target = part1()
 
-    start = 0
-    end = 0
+    window = deque()
+    data = iter(DATA)
 
     while True:
-        print("Trying", start, end)
-        range_ = DATA[start : end + 1]
-        value = sum(range_)
+        value = sum(window)
         if value > target:
-            start += 1
+            window.popleft()
         elif value < target:
-            end += 1
+            window.append(next(data))
         else:
-            return max(range_) + min(range_)
+            return max(window) + min(window)
 
 
 def main() -> None:
