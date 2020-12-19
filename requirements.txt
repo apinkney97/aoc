@@ -1,4 +1,5 @@
 black
+cachetools
 isort
 more-itertools
 singledispatch
