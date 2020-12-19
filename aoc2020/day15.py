@@ -1,5 +1,3 @@
-from itertools import count
-
 DATA = [6, 4, 12, 1, 20, 0, 16]
 
 # DATA = [0, 3, 6]
