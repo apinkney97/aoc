@@ -15,15 +15,22 @@ touch "${dirname}/data/${day_str}-example.data"
 cat > "${dirname}/${day_str}.py" <<EOF
 import utils
 
-DATA = utils.load_data(${day_num})
+
+def load_data():
+    data = utils.load_data(${day_num})
+
+    return data
+
+
+DATA = load_data()
 
 
 def part1() -> int:
-    pass
+    return 0
 
 
 def part2() -> int:
-    pass
+    return 0
 
 
 def main() -> None:
