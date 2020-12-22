@@ -6,6 +6,13 @@ from typing import Callable, List, Optional, TypeVar, Union
 T = TypeVar("T")
 TNum = TypeVar("TNum", int, float)
 
+DEBUG = True
+
+
+def log(*args, **kwargs):
+    if DEBUG:
+        print(*args, **kwargs)
+
 
 def load_data(
     day: int,
