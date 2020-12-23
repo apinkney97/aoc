@@ -1,5 +1,6 @@
 import os
-from functools import reduce
+import time
+from functools import reduce, wraps
 from operator import mul
 from typing import Callable, List, Optional, Union
 
@@ -42,3 +43,14 @@ def load_data(
 
 def product(*args: TNum) -> TNum:
     return reduce(mul, args)
+
+
+def timed(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        start = time.monotonic()
+        ret = f(*args, **kwargs)
+        print(f"Took {time.monotonic() - start} secs")
+        return ret
+
+    return decorated

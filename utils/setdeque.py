@@ -25,6 +25,9 @@ class SetDeque(Generic[T]):
     def __contains__(self, item: T) -> bool:
         return item in self._dict
 
+    def __len__(self):
+        return len(self._deque)
+
     def append(self, item: T) -> None:
         self.__add_to_dict(item)
         self._deque.append(item)
@@ -45,5 +48,11 @@ class SetDeque(Generic[T]):
 
     def extend(self, iterable: Iterable[T]) -> None:
         for item in iterable:
-            self.__add_to_dict(item)
-            self._deque.append(item)
+            self.append(item)
+
+    def extendleft(self, iterable: Iterable[T]) -> None:
+        for item in iterable:
+            self.appendleft(item)
+
+    def rotate(self, n: int) -> None:
+        self._deque.rotate(n)
