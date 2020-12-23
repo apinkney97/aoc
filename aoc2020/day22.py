@@ -3,8 +3,6 @@ from typing import Deque, Tuple
 
 import utils
 
-utils.DEBUG = False
-
 
 def load_data() -> Tuple[Tuple[int], Tuple[int]]:
     data = utils.load_data(22, example=False)
