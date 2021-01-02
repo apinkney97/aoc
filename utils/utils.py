@@ -1,3 +1,4 @@
+import math
 import os
 import time
 from functools import reduce, wraps
@@ -43,6 +44,14 @@ def load_data(
 
 def product(*args: TNum) -> TNum:
     return reduce(mul, args)
+
+
+def magnitude(*args: TNum) -> float:
+    return math.sqrt(sum(a ** 2 for a in args))
+
+
+def manhattan(*args: int) -> int:
+    return sum(abs(a) for a in args)
 
 
 def timed(f):
