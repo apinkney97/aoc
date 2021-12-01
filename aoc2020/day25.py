@@ -1,5 +1,6 @@
-import utils
 from itertools import count
+
+import utils
 
 
 def load_data():

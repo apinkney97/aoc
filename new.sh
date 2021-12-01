@@ -4,7 +4,7 @@ set -euC
 
 day_num=$1
 day_str=$(printf 'day%02d' "${day_num}")
-year=${2:-2020}
+year=${2:-2021}
 
 dirname="aoc${year}"
 
