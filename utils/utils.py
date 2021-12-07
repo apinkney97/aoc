@@ -54,6 +54,10 @@ def manhattan(*args: int) -> int:
     return sum(abs(a) for a in args)
 
 
+def triangle(n: int) -> int:
+    return n * (n + 1) // 2
+
+
 def timed(f):
     @wraps(f)
     def decorated(*args, **kwargs):
