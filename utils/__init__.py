@@ -8,6 +8,7 @@ from utils.utils import (
     log,
     magnitude,
     manhattan,
+    neighbours,
     product,
     timed,
     triangle,

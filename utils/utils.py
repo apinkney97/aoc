@@ -1,9 +1,10 @@
+import itertools
 import math
 import os
 import time
 from functools import reduce, wraps
 from operator import mul
-from typing import Callable, List, Optional, Union
+from typing import Callable, Optional
 
 from utils.types import T, TNum
 
@@ -31,7 +32,7 @@ def load_data(
     *,
     fn: Optional[Callable[[str], T]] = None,
     example: bool = False,
-) -> Union[List[T], List[str]]:
+) -> list[T] | list[str]:
     suffix = "-example" if example else ""
     with open(os.path.join("data", f"day{day:02d}{suffix}.data")) as f:
         data = f.readlines()
@@ -67,3 +68,21 @@ def timed(f):
         return ret
 
     return decorated
+
+
+def neighbours(coord: tuple[int, ...], include_diagonals: bool):
+    dimensions = len(coord)
+    if not include_diagonals:
+        # +-1 on each dimension
+        for d in range(dimensions):
+            unpacked = list(coord)
+            unpacked[d] -= 1
+            yield tuple(unpacked)
+            unpacked[d] += 2
+            yield tuple(unpacked)
+    else:
+        # cartesian product of (-1, 0, +1) on each dimension, excluding original coord
+        ranges = [(coord[d] - 1, coord[d], coord[d] + 1) for d in range(dimensions)]
+        for new_coord in itertools.product(*ranges):
+            if new_coord != coord:
+                yield new_coord
