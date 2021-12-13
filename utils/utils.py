@@ -2,6 +2,7 @@ import itertools
 import math
 import os
 import time
+from contextlib import ContextDecorator
 from functools import reduce, wraps
 from operator import mul
 from typing import Callable, Optional
@@ -59,15 +60,12 @@ def triangle(n: int) -> int:
     return n * (n + 1) // 2
 
 
-def timed(f):
-    @wraps(f)
-    def decorated(*args, **kwargs):
-        start = time.monotonic()
-        ret = f(*args, **kwargs)
-        print(f"Took {time.monotonic() - start} secs")
-        return ret
+class timed(ContextDecorator):
+    def __enter__(self):
+        self.start = time.monotonic()
 
-    return decorated
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        print(f"Took {time.monotonic() - self.start:.6f} secs")
 
 
 def neighbours(coord: tuple[int, ...], include_diagonals: bool):

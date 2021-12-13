@@ -2,9 +2,9 @@
 
 set -euC
 
-day_num=$1
+day_num=${1:-$(date +'%-d')}
 day_str=$(printf 'day%02d' "${day_num}")
-year=${2:-2021}
+year=${2:-$(date +'%Y')}
 
 dirname="aoc${year}"
 
@@ -34,8 +34,10 @@ def part2() -> int:
 
 
 def main() -> None:
-    print(f"Part 1: {part1()}")
-    print(f"Part 2: {part2()}")
+    with utils.timed():
+        print(f"Part 1: {part1()}")
+    with utils.timed():
+        print(f"Part 2: {part2()}")
 
 
 if __name__ == "__main__":

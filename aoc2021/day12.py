@@ -12,14 +12,21 @@ def load_data():
 
     adjacencies = defaultdict(list)
 
+    small = set()
+
     for line in data:
         a, b = line.split("-")
+        if a.islower():
+            small.add(a)
+        if b.islower():
+            small.add(b)
+
         if a != "end" and b != "start":
             adjacencies[a].append(b)
         if b != "end" and a != "start":
             adjacencies[b].append(a)
 
-    return adjacencies
+    return adjacencies, small
 
 
 DATA = load_data()
@@ -33,12 +40,10 @@ class Node:
 
 
 def is_ancestor(node: Node, name: str):
-    if node.name == name:
-        return True
-    while node.parent is not None:
-        node = node.parent
+    while node is not None:
         if node.name == name:
             return True
+        node = node.parent
     return False
 
 
@@ -50,10 +55,12 @@ def part1() -> int:
 
     ends = []
 
+    adjacencies, small = DATA
+
     while queue:
         current = queue.popleft()
-        for neighbour in DATA[current.name]:
-            if neighbour.islower() and is_ancestor(current, neighbour):
+        for neighbour in adjacencies[current.name]:
+            if neighbour in small and is_ancestor(current, neighbour):
                 continue
             new_node = Node(name=neighbour, parent=current)
             if neighbour == "end":
@@ -71,11 +78,13 @@ def part2() -> int:
 
     ends = []
 
+    adjacencies, small = DATA
+
     while queue:
         current = queue.popleft()
-        for neighbour in DATA[current.name]:
+        for neighbour in adjacencies[current.name]:
             has_double = current.has_double
-            if neighbour.islower() and is_ancestor(current, neighbour):
+            if neighbour in small and is_ancestor(current, neighbour):
                 if has_double:
                     continue
                 has_double = True
@@ -88,8 +97,11 @@ def part2() -> int:
 
 
 def main() -> None:
-    print(f"Part 1: {part1()}")
-    print(f"Part 2: {part2()}")
+    with utils.timed():
+        print(f"Part 1: {part1()}")
+
+    with utils.timed():
+        print(f"Part 2: {part2()}")
 
 
 if __name__ == "__main__":
