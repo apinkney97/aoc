@@ -59,9 +59,9 @@ def fold(grid: Grid, axis: str, value: int) -> Grid:
     new_grid = Grid()
     for x, y in grid:
         if axis == "x" and x > value:
-            x = grid.max_x - x
+            x = 2 * value - x
         elif axis == "y" and y > value:
-            y = grid.max_y - y
+            y = 2 * value - y
         new_grid[(x, y)] = 1
     return new_grid
 
