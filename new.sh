@@ -16,8 +16,12 @@ cat > "${dirname}/${day_str}.py" <<EOF
 import utils
 
 
+EXAMPLE = True
+# EXAMPLE = False
+
+
 def load_data():
-    data = utils.load_data(${day_num})
+    data = utils.load_data(${day_num}, example=EXAMPLE)
 
     return data
 
