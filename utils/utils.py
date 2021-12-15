@@ -1,3 +1,4 @@
+import heapq
 import itertools
 import math
 import os
@@ -84,3 +85,38 @@ def neighbours(coord: tuple[int, ...], include_diagonals: bool):
         for new_coord in itertools.product(*ranges):
             if new_coord != coord:
                 yield new_coord
+
+
+class PQ:
+    """Heavily "borrowed" from
+    https://docs.python.org/3/library/heapq.html?highlight=heapq#priority-queue-implementation-notes
+    """
+
+    def __init__(self):
+        self.pq = []  # list of entries arranged in a heap
+        self.entry_finder = {}  # mapping of item to entries
+        self.REMOVED = object()  # placeholder for a removed item
+        self.counter = itertools.count()  # unique sequence count
+
+    def add_item(self, item, priority=0):
+        """Add a new item or update the priority of an existing item"""
+        if item in self.entry_finder:
+            self.remove_item(item)
+        count = next(self.counter)
+        entry = [priority, count, item]
+        self.entry_finder[item] = entry
+        heapq.heappush(self.pq, entry)
+
+    def remove_item(self, item):
+        """Mark an existing item as REMOVED.  Raise KeyError if not found."""
+        entry = self.entry_finder.pop(item)
+        entry[-1] = self.REMOVED
+
+    def pop_item(self):
+        """Remove and return the lowest priority item. Raise KeyError if empty."""
+        while self.pq:
+            priority, count, item = heapq.heappop(self.pq)
+            if item != self.REMOVED:
+                self.entry_finder.pop(item)
+                return item
+        raise KeyError("pop from an empty priority queue")
