@@ -4,7 +4,7 @@ import math
 import os
 import time
 from contextlib import ContextDecorator
-from functools import reduce, wraps
+from functools import reduce
 from operator import mul
 from typing import Callable, Optional
 
@@ -92,31 +92,34 @@ class PQ:
     https://docs.python.org/3/library/heapq.html?highlight=heapq#priority-queue-implementation-notes
     """
 
-    def __init__(self):
-        self.pq = []  # list of entries arranged in a heap
-        self.entry_finder = {}  # mapping of item to entries
-        self.REMOVED = object()  # placeholder for a removed item
-        self.counter = itertools.count()  # unique sequence count
+    def __init__(self, max_heap: bool = False):
+        self._pq = []  # list of entries arranged in a heap
+        self._entry_finder = {}  # mapping of item to entries
+        self._REMOVED = object()  # sentinel for a removed item
+        self._counter = itertools.count()  # unique sequence count
+        self._max_heap = max_heap
 
     def add_item(self, item, priority=0):
         """Add a new item or update the priority of an existing item"""
-        if item in self.entry_finder:
+        if item in self._entry_finder:
             self.remove_item(item)
-        count = next(self.counter)
+        count = next(self._counter)
+        if self._max_heap:
+            priority = -priority
         entry = [priority, count, item]
-        self.entry_finder[item] = entry
-        heapq.heappush(self.pq, entry)
+        self._entry_finder[item] = entry
+        heapq.heappush(self._pq, entry)
 
     def remove_item(self, item):
-        """Mark an existing item as REMOVED.  Raise KeyError if not found."""
-        entry = self.entry_finder.pop(item)
-        entry[-1] = self.REMOVED
+        """Mark an existing item as removed.  Raise KeyError if not found."""
+        entry = self._entry_finder.pop(item)
+        entry[-1] = self._REMOVED
 
     def pop_item(self):
         """Remove and return the lowest priority item. Raise KeyError if empty."""
-        while self.pq:
-            priority, count, item = heapq.heappop(self.pq)
-            if item != self.REMOVED:
-                self.entry_finder.pop(item)
+        while self._pq:
+            priority, count, item = heapq.heappop(self._pq)
+            if item is not self._REMOVED:
+                self._entry_finder.pop(item)
                 return item
         raise KeyError("pop from an empty priority queue")
