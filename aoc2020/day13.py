@@ -29,7 +29,7 @@ def part1() -> int:
 # shamelessly borrowed from https://rosettacode.org/wiki/Chinese_remainder_theorem#Python_3.6
 def chinese_remainder(remainders):
     total = 0
-    prod = utils.product(*remainders.keys())
+    prod = utils.product(remainders.keys())
     for bus, remainder in remainders.items():
         p = prod // bus
         total += remainder * mul_inv(p, bus) * p

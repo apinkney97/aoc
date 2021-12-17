@@ -6,7 +6,7 @@ import time
 from contextlib import ContextDecorator
 from functools import reduce
 from operator import mul
-from typing import Callable, Optional
+from typing import Callable, Iterable, Optional
 
 from utils.types import T, TNum
 
@@ -45,8 +45,8 @@ def load_data(
         return data
 
 
-def product(*args: TNum) -> TNum:
-    return reduce(mul, args)
+def product(nums: Iterable[TNum]) -> TNum:
+    return reduce(mul, nums)
 
 
 def magnitude(*args: TNum) -> float:

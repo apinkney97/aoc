@@ -28,7 +28,7 @@ def part2() -> int:
     total = 0
     for ds in DATA:
         total += 2 * (ds[0] + ds[1])
-        total += utils.product(*ds)
+        total += utils.product(ds)
 
     return total
 

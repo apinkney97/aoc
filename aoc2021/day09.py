@@ -64,7 +64,7 @@ def part2() -> int:
                         stack.append(neighbour)
         basins.append(size)
 
-    return utils.product(*sorted(basins)[-3:])
+    return utils.product(sorted(basins)[-3:])
 
 
 def main() -> None:

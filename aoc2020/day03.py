@@ -34,7 +34,7 @@ def part2() -> int:
         (1, 2),
     ]
 
-    return utils.product(*(check_slope(DATA, dx, dy) for (dx, dy) in tests))
+    return utils.product(check_slope(DATA, dx, dy) for (dx, dy) in tests)
 
 
 def main() -> None:

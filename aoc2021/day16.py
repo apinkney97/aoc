@@ -198,27 +198,22 @@ class Operator(Packet):
 
     @property
     def value(self) -> int:
+        sps = self._sub_packets
         match self._type:
             case 0:
-                return sum(p.value for p in self._sub_packets)
+                return sum(p.value for p in sps)
             case 1:
-                return utils.product(*(p.value for p in self._sub_packets))
+                return utils.product(p.value for p in sps)
             case 2:
-                return min(p.value for p in self._sub_packets)
+                return min(p.value for p in sps)
             case 3:
-                return max(p.value for p in self._sub_packets)
+                return max(p.value for p in sps)
             case 5:
-                return (
-                    1 if self._sub_packets[0].value > self._sub_packets[1].value else 0
-                )
+                return 1 if sps[0].value > sps[1].value else 0
             case 6:
-                return (
-                    1 if self._sub_packets[0].value < self._sub_packets[1].value else 0
-                )
+                return 1 if sps[0].value < sps[1].value else 0
             case 7:
-                return (
-                    1 if self._sub_packets[0].value == self._sub_packets[1].value else 0
-                )
+                return 1 if sps[0].value == sps[1].value else 0
 
 
 DATA = load_data()
