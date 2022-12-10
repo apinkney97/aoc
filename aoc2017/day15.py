@@ -3,7 +3,7 @@ from aoc2017.util import load_data
 MUL_A = 16807
 MUL_B = 48271
 MOD = 2147483647
-MASK = 2 ** 16 - 1
+MASK = 2**16 - 1
 
 
 def gen(start, mul, mod=1):

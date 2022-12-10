@@ -37,7 +37,7 @@ class Vector:
             self.angle += 2 * math.pi
 
         self.manhattan = abs(self.dx) + abs(self.dy)
-        self.magnitude = math.sqrt(self.dx ** 2 + self.dy ** 2)
+        self.magnitude = math.sqrt(self.dx**2 + self.dy**2)
 
     def __repr__(self):
         return f"{type(self).__name__}({self.origin}, {self.destination})"

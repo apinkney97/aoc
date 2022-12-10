@@ -9,7 +9,6 @@ C: scissors, 3, Z
 """
 import utils
 
-
 # EXAMPLE = True
 EXAMPLE = False
 

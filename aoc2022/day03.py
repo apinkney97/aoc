@@ -4,7 +4,6 @@ import more_itertools
 
 import utils
 
-
 # EXAMPLE = True
 EXAMPLE = False
 

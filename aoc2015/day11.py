@@ -28,7 +28,7 @@ def str_to_num(s: str) -> int:
     base = len(VALUE_TO_LETTER)
     total = 0
     for i, c in enumerate(s[::-1]):
-        total += (base ** i) * LETTER_TO_VALUE[c]
+        total += (base**i) * LETTER_TO_VALUE[c]
     return total
 
 

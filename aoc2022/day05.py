@@ -3,7 +3,6 @@ import typing
 
 import utils
 
-
 # EXAMPLE = True
 EXAMPLE = False
 

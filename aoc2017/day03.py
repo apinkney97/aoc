@@ -18,7 +18,7 @@ def part1(num):
     side_len = int(ceil(sqrt(num)))
     if side_len % 2 == 0:
         side_len += 1
-    upper_bound = side_len ** 2
+    upper_bound = side_len**2
     lower_bound = (side_len - 2) ** 2
     layer = range(lower_bound + 1, upper_bound + 1)
     segment_len = side_len - 1
