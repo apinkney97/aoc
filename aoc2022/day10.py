@@ -39,9 +39,9 @@ def part2() -> int:
 
     for cycle, instruction in enumerate(DATA, start=0):
         if sprite_x - 1 <= cycle % 40 <= sprite_x + 1:
-            print("#", end="")
+            print("██", end="")
         else:
-            print(".", end="")
+            print("░░", end="")
 
         if (cycle + 1) % 40 == 0:
             print()
