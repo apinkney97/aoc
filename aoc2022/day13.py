@@ -13,12 +13,9 @@ EXAMPLE = False
 def load_data():
     data = utils.load_data(13, example=EXAMPLE)
     parsed = []
-    for packet_1, packet_2, _ in more_itertools.grouper(
-        data, 3, incomplete="fill", fillvalue=""
-    ):
-        packet_1 = ast.literal_eval(packet_1)
-        packet_2 = ast.literal_eval(packet_2)
-        parsed.append((packet_1, packet_2))
+    for line in data:
+        if line:
+            parsed.append(ast.literal_eval(line))
     return parsed
 
 
@@ -55,7 +52,7 @@ def cmp(left, right):
 
 def part1() -> int:
     total = 0
-    for i, (left, right) in enumerate(DATA, start=1):
+    for i, (left, right) in enumerate(more_itertools.chunked(DATA, 2), start=1):
         result = cmp(left, right)
         if result == -1:
             total += i
@@ -63,18 +60,12 @@ def part1() -> int:
 
 
 def part2() -> int:
-    all_packets = []
-    for left, right in DATA:
-        all_packets.extend([left, right])
-
     marker_1 = [[2]]
     marker_2 = [[6]]
-    all_packets.append(marker_1)
-    all_packets.append(marker_2)
 
-    all_packets.sort(key=functools.cmp_to_key(cmp))
+    ordered = sorted(DATA + [marker_1, marker_2], key=functools.cmp_to_key(cmp))
 
-    return (all_packets.index(marker_1) + 1) * (all_packets.index(marker_2) + 1)
+    return (ordered.index(marker_1) + 1) * (ordered.index(marker_2) + 1)
 
 
 def main() -> None:
