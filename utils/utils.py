@@ -6,7 +6,7 @@ import time
 from contextlib import ContextDecorator
 from functools import reduce
 from operator import mul
-from typing import Callable, Iterable, Optional
+from typing import Callable, Iterable, Iterator, Optional
 
 from utils.types import T, TNum
 
@@ -57,7 +57,7 @@ def manhattan(*args: int) -> int:
     return sum(abs(a) for a in args)
 
 
-def manhattan_border(centre: tuple[int, int], radius: int):
+def manhattan_border(centre: tuple[int, int], radius: int) -> Iterator[tuple[int, int]]:
     cx, cy = centre
 
     for i in range(radius):
