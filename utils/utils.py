@@ -50,11 +50,21 @@ def product(nums: Iterable[TNum]) -> TNum:
 
 
 def magnitude(*args: TNum) -> float:
-    return math.sqrt(sum(a ** 2 for a in args))
+    return math.sqrt(sum(a**2 for a in args))
 
 
 def manhattan(*args: int) -> int:
     return sum(abs(a) for a in args)
+
+
+def manhattan_border(centre: tuple[int, int], radius: int):
+    cx, cy = centre
+
+    for i in range(radius):
+        yield cx + i, cy - i + radius
+        yield cx - i + radius, cy - i
+        yield cx - i, cy + i - radius
+        yield cx + i - radius, cy + i
 
 
 def triangle(n: int) -> int:

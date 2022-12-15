@@ -9,6 +9,7 @@ from utils.utils import (
     log,
     magnitude,
     manhattan,
+    manhattan_border,
     neighbours,
     product,
     timed,
