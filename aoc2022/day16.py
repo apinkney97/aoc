@@ -110,7 +110,7 @@ def part2() -> int:
     best = 0
 
     # Check all non-overlapping pairs of paths
-    for valves_me, valves_elephant in itertools.product(best_by_valves, best_by_valves):
+    for valves_me, valves_elephant in itertools.combinations(best_by_valves, 2):
         if valves_me & valves_elephant:
             continue
         best_total = best_by_valves[valves_me] + best_by_valves[valves_elephant]
