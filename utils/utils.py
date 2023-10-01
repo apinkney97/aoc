@@ -4,6 +4,7 @@ import math
 import os
 import time
 from contextlib import ContextDecorator
+from datetime import timedelta
 from functools import reduce
 from operator import mul
 from typing import Callable, Iterable, Iterator, Optional
@@ -73,10 +74,12 @@ def triangle(n: int) -> int:
 
 class timed(ContextDecorator):
     def __enter__(self):
-        self.start = time.monotonic()
+        self.start = time.perf_counter_ns()
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        print(f"Took {time.monotonic() - self.start:.6f} secs")
+        duration_ns = time.perf_counter_ns() - self.start
+        duration_td = timedelta(microseconds=duration_ns // 1000)
+        print(f"Took {duration_td} ({duration_ns} ns)")
 
 
 def neighbours(coord: tuple[int, ...], include_diagonals: bool):
