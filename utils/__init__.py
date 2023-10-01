@@ -15,3 +15,4 @@ from utils.utils import (
     timed,
     triangle,
 )
+from utils.grid import Grid2D, Coord2D

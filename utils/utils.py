@@ -47,10 +47,12 @@ def load_data(
 
 
 def product(nums: Iterable[TNum]) -> TNum:
+    """Returns the product of the iterable passed in"""
     return reduce(mul, nums)
 
 
 def magnitude(*args: TNum) -> float:
+    """Returns the magnitude of the vector specified by the orthogonal input vectors"""
     return math.sqrt(sum(a**2 for a in args))
 
 
@@ -59,6 +61,11 @@ def manhattan(*args: int) -> int:
 
 
 def manhattan_border(centre: tuple[int, int], radius: int) -> Iterator[tuple[int, int]]:
+    """
+    Returns an iterator of coordinates the specified radius away from the centre coordinate.
+
+    This effectively describes a diamond shape.
+    """
     cx, cy = centre
 
     for i in range(radius):
@@ -69,6 +76,7 @@ def manhattan_border(centre: tuple[int, int], radius: int) -> Iterator[tuple[int
 
 
 def triangle(n: int) -> int:
+    """Returns the nth triangle number"""
     return n * (n + 1) // 2
 
 
@@ -82,7 +90,8 @@ class timed(ContextDecorator):
         print(f"Took {duration_td} ({duration_ns} ns)")
 
 
-def neighbours(coord: tuple[int, ...], include_diagonals: bool):
+def neighbours(coord: tuple[int, ...], *, include_diagonals: bool):
+    """Returns the neighbours of the specified coordinate."""
     dimensions = len(coord)
     if not include_diagonals:
         # +-1 on each dimension
