@@ -5,10 +5,11 @@ from utils.types import T
 
 
 class SetDeque(Generic[T]):
-    def __init__(self, iterable: Iterable[T]):
+    def __init__(self, iterable: Iterable[T] | None = None):
         self._dict: Dict[T, int] = {}
         self._deque: Deque[T] = deque()
-        self.extend(iterable)
+        if iterable is not None:
+            self.extend(iterable)
 
     def __add_to_dict(self, item: T) -> None:
         try:

@@ -1,4 +1,5 @@
 from utils.cmp import safe_max, safe_min
+from utils.grid import Coord2D, Grid2D, Grid3D
 from utils.setdeque import SetDeque
 from utils.types import T, TNum
 from utils.utils import (
@@ -15,4 +16,3 @@ from utils.utils import (
     timed,
     triangle,
 )
-from utils.grid import Grid2D, Coord2D
