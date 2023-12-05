@@ -1,27 +1,11 @@
-#!/bin/bash
-
-set -euC
-
-day_num=${1:-$(date +'%-d')}
-day_str=$(printf 'day%02d' "${day_num}")
-year=${2:-$(date +'%Y')}
-
-dirname="aoc/aoc${year}"
-
-mkdir -p "${dirname}/data/"
-
-touch "${dirname}/data/${day_str}.data"
-touch "${dirname}/data/${day_str}-example.data"
-cat > "${dirname}/${day_str}.py" <<EOF
-import utils
-
+from aoc import utils
 
 EXAMPLE = True
 # EXAMPLE = False
 
 
 def load_data():
-    data = utils.load_data(${year}, ${day_num}, example=EXAMPLE)
+    data = utils.load_data(2023, 5, example=EXAMPLE)
 
     return data
 
@@ -51,4 +35,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-EOF
