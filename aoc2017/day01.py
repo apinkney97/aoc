@@ -1,8 +1,8 @@
-from aoc2017.util import load_data
+import utils
 
 
 def get_data():
-    return load_data(1)[0]
+    return utils.load_data(2017, 1)[0]
 
 
 def part1():

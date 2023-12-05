@@ -3,7 +3,7 @@ Cheers to
 http://keekerdc.com/2011/03/hexagon-grids-coordinate-systems-and-distance-calculations/
 for providing some insight into hex grids!
 """
-from aoc2017.util import load_data
+import utils
 
 DIRS = {
     "n": (0, 1),
@@ -28,7 +28,7 @@ def part1():
     global GLOBAL_MAX
     x = 0
     y = 0
-    for d in load_data(11)[0].split(","):
+    for d in utils.load_data(2017, 11)[0].split(","):
         dx, dy = DIRS[d]
         x += dx
         y += dy

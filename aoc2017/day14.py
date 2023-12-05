@@ -1,9 +1,9 @@
 from aoc2017.day10 import knot_hash
-from aoc2017.util import load_data
+import utils
 
 
 def get_grid():
-    hashes = [knot_hash(load_data(14)[0] + "-" + str(i)) for i in range(128)]
+    hashes = [knot_hash(utils.load_data(2017, 14)[0] + "-" + str(i)) for i in range(128)]
     return [list(bin(int(h, 16))[2:].zfill(128)) for h in hashes]
 
 

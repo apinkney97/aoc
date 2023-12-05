@@ -1,8 +1,8 @@
-from aoc2017.util import load_data
+import utils
 
 
 def get_data():
-    return [[int(i) for i in line.split("\t") if i] for line in load_data(2)]
+    return [[int(i) for i in line.split("\t") if i] for line in utils.load_data(2017, 2)]
 
 
 def part1():

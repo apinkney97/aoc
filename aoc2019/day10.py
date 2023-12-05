@@ -3,7 +3,7 @@ import math
 from fractions import Fraction
 from itertools import product
 
-from aoc2019 import utils
+import utils
 
 
 class Vector:

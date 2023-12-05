@@ -1,4 +1,4 @@
-from aoc2017.util import load_data
+import utils
 
 
 class Node:
@@ -33,7 +33,7 @@ class SpinLock:
 
 
 def get_data():
-    return int(load_data(17)[0])
+    return int(utils.load_data(2017, 17)[0])
 
 
 def part1():

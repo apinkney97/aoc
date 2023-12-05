@@ -1,4 +1,4 @@
-from aoc2019 import utils
+import utils
 
 
 def load_data():

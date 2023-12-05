@@ -1,7 +1,7 @@
 import asyncio
 from collections import defaultdict
 
-from aoc2017.util import load_data
+import utils
 
 event_loop = asyncio.get_event_loop()
 
@@ -15,7 +15,7 @@ def get_instructions():
         except ValueError:
             return val
 
-    for line in load_data(18):
+    for line in utils.load_data(2017, 18):
         instructions.append(tuple(try_int(v) for v in line.split(" ")))
 
     return instructions

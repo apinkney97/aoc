@@ -1,6 +1,6 @@
 from collections import defaultdict
 
-from aoc2017.util import load_data
+import utils
 
 CMP_FNS = {
     "==": lambda a, b: a == b,
@@ -17,7 +17,7 @@ GLOBAL_MAX = 0
 def do_work():
     global GLOBAL_MAX
     cells = defaultdict(int)
-    for line in load_data(8):
+    for line in utils.load_data(2017,8):
         this_name, action, val, _, that, cmp_op, cmp_val = line.split(" ")
         cmp_val = int(cmp_val)
         if CMP_FNS[cmp_op](cells[that], cmp_val):

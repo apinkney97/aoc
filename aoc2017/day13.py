@@ -1,9 +1,9 @@
-from aoc2017.util import load_data
+import utils
 
 
 def get_data():
     data = {}
-    for line in load_data(13):
+    for line in utils.load_data(2017, 13):
         layer, depth = line.split(": ")
         data[int(layer)] = int(depth)
     return data

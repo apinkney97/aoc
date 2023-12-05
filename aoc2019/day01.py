@@ -1,4 +1,4 @@
-from aoc2019 import utils
+import utils
 
 
 def fuel_needed(mass: int) -> int:

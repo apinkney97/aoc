@@ -1,13 +1,13 @@
 import string
 
-from aoc2017.util import load_data
+import utils
 
 MOVES = []
 
 
 def dance(progs):
     if not MOVES:
-        for move in load_data(16)[0].split(","):
+        for move in utils.load_data(2017, 16)[0].split(","):
             if move[0] == "s":
                 MOVES.append(("s", int(move[1:])))
             elif move[0] == "x":

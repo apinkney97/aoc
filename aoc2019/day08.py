@@ -3,7 +3,7 @@ from typing import List, Optional
 
 from more_itertools import chunked
 
-from aoc2019 import utils
+import utils
 
 
 def part1():

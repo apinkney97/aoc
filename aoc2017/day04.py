@@ -1,4 +1,4 @@
-from aoc2017.util import load_data
+import utils
 
 
 def contains_dupes(words):
@@ -12,7 +12,7 @@ def contains_anags(words):
 
 def get_valid_count(invalidation_fn):
     count = 0
-    for line in load_data(4):
+    for line in utils.load_data(2017, 4):
         words = line.strip().split(" ")
         if not invalidation_fn(words):
             count += 1

@@ -1,4 +1,4 @@
-from aoc2017.util import load_data
+import utils
 
 MUL_A = 16807
 MUL_B = 48271
@@ -35,6 +35,6 @@ def part2(a_start, b_start):
 
 
 if __name__ == "__main__":
-    a, b = (int(line.rsplit(" ", 1)[1]) for line in load_data(15))
+    a, b = (int(line.rsplit(" ", 1)[1]) for line in utils.load_data(2017, 15))
     print("Part 1: {}".format(part1(a, b)))
     print("Part 2: {}".format(part2(a, b)))

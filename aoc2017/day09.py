@@ -1,13 +1,13 @@
 import re
 
-from aoc2017.util import load_data
+import utils
 
 CANCEL_RE = re.compile("!.")
 GARBAGE_RE = re.compile("<[^>]*>")
 
 
 def get_data():
-    return load_data(9)[0]
+    return utils.load_data(2017,9)[0]
 
 
 def part1():

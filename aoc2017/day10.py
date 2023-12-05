@@ -1,10 +1,10 @@
 from functools import reduce
 
-from aoc2017.util import load_data
+import utils
 
 
 def get_data():
-    return load_data(10)[0]
+    return utils.load_data(2017,10)[0]
 
 
 def circular_slice(l, start, length):

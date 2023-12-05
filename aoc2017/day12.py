@@ -1,9 +1,9 @@
-from aoc2017.util import load_data
+import utils
 
 
 def get_data():
     data = {}
-    for line in load_data(12):
+    for line in utils.load_data(2017, 12):
         val, _, neighbours = line.split(" ", 2)
         data[val] = {n for n in neighbours.split(", ")}
     return data

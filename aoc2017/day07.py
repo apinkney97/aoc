@@ -1,11 +1,11 @@
 from collections import defaultdict, deque
 
-from aoc2017.util import load_data
+import utils
 
 
 def get_data():
     data = {}
-    for line in load_data(7):
+    for line in utils.load_data(2017,7):
         bits = line.split(" ")
         name = bits[0]
         weight = int(bits[1][1:-1])

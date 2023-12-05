@@ -1,7 +1,7 @@
 import asyncio
 from enum import Enum
 
-from aoc2019 import utils
+import utils
 from aoc2019.intcode import IntCodeProcessor, RunState
 
 

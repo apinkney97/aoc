@@ -1,6 +1,6 @@
 from typing import List, Mapping, Tuple
 
-from aoc2019 import utils
+import utils
 
 DIRECTIONS = {
     "U": (0, 1),

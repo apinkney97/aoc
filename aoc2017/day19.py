@@ -1,6 +1,6 @@
 import string
 
-from aoc2017.util import load_data
+import utils
 
 
 class NoPathFoundError(Exception):
@@ -34,7 +34,7 @@ def is_valid_pos(path, x, y):
 
 
 def follow_path():
-    path = load_data(19, strip=False)
+    path = utils.load_data(2017, 19, strip=False)
 
     # path = [
     #     "     |          ",
