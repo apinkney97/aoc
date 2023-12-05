@@ -1,17 +1,17 @@
 from itertools import cycle
 
-from aoc2018.util import load_data
+import utils
 
 
 def part1():
-    return sum(int(d) for d in load_data(1))
+    return sum(int(d) for d in utils.load_data(2018, 1))
 
 
 def part2():
     curr = 0
     seen = {0}
 
-    for val in cycle(int(d) for d in load_data(1)):
+    for val in cycle(int(d) for d in utils.load_data(2018, 1)):
         curr += val
         if curr in seen:
             return curr

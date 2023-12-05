@@ -1,10 +1,10 @@
 from collections import Counter
 
-from aoc2018.util import load_data
+import utils
 
 
 def part1():
-    data = load_data(2)
+    data = utils.load_data(2018, 2)
 
     twos = 0
     threes = 0
@@ -22,7 +22,7 @@ def part1():
 
 
 def part2():
-    data = load_data(2)
+    data = utils.load_data(2018, 2)
 
     seen = set()
 
