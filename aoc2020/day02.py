@@ -5,7 +5,7 @@ import utils
 
 LINE_RE = re.compile(r"^(?P<lower>\d+)-(?P<upper>\d+) (?P<letter>.): (?P<password>.*)$")
 
-DATA = utils.load_data(2, fn=LINE_RE.match)
+DATA = utils.load_data(2020, 2, fn=LINE_RE.match)
 
 
 def part1() -> int:

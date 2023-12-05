@@ -5,7 +5,7 @@ import utils
 
 RE = re.compile(r"(?P<place_1>\w+) to (?P<place_2>\w+) = (?P<dist>\d+)")
 
-DATA = utils.load_data(9, fn=RE.fullmatch)
+DATA = utils.load_data(2015, 9, fn=RE.fullmatch)
 
 
 def _get_key(place_1, place_2):

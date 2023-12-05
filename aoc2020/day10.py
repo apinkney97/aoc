@@ -2,7 +2,7 @@ import utils
 
 
 def _get_data():
-    data = utils.load_data(10, fn=int, example=False) + [0]
+    data = utils.load_data(2020, 10, fn=int, example=False) + [0]
     data.sort()
     data.append(data[-1] + 3)
     return data

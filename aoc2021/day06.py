@@ -4,7 +4,7 @@ import utils
 
 
 def load_data():
-    data = utils.load_data(6, example=False)
+    data = utils.load_data(2021, 6, example=False)
 
     return [int(i) for i in data[0].split(",")]
 

@@ -8,7 +8,7 @@ import utils
 
 
 def load_data():
-    data = utils.load_data(24, example=False)
+    data = utils.load_data(2020, 24, example=False)
     lines = []
     for line in data:
         directions = []

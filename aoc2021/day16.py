@@ -29,7 +29,7 @@ HEX_TO_BYTES = {
 
 
 def load_data():
-    data = utils.load_data(16, example=EXAMPLE)
+    data = utils.load_data(2021, 16, example=EXAMPLE)
 
     bits = []
 

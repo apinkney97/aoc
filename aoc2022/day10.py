@@ -5,7 +5,7 @@ EXAMPLE = False
 
 
 def load_data():
-    data = utils.load_data(10, example=EXAMPLE)
+    data = utils.load_data(2022, 10, example=EXAMPLE)
 
     instructions = []
     for line in data:

@@ -10,7 +10,7 @@ def load_data():
     matcher = re.compile(
         r"Sensor at x=(-?\d+), y=(-?\d+): closest beacon is at x=(-?\d+), y=(-?\d+)"
     )
-    data = utils.load_data(15, example=EXAMPLE, fn=matcher.fullmatch)
+    data = utils.load_data(2022, 15, example=EXAMPLE, fn=matcher.fullmatch)
 
     return [
         ((int(d.group(1)), int(d.group(2))), (int(d.group(3)), int(d.group(4))))

@@ -6,7 +6,7 @@ INSTRUCTION_RE = re.compile(
     r"(?P<action>.*) (?P<x1>\d+),(?P<y1>\d+) through (?P<x2>\d+),(?P<y2>\d+)"
 )
 
-DATA = utils.load_data(6, fn=INSTRUCTION_RE.fullmatch)
+DATA = utils.load_data(2015, 6, fn=INSTRUCTION_RE.fullmatch)
 
 
 def get_coords(x1, y1, x2, y2):

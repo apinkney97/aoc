@@ -3,7 +3,7 @@ from itertools import combinations
 import utils
 
 TARGET = 2020
-DATA = utils.load_data(1, fn=int)
+DATA = utils.load_data(2020, 1, fn=int)
 
 
 def part1() -> int:

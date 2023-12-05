@@ -11,7 +11,7 @@ class ContainedBags(NamedTuple):
 
 def _load_data():
     line_re = re.compile(r"(?P<outer>.*) bags contain (?P<inner>.*)")
-    raw_data = utils.load_data(7, fn=line_re.fullmatch)
+    raw_data = utils.load_data(2020, 7, fn=line_re.fullmatch)
     inner_re = re.compile(r"(?P<count>\d+) (?P<name>.*) bags?\.?")
     data = {}
     for line in raw_data:

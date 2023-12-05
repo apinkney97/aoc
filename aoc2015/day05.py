@@ -2,7 +2,7 @@ import re
 
 import utils
 
-DATA = utils.load_data(5)
+DATA = utils.load_data(2015, 5)
 
 
 PAIR_RE = re.compile(r"(.)(\1)")

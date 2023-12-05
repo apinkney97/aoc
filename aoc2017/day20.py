@@ -37,7 +37,7 @@ def load_data():
             a=Vector(int(match["ax"]), int(match["ay"]), int(match["az"])),
         )
 
-    data = utils.load_data(20, fn=process)
+    data = utils.load_data(2017, 20, fn=process)
 
     return data
 

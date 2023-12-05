@@ -1,7 +1,6 @@
 import heapq
 import itertools
 import math
-import os
 import time
 from contextlib import ContextDecorator
 from datetime import timedelta
@@ -27,23 +26,6 @@ def disable_logging():
 def log(*args, **kwargs):
     if DEBUG:
         print(*args, **kwargs)
-
-
-def load_data(
-    day: int,
-    strip: bool = True,
-    *,
-    fn: Optional[Callable[[str], T]] = None,
-    example: bool = False,
-) -> list[T] | list[str]:
-    suffix = "-example" if example else ""
-    with open(os.path.join("data", f"day{day:02d}{suffix}.data")) as f:
-        data = f.readlines()
-        if strip:
-            data = [line.strip() for line in data]
-        if fn is not None:
-            data = [fn(line) for line in data]
-        return data
 
 
 def product(nums: Iterable[TNum]) -> TNum:
@@ -81,12 +63,17 @@ def triangle(n: int) -> int:
 
 
 class timed(ContextDecorator):
+    def __init__(self, text: str = ""):
+        self.text = text
+
     def __enter__(self):
         self.start = time.perf_counter_ns()
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         duration_ns = time.perf_counter_ns() - self.start
         duration_td = timedelta(microseconds=duration_ns // 1000)
+        if self.text:
+            print(f"Timing {self.text}")
         print(f"Took {duration_td} ({duration_ns} ns)")
 
 

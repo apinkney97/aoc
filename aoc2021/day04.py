@@ -2,7 +2,7 @@ import utils
 
 
 def load_data():
-    data = utils.load_data(4, example=False)
+    data = utils.load_data(2021, 4, example=False)
 
     called_numbers = [int(i) for i in data[0].split(",")]
     boards = []

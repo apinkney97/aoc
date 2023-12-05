@@ -5,7 +5,9 @@ EXAMPLE = False
 
 
 def load_data():
-    data = utils.load_data(15, example=EXAMPLE, fn=lambda line: [int(i) for i in line])
+    data = utils.load_data(
+        2021, 15, example=EXAMPLE, fn=lambda line: [int(i) for i in line]
+    )
 
     return data
 

@@ -8,7 +8,7 @@ EXAMPLE = False
 
 
 def load_data():
-    data = utils.load_data(19, example=EXAMPLE)
+    data = utils.load_data(2015, 19, example=EXAMPLE)
     rules = {}
     for line in data:
         if not line:

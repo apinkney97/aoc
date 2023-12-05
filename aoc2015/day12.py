@@ -4,7 +4,7 @@ from singledispatch import singledispatch
 
 import utils
 
-DATA = json.loads(utils.load_data(12)[0])
+DATA = json.loads(utils.load_data(2015, 12)[0])
 
 
 @singledispatch

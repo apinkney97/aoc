@@ -1,6 +1,6 @@
 import utils
 
-DATA = utils.load_data(11, fn=list)
+DATA = utils.load_data(2020, 11, fn=list)
 
 
 def get_adjacent_neighbours(row, col, data):

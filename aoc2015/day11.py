@@ -3,7 +3,7 @@ import string
 
 import utils
 
-DATA = utils.load_data(11)
+DATA = utils.load_data(2015, 11)
 
 VALUE_TO_LETTER = dict(enumerate(string.ascii_lowercase))
 LETTER_TO_VALUE = {letter: value for value, letter in VALUE_TO_LETTER.items()}

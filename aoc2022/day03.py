@@ -9,7 +9,7 @@ EXAMPLE = False
 
 
 def load_data():
-    data = utils.load_data(3, example=EXAMPLE)
+    data = utils.load_data(2022, 3, example=EXAMPLE)
     return data
 
 

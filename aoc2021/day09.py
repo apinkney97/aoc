@@ -2,7 +2,9 @@ import utils
 
 
 def load_data():
-    data = utils.load_data(9, fn=lambda line: [int(c) for c in line], example=False)
+    data = utils.load_data(
+        2021, 9, fn=lambda line: [int(c) for c in line], example=False
+    )
 
     return data
 

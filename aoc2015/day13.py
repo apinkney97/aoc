@@ -8,7 +8,7 @@ def _load_data():
     re_ = re.compile(
         r"(?P<name1>\w+) would (?P<action>\w+) (?P<n>\d+) happiness units by sitting next to (?P<name2>\w+)\."
     )
-    data = utils.load_data(13, fn=re_.fullmatch)
+    data = utils.load_data(2015, 13, fn=re_.fullmatch)
     scores = {}
     for row in data:
         score = int(row["n"]) * (-1 if row["action"] == "lose" else 1)

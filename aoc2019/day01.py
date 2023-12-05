@@ -8,7 +8,7 @@ def fuel_needed(mass: int) -> int:
 def part1() -> int:
     total_fuel_mass = 0
 
-    for module_mass in utils.load_data(1):
+    for module_mass in utils.load_data(2019, 1):
         module_mass = int(module_mass)
         total_fuel_mass += fuel_needed(module_mass)
 
@@ -18,7 +18,7 @@ def part1() -> int:
 def part2() -> int:
     total_fuel_mass = 0
 
-    for module_mass in utils.load_data(1):
+    for module_mass in utils.load_data(2019, 1):
         module_mass = int(module_mass)
         extra_fuel_mass = fuel_needed(module_mass)
         total_fuel_mass += extra_fuel_mass

@@ -118,7 +118,7 @@ class Arcade:
 
 
 async def run():
-    memory = [int(i) for i in utils.load_data(13)[0].split(",")]
+    memory = [int(i) for i in utils.load_data(2019, 13)[0].split(",")]
     arcade = Arcade(memory, add_credit=True)
     result = await arcade.run()
     return result

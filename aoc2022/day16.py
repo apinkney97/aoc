@@ -12,7 +12,7 @@ def load_data():
     matcher = re.compile(
         r"Valve (..) has flow rate=(\d+); tunnels? leads? to valves? (.*)$"
     )
-    data = utils.load_data(16, example=EXAMPLE, fn=matcher.fullmatch)
+    data = utils.load_data(2022, 16, example=EXAMPLE, fn=matcher.fullmatch)
 
     valves = {}
     for row in data:

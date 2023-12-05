@@ -1,6 +1,6 @@
 import utils
 
-DATA = utils.load_data(18)
+DATA = utils.load_data(2020, 18)
 
 
 def split(expr):

@@ -7,7 +7,7 @@ EXAMPLE = False
 
 
 def load_data():
-    data = utils.load_data(17, example=EXAMPLE, fn=int)
+    data = utils.load_data(2015, 17, example=EXAMPLE, fn=int)
 
     return data
 

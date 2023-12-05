@@ -6,7 +6,7 @@ EXAMPLE = False
 
 def load_data():
     data = utils.load_data(
-        18, example=EXAMPLE, fn=lambda line: [0 if c == "." else 1 for c in line]
+        2015, 18, example=EXAMPLE, fn=lambda line: [0 if c == "." else 1 for c in line]
     )
 
     bounds = (0, len(data[0]), 0, len(data))

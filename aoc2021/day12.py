@@ -8,7 +8,7 @@ import utils
 
 
 def load_data():
-    data = utils.load_data(12, example=False)
+    data = utils.load_data(2021, 12, example=False)
 
     adjacencies = defaultdict(list)
 

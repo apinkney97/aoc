@@ -2,7 +2,7 @@ import utils
 
 
 def load_data():
-    data = utils.load_data(13, example=False)
+    data = utils.load_data(2021, 13, example=False)
     grid = utils.Grid2D()
     folds = []
     for line in data:

@@ -1,6 +1,6 @@
 import utils
 
-DATA = utils.load_data(5)
+DATA = utils.load_data(2020, 5)
 
 
 def to_id(seat: str) -> int:

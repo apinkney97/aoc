@@ -5,7 +5,7 @@ import utils
 
 
 def load_data() -> Tuple[Tuple[int], Tuple[int]]:
-    data = utils.load_data(22, example=False)
+    data = utils.load_data(2020, 22, example=False)
 
     di = iter(data)
 

@@ -41,7 +41,7 @@ def manhattan_distance(p1: Point, p2: Point) -> int:
 
 
 def part1() -> int:
-    data = utils.load_data(3)
+    data = utils.load_data(2019, 3)
     wire1 = data[0].split(",")
     wire2 = data[1].split(",")
 
@@ -63,7 +63,7 @@ def part1() -> int:
 
 
 def part2() -> int:
-    data = utils.load_data(3)
+    data = utils.load_data(2019, 3)
     wire1 = data[0].split(",")
     wire2 = data[1].split(",")
 

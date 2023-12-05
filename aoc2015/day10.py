@@ -1,6 +1,6 @@
 import utils
 
-DATA = utils.load_data(10)
+DATA = utils.load_data(2015, 10)
 
 
 def look_and_say(string: str):

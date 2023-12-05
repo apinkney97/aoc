@@ -14,7 +14,7 @@ class Coord(NamedTuple):
 
 def load_data():
     grid = set()
-    data = utils.load_data(17, example=False)
+    data = utils.load_data(2020, 17, example=False)
     for x, row in enumerate(data):
         for y, char in enumerate(row):
             if char == "#":

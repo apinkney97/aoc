@@ -6,7 +6,7 @@ RE = re.compile(r"^(\d+)x(\d+)x(\d+)$")
 
 
 def _get_data():
-    data = utils.load_data(2, fn=RE.match)
+    data = utils.load_data(2015, 2, fn=RE.match)
     dimensions = [sorted(int(item[i]) for i in (1, 2, 3)) for item in data]
     return dimensions
 

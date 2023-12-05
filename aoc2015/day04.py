@@ -3,7 +3,7 @@ from itertools import count
 
 import utils
 
-DATA = utils.load_data(4)
+DATA = utils.load_data(2015, 4)
 
 
 def find_hash(leading_zeros):

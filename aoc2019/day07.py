@@ -6,7 +6,7 @@ from aoc2019.intcode import IntCodeProcessor, RunState
 
 
 async def intcode_eval(phase_settings) -> int:
-    memory = [int(i) for i in utils.load_data(7)[0].split(",")]
+    memory = [int(i) for i in utils.load_data(2019, 7)[0].split(",")]
     processors = []
 
     for phase_setting in phase_settings:

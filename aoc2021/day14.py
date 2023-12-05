@@ -7,7 +7,7 @@ EXAMPLE = False
 
 
 def load_data():
-    data = utils.load_data(14, example=EXAMPLE)
+    data = utils.load_data(2021, 14, example=EXAMPLE)
     template = list(data[0])
 
     rules = {}

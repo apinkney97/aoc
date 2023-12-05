@@ -90,7 +90,7 @@ class Tile:
 
 
 def load_data() -> List[Tile]:
-    data = utils.load_data(20, example=False)
+    data = utils.load_data(2020, 20, example=False)
 
     tiles = []
 

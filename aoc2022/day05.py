@@ -14,7 +14,7 @@ class Move(typing.NamedTuple):
 
 
 def load_data():
-    data = utils.load_data(5, example=EXAMPLE, strip=False)
+    data = utils.load_data(2022, 5, example=EXAMPLE, strip=False)
     d_it = iter(data)
     stack_rows = []
     for row in d_it:

@@ -3,7 +3,7 @@ import utils
 
 def load_data():
 
-    data = utils.load_data(2, example=False)
+    data = utils.load_data(2021, 2, example=False)
 
     return data
 

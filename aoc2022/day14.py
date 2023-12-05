@@ -13,7 +13,7 @@ class Coord(typing.NamedTuple):
 
 
 def load_data():
-    data = utils.load_data(14, example=EXAMPLE)
+    data = utils.load_data(2022, 14, example=EXAMPLE)
     grid = {}
 
     for line in data:

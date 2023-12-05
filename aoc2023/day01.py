@@ -2,19 +2,17 @@ import re
 
 import utils
 
-
 # EXAMPLE = True
 EXAMPLE = False
 
 
 def load_data():
-    data = utils.load_data(1, example=EXAMPLE)
+    data = utils.load_data(2023, 1, example=EXAMPLE)
 
     return data
 
 
 DATA = load_data()
-
 
 
 def part1() -> int:

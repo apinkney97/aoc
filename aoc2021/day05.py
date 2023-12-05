@@ -10,7 +10,7 @@ def load_data():
         x2, y2 = parts[1].split(",")
         return tuple(int(n) for n in (x1, y1, x2, y2))
 
-    data = utils.load_data(5, fn=parse, example=False)
+    data = utils.load_data(2021, 5, fn=parse, example=False)
 
     return data
 

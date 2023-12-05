@@ -21,20 +21,25 @@ EXAMPLE = True
 
 
 def load_data():
-    data = utils.load_data(${day_num}, example=EXAMPLE)
+    data = utils.load_data(${year}, ${day_num}, example=EXAMPLE)
 
     return data
 
 
-DATA = load_data()
+with utils.timed("Load data"):
+    DATA = load_data()
 
 
 def part1() -> int:
-    return 0
+    result = 0
+
+    return result
 
 
 def part2() -> int:
-    return 0
+    result = 0
+
+    return result
 
 
 def main() -> None:

@@ -1,6 +1,6 @@
 import utils
 
-DATA = utils.load_data(1)
+DATA = utils.load_data(2015, 1)
 
 
 def part1() -> int:

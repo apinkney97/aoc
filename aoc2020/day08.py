@@ -14,7 +14,7 @@ def _parse(data: str):
     return Instruction(inst), int(val)
 
 
-DATA = utils.load_data(8, fn=_parse)
+DATA = utils.load_data(2020, 8, fn=_parse)
 
 
 def run(data):

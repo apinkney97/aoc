@@ -12,7 +12,7 @@ class Gate(NamedTuple):
 
 
 def _load_data() -> Dict[str, Gate]:
-    raw_data = utils.load_data(7, fn=INSTRUCTIONS_RE.fullmatch)
+    raw_data = utils.load_data(2015, 7, fn=INSTRUCTIONS_RE.fullmatch)
 
     data: Dict[str, Gate] = {}
     for item in raw_data:

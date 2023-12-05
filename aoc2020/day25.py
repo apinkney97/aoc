@@ -4,7 +4,7 @@ import utils
 
 
 def load_data():
-    data = utils.load_data(25, fn=int)
+    data = utils.load_data(2020, 25, fn=int)
 
     return data
 

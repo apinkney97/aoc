@@ -5,7 +5,7 @@ import utils
 
 
 def load_data():
-    raw_data = utils.load_data(14, fn=lambda s: s.partition(" = "))
+    raw_data = utils.load_data(2020, 14, fn=lambda s: s.partition(" = "))
     mem_re = re.compile(r"mem\[(?P<loc>\d+)]")
 
     data = []

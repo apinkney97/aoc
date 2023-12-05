@@ -29,7 +29,7 @@ def load_data():
         """,
         re.VERBOSE,
     )
-    data = utils.load_data(22, example=EXAMPLE, fn=r.fullmatch)
+    data = utils.load_data(2021, 22, example=EXAMPLE, fn=r.fullmatch)
 
     return [
         Action(

@@ -8,7 +8,7 @@ EXAMPLE = False
 
 def load_data():
     r = re.compile(r"target area: x=(-?\d+)\.\.(-?\d+), y=(-?\d+)\.\.(-?\d+)")
-    data = utils.load_data(17, example=EXAMPLE, fn=r.fullmatch)
+    data = utils.load_data(2021, 17, example=EXAMPLE, fn=r.fullmatch)
     match = data[0]
     return tuple(int(match.group(n + 1)) for n in range(4))
 

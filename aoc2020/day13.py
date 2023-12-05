@@ -2,7 +2,7 @@ import utils
 
 
 def _load_data():
-    data = utils.load_data(13, example=False)
+    data = utils.load_data(2020, 13, example=False)
     return int(data[0]), [int(a if a != "x" else 0) for a in data[1].split(",")]
 
 

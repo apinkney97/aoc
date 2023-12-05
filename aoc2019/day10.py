@@ -50,7 +50,7 @@ class Vector:
 
 
 def main() -> None:
-    data = utils.load_data(10)
+    data = utils.load_data(2019, 10)
     asteroid_coords = []
     for y, row in enumerate(data):
         for x, sector in enumerate(row):

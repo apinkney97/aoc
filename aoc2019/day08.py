@@ -7,7 +7,7 @@ from aoc2019 import utils
 
 
 def part1():
-    data = utils.load_data(8)[0]
+    data = utils.load_data(2019, 8)[0]
     width = 25
     height = 6
     pixels_per_layer = width * height
@@ -22,7 +22,7 @@ def part1():
 
 
 def part2():
-    data = utils.load_data(8)[0]
+    data = utils.load_data(2019, 8)[0]
     width = 25
     height = 6
     pixels_per_layer = width * height

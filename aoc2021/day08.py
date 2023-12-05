@@ -2,7 +2,7 @@ import utils
 
 
 def load_data():
-    data = utils.load_data(8, example=False)
+    data = utils.load_data(2021, 8, example=False)
     parsed_data = []
     for row in data:
         sample_digits, output = row.split("|")

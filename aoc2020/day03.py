@@ -2,7 +2,7 @@ from typing import List
 
 import utils
 
-DATA = utils.load_data(3)
+DATA = utils.load_data(2020, 3)
 
 
 def check_slope(data: List[str], dx: int, dy: int) -> int:

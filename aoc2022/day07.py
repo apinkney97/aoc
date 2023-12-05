@@ -44,7 +44,7 @@ class Dir(BaseFile):
 
 
 def load_data():
-    data = utils.load_data(7, example=EXAMPLE)
+    data = utils.load_data(2022, 7, example=EXAMPLE)
 
     commands = []
 

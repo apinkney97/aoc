@@ -1,6 +1,6 @@
 import utils
 
-DATA = utils.load_data(12, fn=lambda x: (x[0], int(x[1:])))
+DATA = utils.load_data(2020, 12, fn=lambda x: (x[0], int(x[1:])))
 
 
 # North is +Y

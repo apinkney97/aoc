@@ -2,13 +2,12 @@ import re
 
 import utils
 
-
 # EXAMPLE = True
 EXAMPLE = False
 
 
 def load_data():
-    data = utils.load_data(3, example=EXAMPLE)
+    data = utils.load_data(2023, 3, example=EXAMPLE)
 
     return data
 
@@ -19,6 +18,7 @@ DATA = load_data()
 class Number:
     def __init__(self, value: int) -> None:
         self.value = value
+
     def __repr__(self):
         return f"{self.value}"
 

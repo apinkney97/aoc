@@ -21,7 +21,7 @@ def _load_data():
 
     data = []
     passport = {}
-    for line in utils.load_data(4):
+    for line in utils.load_data(2020, 4):
         if not line:
             data.append(passport)
             passport = {}

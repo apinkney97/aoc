@@ -9,7 +9,7 @@ OPCODES = {
 
 
 def intcode_eval(noun: int, verb: int) -> int:
-    data = utils.load_data(2)[0]
+    data = utils.load_data(2019, 2)[0]
 
     memory = [int(i) for i in data.split(",")]
     memory[1] = noun

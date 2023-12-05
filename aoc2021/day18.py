@@ -12,7 +12,7 @@ EXAMPLE = False
 
 
 def load_data():
-    data = utils.load_data(18, example=EXAMPLE, fn=eval)
+    data = utils.load_data(2021, 18, example=EXAMPLE, fn=eval)
 
     return data
 

@@ -6,7 +6,7 @@ from aoc2019.intcode import IntCodeProcessor
 
 
 async def intcode_eval(auto_input: List[int] = None) -> int:
-    memory = [int(i) for i in utils.load_data(5)[0].split(",")]
+    memory = [int(i) for i in utils.load_data(2019, 5)[0].split(",")]
     processor = IntCodeProcessor(memory)
 
     for i in auto_input:

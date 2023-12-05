@@ -88,7 +88,7 @@ class Painter:
 
 
 async def run(start):
-    memory = [int(i) for i in utils.load_data(11)[0].split(",")]
+    memory = [int(i) for i in utils.load_data(2019, 11)[0].split(",")]
     painter = Painter(memory, start)
     result = await painter.run()
     print(str(painter))

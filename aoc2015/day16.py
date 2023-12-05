@@ -19,7 +19,7 @@ class Sue(typing.NamedTuple):
 
 
 def load_data():
-    data = utils.load_data(16, example=False)
+    data = utils.load_data(2015, 16, example=False)
 
     sues = []
 

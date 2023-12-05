@@ -2,9 +2,9 @@ from typing import NamedTuple
 
 import utils
 
-
 # EXAMPLE = True
 EXAMPLE = False
+
 
 class Draw(NamedTuple):
     red: int
@@ -14,7 +14,7 @@ class Draw(NamedTuple):
 
 def load_data():
     # Game 1: 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green
-    data = utils.load_data(2, example=EXAMPLE)
+    data = utils.load_data(2023, 2, example=EXAMPLE)
     games = []
     for line in data:
         game, desc = line.split(": ")

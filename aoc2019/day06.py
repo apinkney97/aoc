@@ -5,7 +5,7 @@ def load_data():
     orbits = {}
     inverse_orbits = {}
 
-    for d in utils.load_data(6):
+    for d in utils.load_data(2019, 6):
         centre, orbiter = d.split(")")
         orbits[orbiter] = centre
         inverse_orbits.setdefault(centre, []).append(orbiter)

@@ -23,7 +23,7 @@ SCISSORS = 3
 
 
 def load_data():
-    data = utils.load_data(2, example=EXAMPLE)
+    data = utils.load_data(2022, 2, example=EXAMPLE)
 
     return data
 
