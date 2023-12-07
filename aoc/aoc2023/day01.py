@@ -54,8 +54,8 @@ def part2() -> int:
 
 
 def main() -> None:
-    # with utils.timed():
-    #     print(f"Part 1: {part1()}")
+    with utils.timed():
+        print(f"Part 1: {part1()}")
     with utils.timed():
         print(f"Part 2: {part2()}")
 

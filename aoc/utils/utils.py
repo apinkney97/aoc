@@ -132,3 +132,13 @@ class PQ:
                 self._entry_finder.pop(item)
                 return item
         raise KeyError("pop from an empty priority queue")
+
+    def __len__(self):
+        return len(self._entry_finder)
+
+    def __repr__(self):
+        return f"PQ({list(self)})"
+
+    def __iter__(self):
+        for entry in sorted(self._entry_finder.values()):
+            yield entry[2]
