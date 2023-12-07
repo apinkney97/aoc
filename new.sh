@@ -13,7 +13,7 @@ mkdir -p "${dirname}/data/"
 touch "${dirname}/data/${day_str}.data"
 touch "${dirname}/data/${day_str}-example.data"
 cat > "${dirname}/${day_str}.py" <<EOF
-import utils
+from aoc import utils
 
 
 EXAMPLE = True
