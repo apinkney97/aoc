@@ -1,6 +1,5 @@
 from aoc import utils
 
-
 # EXAMPLE = True
 EXAMPLE = False
 
