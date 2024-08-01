@@ -1,9 +1,29 @@
-import pathlib
 from typing import Callable, Optional
 
+import platformdirs
 import requests
 
 from aoc.utils.types import T
+
+APP_NAME = "aoc"
+
+# Used for input data
+CACHE_PATH = platformdirs.user_cache_path(APP_NAME)
+
+# Used for config data, eg cookie value
+CONFIG_PATH = platformdirs.user_config_path(APP_NAME)
+
+
+def multiline_input(message: str) -> str:
+    print(message)
+    print("^D to end")
+    lines = []
+    while True:
+        try:
+            lines.append(input())
+        except EOFError:
+            break
+    return "\n".join(lines)
 
 
 def load_data(
@@ -15,10 +35,19 @@ def load_data(
     example: bool = False,
 ) -> list[T] | list[str]:
     suffix = "-example" if example else ""
-    path = pathlib.Path("aoc") / f"aoc{year}" / "data" / f"day{day:02d}{suffix}.data"
+    CACHE_PATH.mkdir(mode=0o700, parents=True, exist_ok=True)
 
-    if not example and (not path.exists() or path.stat().st_size == 0):
-        data = _fetch_data(year, day)
+    path = CACHE_PATH / f"{year}-{day:02d}{suffix}.txt"
+
+    print("Input path:", path)
+
+    if not path.exists() or path.stat().st_size == 0:
+        if example:
+            data = multiline_input(f"Paste example data for day {day} {year}")
+
+        else:
+            data = _fetch_input_data(year, day)
+
         path.write_text(data)
 
     with open(path) as f:
@@ -31,18 +60,18 @@ def load_data(
 
 
 def _get_cookie(force_refresh: bool = False):
-    cache_dir = pathlib.Path.home() / ".cache" / "aoc"
-    cache_dir.mkdir(mode=0o700, parents=True, exist_ok=True)
-    cookie = cache_dir / "cookie"
+    CONFIG_PATH.mkdir(mode=0o700, parents=True, exist_ok=True)
+    cookie = CONFIG_PATH / "cookie"
+    print("Cookie path:", cookie)
     if cookie.exists() and not force_refresh:
         cookie_value = cookie.read_text()
     else:
-        cookie_value = input("Enter cookie: ")
+        cookie_value = input("Enter value of `session` cookie: ")
         cookie.write_text(cookie_value)
     return cookie_value.strip()
 
 
-def _fetch_data(year: int, day: int) -> str:
+def _fetch_input_data(year: int, day: int) -> str:
     url = f"https://adventofcode.com/{year}/day/{day}/input"
     print(f"About to fetch {url}")
     headers = {
