@@ -3,6 +3,7 @@ Cheers to
 http://keekerdc.com/2011/03/hexagon-grids-coordinate-systems-and-distance-calculations/
 for providing some insight into hex grids!
 """
+
 from aoc import utils
 
 DIRS = {

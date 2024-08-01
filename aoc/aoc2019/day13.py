@@ -3,9 +3,8 @@ from collections import Counter
 from enum import Enum
 from typing import MutableMapping, NamedTuple
 
-from aoc2019 import intcode
-
 from aoc import utils
+from aoc.aoc2019 import intcode
 
 # 0 is an empty tile. No game object appears in this tile.
 # 1 is a wall tile. Walls are indestructible barriers.

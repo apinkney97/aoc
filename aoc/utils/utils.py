@@ -6,9 +6,9 @@ from contextlib import ContextDecorator
 from datetime import timedelta
 from functools import reduce
 from operator import mul
-from typing import Callable, Iterable, Iterator, Optional
+from typing import Iterable, Iterator
 
-from aoc.utils.types import T, TNum
+from aoc.utils.types import TNum
 
 DEBUG = False
 

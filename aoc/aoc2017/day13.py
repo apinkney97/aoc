@@ -19,9 +19,9 @@ def get_scanner_pos(depth, t):
 def part1():
     layers = get_data()
     severity = 0
-    for l in layers:
-        if get_scanner_pos(layers[l], l) == 0:
-            severity += l * layers[l]
+    for layer in layers:
+        if get_scanner_pos(layers[layer], layer) == 0:
+            severity += layer * layers[layer]
     return severity
 
 
@@ -30,8 +30,8 @@ def part2():
     delay = 0
 
     while True:
-        for l in layers:
-            if get_scanner_pos(layers[l], l + delay) == 0:
+        for layer in layers:
+            if get_scanner_pos(layers[layer], layer + delay) == 0:
                 break
         else:
             return delay

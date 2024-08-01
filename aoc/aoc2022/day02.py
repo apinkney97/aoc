@@ -7,6 +7,7 @@ C: scissors, 3, Z
 3 draw
 6 win
 """
+
 from aoc import utils
 
 # EXAMPLE = True

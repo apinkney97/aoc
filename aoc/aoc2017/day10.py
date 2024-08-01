@@ -7,22 +7,22 @@ def get_data():
     return utils.load_data(2017, 10)[0]
 
 
-def circular_slice(l, start, length):
-    if length > len(l):
+def circular_slice(sliceable, start, length):
+    if length > len(sliceable):
         raise Exception("Slice length too long")
 
-    vals = l[start : start + length]
+    vals = sliceable[start : start + length]
     if len(vals) < length:
-        vals += l[0 : length - len(vals)]
+        vals += sliceable[0 : length - len(vals)]
     return vals
 
 
-def circular_overwrite(l, start, values):
-    end = min(len(l), start + len(values))
-    l[start:end] = values[: end - start]
+def circular_overwrite(sliceable, start, values):
+    end = min(len(sliceable), start + len(values))
+    sliceable[start:end] = values[: end - start]
 
-    if end == len(l):
-        l[: len(values) + start - end] = values[end - start :]
+    if end == len(sliceable):
+        sliceable[: len(values) + start - end] = values[end - start :]
 
 
 def knot_hash_round(list_, lengths, pos=0, skip=0):

@@ -36,7 +36,6 @@ def part2() -> int:
     time = int("".join(str(t) for t in time))
     record = int("".join(str(r) for r in record))
     print(time, record)
-    result = 0
 
     first_win = last_win = None
 
