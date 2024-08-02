@@ -1,8 +1,3 @@
-from aoc import utils
-
-DATA = utils.load_data(2020, 5)
-
-
 def to_id(seat: str) -> int:
     binary = (
         seat.replace("B", "1").replace("F", "0").replace("L", "0").replace("R", "1")
@@ -10,15 +5,15 @@ def to_id(seat: str) -> int:
     return int(binary, 2)
 
 
-def part1() -> int:
+def part1(data) -> int:
     max_seat = 0
-    for row in DATA:
+    for row in data:
         max_seat = max(max_seat, to_id(row))
     return max_seat
 
 
-def part2() -> int:
-    all_seats = {to_id(row) for row in DATA}
+def part2(data) -> int:
+    all_seats = {to_id(row) for row in data}
 
     missing = set(range(max(all_seats) + 1)) - all_seats
 
@@ -27,12 +22,3 @@ def part2() -> int:
             return seat
 
     raise Exception("No seat found")
-
-
-def main() -> None:
-    print(f"Part 1: {part1()}")
-    print(f"Part 2: {part2()}")
-
-
-if __name__ == "__main__":
-    main()

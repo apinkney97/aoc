@@ -2,11 +2,8 @@ import re
 from itertools import chain
 from typing import Dict, List, Set
 
-from aoc import utils
 
-
-def load_data():
-    data = utils.load_data(2020, 16, example=False)
+def parse_data(data):
     di = iter(data)
 
     field_re = re.compile(
@@ -42,13 +39,10 @@ def load_data():
     return {"fields": fields, "my_ticket": my_ticket, "tickets": tickets}
 
 
-DATA = load_data()
-
-
-def part1() -> int:
+def part1(data) -> int:
     invalid_sum = 0
-    fields = DATA["fields"]
-    for ticket in DATA["tickets"]:
+    fields = data["fields"]
+    for ticket in data["tickets"]:
         for val in ticket:
             if not any(val in allowed for allowed in fields.values()):
                 invalid_sum += val
@@ -56,12 +50,12 @@ def part1() -> int:
     return invalid_sum
 
 
-def part2() -> int:
-    fields = DATA["fields"]
+def part2(data) -> int:
+    fields = data["fields"]
 
-    collected_values = [set() for _ in range(len(DATA["tickets"][0]))]
+    collected_values = [set() for _ in range(len(data["tickets"][0]))]
 
-    for ticket in DATA["tickets"]:
+    for ticket in data["tickets"]:
         for val in ticket:
             if not any(val in allowed for allowed in fields.values()):
                 break
@@ -95,19 +89,10 @@ def part2() -> int:
 
     print(matched)
 
-    my_ticket = DATA["my_ticket"]
+    my_ticket = data["my_ticket"]
     res = 1
     for field_name, pos in matched.items():
         if field_name.startswith("departure"):
             res *= my_ticket[pos]
 
     return res
-
-
-def main() -> None:
-    print(f"Part 1: {part1()}")
-    print(f"Part 2: {part2()}")
-
-
-if __name__ == "__main__":
-    main()

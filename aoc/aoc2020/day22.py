@@ -4,9 +4,7 @@ from typing import Deque, Tuple
 from aoc import utils
 
 
-def load_data() -> Tuple[Tuple[int], Tuple[int]]:
-    data = utils.load_data(2020, 22, example=False)
-
+def parse_data(data) -> Tuple[Tuple[int, ...], Tuple[int, ...]]:
     di = iter(data)
 
     p1_cards = []
@@ -30,12 +28,9 @@ def load_data() -> Tuple[Tuple[int], Tuple[int]]:
     return tuple(p1_cards), tuple(p2_cards)
 
 
-DATA = load_data()
-
-
-def part1() -> int:
-    p1 = deque(DATA[0])
-    p2 = deque(DATA[1])
+def part1(data) -> int:
+    p1 = deque(data[0])
+    p2 = deque(data[1])
 
     while p1 and p2:
         p1_card = p1.popleft()
@@ -109,9 +104,9 @@ def recursive_combat(p1: Deque[int], p2: Deque[int]) -> int:
     return game_winner
 
 
-def part2() -> int:
-    p1 = deque(DATA[0])
-    p2 = deque(DATA[1])
+def part2(data) -> int:
+    p1 = deque(data[0])
+    p2 = deque(data[1])
 
     recursive_combat(p1, p2)
 
@@ -121,12 +116,3 @@ def part2() -> int:
         score += i * card
 
     return score
-
-
-def main() -> None:
-    print(f"Part 1: {part1()}")
-    print(f"Part 2: {part2()}")
-
-
-if __name__ == "__main__":
-    main()

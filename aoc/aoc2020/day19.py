@@ -1,11 +1,7 @@
 import re
 
-from aoc import utils
 
-
-def load_data():
-    data = utils.load_data(2020, 19, example=False)
-
+def parse_data(data):
     it = iter(data)
 
     rules = {}
@@ -23,35 +19,36 @@ def load_data():
     return rules, strings
 
 
-RULES, STRINGS = load_data()
-
-
-def resolve_rule(rule_id: str):
+def resolve_rule(rules, rule_id: str):
     if rule_id.startswith('"'):
         # Not really a rule id, it's a literal
         return rule_id[1:-1]
 
-    options = RULES[rule_id]
+    options = rules[rule_id]
 
     return (
         "("
-        + "|".join("".join(resolve_rule(r) for r in option) for option in options)
+        + "|".join(
+            "".join(resolve_rule(rules, r) for r in option) for option in options
+        )
         + ")"
     )
 
 
-def part1() -> int:
+def part1(data) -> int:
+    rules, strings = data
     matches = 0
-    r = re.compile(resolve_rule("0"))
-    for string in STRINGS:
+    r = re.compile(resolve_rule(rules, "0"))
+    for string in strings:
         if r.fullmatch(string):
             matches += 1
     return matches
 
 
-def part2() -> int:
-    rule_42 = resolve_rule("42")
-    rule_31 = resolve_rule("31")
+def part2(data) -> int:
+    rules, strings = data
+    rule_42 = resolve_rule(rules, "42")
+    rule_31 = resolve_rule(rules, "31")
 
     # 0 -> 8 11
     # 8 -> 42 | 42 8
@@ -67,19 +64,10 @@ def part2() -> int:
     ]
 
     matches = 0
-    for s in STRINGS:
+    for s in strings:
         for r in regexes:
             if r.fullmatch(s):
                 matches += 1
                 break
 
     return matches
-
-
-def main() -> None:
-    print(f"Part 1: {part1()}")
-    print(f"Part 2: {part2()}")
-
-
-if __name__ == "__main__":
-    main()

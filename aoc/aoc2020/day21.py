@@ -1,12 +1,8 @@
 import operator
 from functools import reduce
 
-from aoc import utils
 
-
-def load_data():
-    data = utils.load_data(2020, 21, example=False)
-
+def parse_data(data):
     parsed = []
 
     for line in data:
@@ -18,16 +14,13 @@ def load_data():
     return parsed
 
 
-DATA = load_data()
-
-
-def part1() -> int:
+def part1(data) -> int:
     # Each allergen is found in exactly one ingredient.
 
     allergen_to_recipes = {}
     all_ingredients = set()
 
-    for recipe, allergens in DATA:
+    for recipe, allergens in data:
         all_ingredients.update(recipe)
         for allergen in allergens:
             allergen_to_recipes.setdefault(allergen, []).append(recipe)
@@ -64,16 +57,12 @@ def part1() -> int:
 
     count = 0
     for ingredient in no_allergens:
-        for recipe, _ in DATA:
+        for recipe, _ in data:
             if ingredient in recipe:
                 count += 1
 
     return count
 
 
-def main() -> None:
-    print(f"Part 1: {part1()}")
-
-
-if __name__ == "__main__":
-    main()
+def part2(data):
+    return "See answer printed above"

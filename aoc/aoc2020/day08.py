@@ -9,12 +9,12 @@ class Instruction(enum.Enum):
     ACC = "acc"
 
 
-def _parse(data: str):
-    inst, _, val = data.partition(" ")
-    return Instruction(inst), int(val)
+def parse_data(data):
+    def _parse(data_line: str):
+        inst, _, val = data_line.partition(" ")
+        return Instruction(inst), int(val)
 
-
-DATA = utils.load_data(2020, 8, fn=_parse)
+    return utils.parse_data(data, fn=_parse)
 
 
 def run(data):
@@ -53,29 +53,20 @@ def run(data):
         pc += inc
 
 
-def part1() -> int:
-    return run(DATA)[2]
+def part1(data) -> int:
+    return run(data)[2]
 
 
-def part2() -> int:
-    for i, (inst, val) in enumerate(DATA):
+def part2(data) -> int:
+    for i, (inst, val) in enumerate(data):
         if inst is Instruction.ACC:
             continue
 
-        data = list(DATA)
+        data_copy = list(data)
         new_inst = Instruction.NOP if inst is Instruction.JMP else Instruction.JMP
-        data[i] = [new_inst, val]
+        data_copy[i] = [new_inst, val]
 
-        terminated, pc, acc = run(data)
+        terminated, pc, acc = run(data_copy)
 
         if terminated:
             return acc
-
-
-def main() -> None:
-    print(f"Part 1: {part1()}")
-    print(f"Part 2: {part2()}")
-
-
-if __name__ == "__main__":
-    main()

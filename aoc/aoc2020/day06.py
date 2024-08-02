@@ -1,12 +1,7 @@
-from aoc import utils
-
-DATA = utils.load_data(2020, 6)
-
-
-def part1() -> int:
+def part1(data) -> int:
     total = 0
     group = set()
-    for line in DATA:
+    for line in data:
         if not line:
             total += len(group)
             group = set()
@@ -18,10 +13,10 @@ def part1() -> int:
     return total
 
 
-def part2() -> int:
+def part2(data) -> int:
     total = 0
     group = None
-    for line in DATA:
+    for line in data:
         if not line:
             total += len(group)
             group = None
@@ -33,12 +28,3 @@ def part2() -> int:
     total += len(group)
 
     return total
-
-
-def main() -> None:
-    print(f"Part 1: {part1()}")
-    print(f"Part 2: {part2()}")
-
-
-if __name__ == "__main__":
-    main()

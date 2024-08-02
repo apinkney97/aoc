@@ -1,6 +1,8 @@
 from aoc import utils
 
-DATA = utils.load_data(2020, 11, fn=list)
+
+def parse_data(data):
+    return utils.parse_data(data, fn=list)
 
 
 def get_adjacent_neighbours(row, col, data):
@@ -79,8 +81,7 @@ def step(data, neighbour_fn, limit):
     return changed, new_data
 
 
-def run(neighbour_fn, limit):
-    data = DATA
+def run(data, neighbour_fn, limit):
     changed = True
 
     while changed:
@@ -89,18 +90,9 @@ def run(neighbour_fn, limit):
     return sum(row.count("#") for row in data)
 
 
-def part1() -> int:
-    return run(neighbour_fn=get_adjacent_neighbours, limit=4)
+def part1(data) -> int:
+    return run(data, neighbour_fn=get_adjacent_neighbours, limit=4)
 
 
-def part2() -> int:
-    return run(neighbour_fn=get_visible_neighbours, limit=5)
-
-
-def main() -> None:
-    print(f"Part 1: {part1()}")
-    print(f"Part 2: {part2()}")
-
-
-if __name__ == "__main__":
-    main()
+def part2(data) -> int:
+    return run(data, neighbour_fn=get_visible_neighbours, limit=5)

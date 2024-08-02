@@ -1,7 +1,5 @@
 import re
 
-from aoc import utils
-
 HCL_RE = re.compile(r"^#[0-9a-f]{6}$")
 
 
@@ -17,27 +15,24 @@ FIELDS = {
 }
 
 
-def _load_data():
-    data = []
+def parse_data(data):
+    parsed = []
     passport = {}
-    for line in utils.load_data(2020, 4):
+    for line in data:
         if not line:
-            data.append(passport)
+            parsed.append(passport)
             passport = {}
             continue
         for field in line.split():
             key, _, val = field.partition(":")
             passport[key] = val
 
-    return data
+    return parsed
 
 
-DATA = _load_data()
-
-
-def part1() -> int:
+def part1(data) -> int:
     valid = 0
-    for passport in DATA:
+    for passport in data:
         missing = FIELDS.keys() - passport.keys()
         if not missing or missing == {"cid"}:
             valid += 1
@@ -45,9 +40,9 @@ def part1() -> int:
     return valid
 
 
-def part2() -> int:
+def part2(data) -> int:
     valid = 0
-    for passport in DATA:
+    for passport in data:
         if not 1920 <= int(passport.get("byr", 0)) <= 2002:
             continue
 
@@ -87,12 +82,3 @@ def part2() -> int:
 
         valid += 1
     return valid
-
-
-def main() -> None:
-    print(f"Part 1: {part1()}")
-    print(f"Part 2: {part2()}")
-
-
-if __name__ == "__main__":
-    main()

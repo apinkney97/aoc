@@ -3,13 +3,10 @@ from itertools import count
 from aoc import utils
 
 
-def load_data():
-    data = utils.load_data(2020, 25, fn=int)
+def parse_data(data):
+    data = utils.parse_data(data, fn=int)
 
     return data
-
-
-DATA = load_data()
 
 
 def transform(subject: int, loop_size: int) -> int:
@@ -27,14 +24,10 @@ def find_loop_size(expected: int) -> int:
         value = (value * 7) % 20201227
 
 
-def part1() -> int:
-    loop_size = find_loop_size(DATA[0])
-    return transform(DATA[1], loop_size)
+def part1(data) -> int:
+    loop_size = find_loop_size(data[0])
+    return transform(data[1], loop_size)
 
 
-def main() -> None:
-    print(f"Part 1: {part1()}")
-
-
-if __name__ == "__main__":
-    main()
+def part2(data) -> str:
+    return "*"

@@ -1,8 +1,3 @@
-from aoc import utils
-
-DATA = utils.load_data(2020, 18)
-
-
 def split(expr):
     expr = expr.replace("(", " ( ")
     expr = expr.replace(")", " ) ")
@@ -53,18 +48,9 @@ def to_postfix(expr, plus_has_precedence=False):
     return postfix
 
 
-def part1() -> int:
-    return sum(evaluate(to_postfix(expr)) for expr in DATA)
+def part1(data) -> int:
+    return sum(evaluate(to_postfix(expr)) for expr in data)
 
 
-def part2() -> int:
-    return sum(evaluate(to_postfix(expr, plus_has_precedence=True)) for expr in DATA)
-
-
-def main() -> None:
-    print(f"Part 1: {part1()}")
-    print(f"Part 2: {part2()}")
-
-
-if __name__ == "__main__":
-    main()
+def part2(data) -> int:
+    return sum(evaluate(to_postfix(expr, plus_has_precedence=True)) for expr in data)

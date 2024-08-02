@@ -9,9 +9,9 @@ class ContainedBags(NamedTuple):
     name: str
 
 
-def _load_data():
+def parse_data(data):
     line_re = re.compile(r"(?P<outer>.*) bags contain (?P<inner>.*)")
-    raw_data = utils.load_data(2020, 7, fn=line_re.fullmatch)
+    raw_data = utils.parse_data(data, fn=line_re.fullmatch)
     inner_re = re.compile(r"(?P<count>\d+) (?P<name>.*) bags?\.?")
     data = {}
     for line in raw_data:
@@ -29,10 +29,7 @@ def _load_data():
     return data
 
 
-DATA = _load_data()
-
-
-def part1() -> int:
+def part1(data) -> int:
     """
     This sounds like a graph traversal problem:
 
@@ -40,7 +37,7 @@ def part1() -> int:
     the specified bag and find all reachable nodes. May need to check for cycles?
     """
     inverted = {}  # Maps from bags to those that can contain them
-    for src, dests in DATA.items():
+    for src, dests in data.items():
         for dest in dests:
             inverted.setdefault(dest.name, []).append(src)
 
@@ -57,31 +54,22 @@ def part1() -> int:
     return len(seen)
 
 
-def part2() -> int:
+def part2(data) -> int:
     expanded = {}
     to_expand = {"shiny gold"}
     while to_expand:
         passes = 0
         for bag in list(to_expand):
             passes += 1
-            if all(cb.name in expanded for cb in DATA[bag]):
+            if all(cb.name in expanded for cb in data[bag]):
                 expanded[bag] = 1 + sum(
-                    cb.count * expanded[cb.name] for cb in DATA[bag]
+                    cb.count * expanded[cb.name] for cb in data[bag]
                 )
                 to_expand.remove(bag)
                 continue
 
-            for contained_bag in DATA[bag]:
+            for contained_bag in data[bag]:
                 if contained_bag.name in expanded:
                     continue
                 to_expand.add(contained_bag.name)
     return expanded["shiny gold"] - 1
-
-
-def main() -> None:
-    print(f"Part 1: {part1()}")
-    print(f"Part 2: {part2()}")
-
-
-if __name__ == "__main__":
-    main()

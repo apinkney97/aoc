@@ -4,11 +4,8 @@ from typing import NamedTuple, Set
 
 from cachetools import cached
 
-from aoc import utils
 
-
-def load_data():
-    data = utils.load_data(2020, 24, example=False)
+def parse_data(data):
     lines = []
     for line in data:
         directions = []
@@ -21,9 +18,6 @@ def load_data():
                 directions.append(c + next(li))
 
     return lines
-
-
-DATA = load_data()
 
 
 class Coord(NamedTuple):
@@ -54,10 +48,10 @@ def get_neighbours(coord: Coord) -> Set[Coord]:
     return ns
 
 
-def init_tiles() -> Set[Coord]:
+def init_tiles(data) -> Set[Coord]:
     tiles: Set[Coord] = set()
     start = Coord(0, 0)
-    for line in DATA:
+    for line in data:
         c = start
         for direction in line:
             c += VECTORS[direction]
@@ -69,8 +63,8 @@ def init_tiles() -> Set[Coord]:
     return tiles
 
 
-def part1() -> int:
-    tiles = init_tiles()
+def part1(data) -> int:
+    tiles = init_tiles(data)
     return len(tiles)
 
 
@@ -93,19 +87,10 @@ def step(tiles: Set[Coord]) -> Set[Coord]:
     return next_grid
 
 
-def part2() -> int:
-    tiles = init_tiles()
+def part2(data) -> int:
+    tiles = init_tiles(data)
 
     for i in range(100):
         tiles = step(tiles)
 
     return len(tiles)
-
-
-def main() -> None:
-    print(f"Part 1: {part1()}")
-    print(f"Part 2: {part2()}")
-
-
-if __name__ == "__main__":
-    main()

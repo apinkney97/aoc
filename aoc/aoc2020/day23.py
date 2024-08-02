@@ -1,7 +1,5 @@
 from typing import Dict, Optional
 
-from aoc import utils
-
 
 class LinkedCup:
     def __init__(self, val: int):
@@ -12,13 +10,8 @@ class LinkedCup:
         return f"Cup({self.val})"
 
 
-def load_data():
-    data = utils.load_data(2020, 23, example=False)
-
+def parse_data(data):
     return [int(n) for n in data[0]]
-
-
-DATA = load_data()
 
 
 def get_dest(n: int, max_item: int):
@@ -54,13 +47,12 @@ def move_cups(current: LinkedCup, cups_map: Dict[int, LinkedCup], max_val: int) 
     dest.next = removed[0]
 
 
-@utils.timed
-def part1() -> str:
-    current = LinkedCup(DATA[0])
-    cups_map = {DATA[0]: current}
+def part1(data) -> str:
+    current = LinkedCup(data[0])
+    cups_map = {data[0]: current}
 
     c = current
-    for value in DATA[1:]:
+    for value in data[1:]:
         c = add_linked_cup(value, cups_map, c)
 
     c.next = current
@@ -77,15 +69,14 @@ def part1() -> str:
     return "".join(str(v) for v in vals)
 
 
-@utils.timed
-def part2() -> int:
+def part2(data) -> int:
     max_val = 1_000_000
 
-    current = LinkedCup(DATA[0])
-    cups_map = {DATA[0]: current}
+    current = LinkedCup(data[0])
+    cups_map = {data[0]: current}
 
     c = current
-    for value in DATA[1:]:
+    for value in data[1:]:
         c = add_linked_cup(value, cups_map, c)
 
     for i in range(10, max_val + 1):
@@ -99,12 +90,3 @@ def part2() -> int:
 
     cup_1 = cups_map[1]
     return cup_1.next.val * cup_1.next.next.val
-
-
-def main() -> None:
-    print(f"Part 1: {part1()}")
-    print(f"Part 2: {part2()}")
-
-
-if __name__ == "__main__":
-    main()

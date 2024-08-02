@@ -1,6 +1,8 @@
 from aoc import utils
 
-DATA = utils.load_data(2020, 12, fn=lambda x: (x[0], int(x[1:])))
+
+def parse_data(data):
+    return utils.parse_data(data, fn=lambda x: (x[0], int(x[1:])))
 
 
 # North is +Y
@@ -13,7 +15,7 @@ COMPASS_POINTS = {
 }
 
 
-def part1() -> int:
+def part1(data) -> int:
     angle = 0
     x, y = 0, 0
 
@@ -24,7 +26,7 @@ def part1() -> int:
         (0, 1),  # north
     ]
 
-    for c, n in DATA:
+    for c, n in data:
         if c in COMPASS_POINTS:
             dx, dy = COMPASS_POINTS[c]
             x += n * dx
@@ -41,13 +43,13 @@ def part1() -> int:
     return abs(x) + abs(y)
 
 
-def part2() -> int:
+def part2(data) -> int:
     dx = 10
     dy = 1
 
     x, y = 0, 0
 
-    for c, n in DATA:
+    for c, n in data:
         if c in COMPASS_POINTS:
             ddx, ddy = COMPASS_POINTS[c]
             dx += ddx * n
@@ -65,12 +67,3 @@ def part2() -> int:
             y += dy * n
 
     return abs(x) + abs(y)
-
-
-def main() -> None:
-    print(f"Part 1: {part1()}")
-    print(f"Part 2: {part2()}")
-
-
-if __name__ == "__main__":
-    main()

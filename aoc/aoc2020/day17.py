@@ -2,8 +2,6 @@ from typing import NamedTuple, Set
 
 from cachetools import cached
 
-from aoc import utils
-
 
 class Coord(NamedTuple):
     x: int
@@ -12,17 +10,13 @@ class Coord(NamedTuple):
     w: int
 
 
-def load_data():
+def parse_data(data):
     grid = set()
-    data = utils.load_data(2020, 17, example=False)
     for x, row in enumerate(data):
         for y, char in enumerate(row):
             if char == "#":
                 grid.add(Coord(x, y, 0, 0))
     return grid
-
-
-DATA = load_data()
 
 
 CACHE = {}
@@ -66,8 +60,8 @@ def step(grid: Set[Coord], dimensions) -> Set[Coord]:
     return next_grid
 
 
-def part1() -> int:
-    grid = DATA
+def part1(data) -> int:
+    grid = data
 
     for _ in range(6):
         grid = step(grid, dimensions=3)
@@ -75,19 +69,10 @@ def part1() -> int:
     return len(grid)
 
 
-def part2() -> int:
-    grid = DATA
+def part2(data) -> int:
+    grid = data
 
     for _ in range(6):
         grid = step(grid, dimensions=4)
 
     return len(grid)
-
-
-def main() -> None:
-    print(f"Part 1: {part1()}")
-    print(f"Part 2: {part2()}")
-
-
-if __name__ == "__main__":
-    main()

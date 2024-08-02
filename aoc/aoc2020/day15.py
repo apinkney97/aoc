@@ -1,21 +1,14 @@
-DATA = [6, 4, 12, 1, 20, 0, 16]
-
-# DATA = [0, 3, 6]
-# DATA = [1, 3, 2]
-# DATA = [2, 1, 3]
-# DATA = [1, 2, 3]
-# DATA = [2, 3, 1]
-# DATA = [3, 2, 1]
-# DATA = [3, 1, 2]
+def parse_data(data):
+    return [int(i) for i in data[0].split(",")]
 
 
-def mem_game(n):
+def mem_game(data, n):
     seen = {}
-    for i, d in enumerate(DATA):
+    for i, d in enumerate(data):
         seen.setdefault(d, []).append(i)
 
-    last = DATA[-1]
-    for i in range(len(DATA), n):
+    last = data[-1]
+    for i in range(len(data), n):
         last_seen = seen.get(last, [])
         if len(last_seen) < 2:
             new_val = 0
@@ -27,18 +20,9 @@ def mem_game(n):
     return last
 
 
-def part1() -> int:
-    return mem_game(2020)
+def part1(data) -> int:
+    return mem_game(data, 2020)
 
 
-def part2() -> int:
-    return mem_game(30000000)
-
-
-def main() -> None:
-    print(f"Part 1: {part1()}")
-    print(f"Part 2: {part2()}")
-
-
-if __name__ == "__main__":
-    main()
+def part2(data) -> int:
+    return mem_game(data, 30000000)

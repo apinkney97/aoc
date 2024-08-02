@@ -3,13 +3,15 @@ from itertools import combinations
 
 from aoc import utils
 
-DATA = utils.load_data(2020, 9, fn=int)
+
+def parse_data(data):
+    return utils.parse_data(data, fn=int)
 
 
-def part1() -> int:
+def part1(data) -> int:
     preamble = 25
-    window = deque(DATA[:preamble])
-    for val in DATA[preamble:]:
+    window = deque(data[:preamble])
+    for val in data[preamble:]:
         for a, b in combinations(window, 2):
             if val == a + b:
                 break
@@ -21,11 +23,11 @@ def part1() -> int:
     raise Exception("No value found")
 
 
-def part2() -> int:
-    target = part1()
+def part2(data) -> int:
+    target = part1(data)
 
     window = deque()
-    data = iter(DATA)
+    data = iter(data)
 
     while True:
         value = sum(window)
@@ -35,12 +37,3 @@ def part2() -> int:
             window.append(next(data))
         else:
             return max(window) + min(window)
-
-
-def main() -> None:
-    print(f"Part 1: {part1()}")
-    print(f"Part 2: {part2()}")
-
-
-if __name__ == "__main__":
-    main()

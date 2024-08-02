@@ -1,20 +1,17 @@
 from aoc import utils
 
 
-def _get_data():
-    data = utils.load_data(2020, 10, fn=int, example=False) + [0]
+def parse_data(data):
+    data = utils.parse_data(data, fn=int) + [0]
     data.sort()
     data.append(data[-1] + 3)
     return data
 
 
-DATA = _get_data()
-
-
-def part1() -> int:
+def part1(data) -> int:
     ones = 0
     threes = 0
-    for i, j in zip(DATA, DATA[1:]):
+    for i, j in zip(data, data[1:]):
         diff = j - i
         if diff == 1:
             ones += 1
@@ -24,7 +21,7 @@ def part1() -> int:
     return ones * threes
 
 
-def part2() -> int:
+def part2(data) -> int:
     # Diffs only seem to be 3 or 1
     # Can't remove any with a diff of 3
     # Can remove any with a diff of 1 as long as the remaining gap is <= 3
@@ -35,7 +32,7 @@ def part2() -> int:
 
     arrangements = 1
     curr = []
-    for i, j, k in zip(DATA, DATA[1:], DATA[2:]):
+    for i, j, k in zip(data, data[1:], data[2:]):
         lower_diff = j - i
         upper_diff = k - j
 
@@ -53,12 +50,3 @@ def part2() -> int:
         # print(lower_diff, upper_diff, "  ", i, j, k)
 
     return arrangements
-
-
-def main() -> None:
-    print(f"Part 1: {part1()}")
-    print(f"Part 2: {part2()}")
-
-
-if __name__ == "__main__":
-    main()

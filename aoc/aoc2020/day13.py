@@ -1,16 +1,12 @@
 from aoc import utils
 
 
-def _load_data():
-    data = utils.load_data(2020, 13, example=False)
+def parse_data(data):
     return int(data[0]), [int(a if a != "x" else 0) for a in data[1].split(",")]
 
 
-DATA = _load_data()
-
-
-def part1() -> int:
-    now, buses = DATA
+def part1(data) -> int:
+    now, buses = data
 
     results = {}
 
@@ -50,20 +46,11 @@ def mul_inv(a, b):
     return x1
 
 
-def part2() -> int:
+def part2(data) -> int:
     remainders = {}
-    for i, bus in enumerate(DATA[1]):
+    for i, bus in enumerate(data[1]):
         if bus:
             remainder = (bus - i) % bus
             remainders[bus] = remainder
 
     return chinese_remainder(remainders)
-
-
-def main() -> None:
-    print(f"Part 1: {part1()}")
-    print(f"Part 2: {part2()}")
-
-
-if __name__ == "__main__":
-    main()

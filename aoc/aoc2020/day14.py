@@ -4,21 +4,18 @@ from itertools import combinations
 from aoc import utils
 
 
-def load_data():
-    raw_data = utils.load_data(2020, 14, fn=lambda s: s.partition(" = "))
+def parse_data(data):
+    data = utils.parse_data(data, fn=lambda s: s.partition(" = "))
     mem_re = re.compile(r"mem\[(?P<loc>\d+)]")
 
-    data = []
-    for command, _, val in raw_data:
+    parsed_data = []
+    for command, _, val in data:
         if command == "mask":
-            data.append(val)
+            parsed_data.append(val)
         else:
             match = mem_re.fullmatch(command)
-            data.append((int(match["loc"]), int(val)))
-    return data
-
-
-DATA = load_data()
+            parsed_data.append((int(match["loc"]), int(val)))
+    return parsed_data
 
 
 class ValueMask:
@@ -73,10 +70,10 @@ class AddressMask:
                 yield m.apply(base_address)
 
 
-def part1() -> int:
+def part1(data) -> int:
     mem = {}
     mask = None
-    for command in DATA:
+    for command in data:
         if isinstance(command, str):
             mask = ValueMask(command)
         else:
@@ -86,10 +83,10 @@ def part1() -> int:
     return sum(mem.values())
 
 
-def part2() -> int:
+def part2(data) -> int:
     mem = {}
     mask = None
-    for command in DATA:
+    for command in data:
         if isinstance(command, str):
             mask = AddressMask(command)
         else:
@@ -98,12 +95,3 @@ def part2() -> int:
                 mem[address] = val
 
     return sum(mem.values())
-
-
-def main() -> None:
-    print(f"Part 1: {part1()}")
-    print(f"Part 2: {part2()}")
-
-
-if __name__ == "__main__":
-    main()

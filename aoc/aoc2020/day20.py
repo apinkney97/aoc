@@ -5,8 +5,6 @@ from functools import reduce
 from itertools import chain
 from typing import Dict, List, NamedTuple, NewType
 
-from aoc import utils
-
 TileId = NewType("TileId", int)
 Edge = NewType("Edge", str)
 
@@ -89,9 +87,7 @@ class Tile:
         return f"Tile(id={self.tile_id})"
 
 
-def load_data() -> List[Tile]:
-    data = utils.load_data(2020, 20, example=False)
-
+def parse_data(data) -> List[Tile]:
     tiles = []
 
     tile_data = []
@@ -111,9 +107,6 @@ def load_data() -> List[Tile]:
         tiles.append(Tile(tile_id, tile_data))
 
     return tiles
-
-
-DATA = load_data()
 
 
 def edges_to_tiles(data: List[Tile]) -> Dict[Edge, List[TileId]]:
@@ -139,8 +132,8 @@ def get_counts(edges: Dict[Edge, List[TileId]]) -> Dict[TileId, int]:
     return dict(counts)
 
 
-def part1() -> int:
-    edges = edges_to_tiles(DATA)
+def part1(data) -> int:
+    edges = edges_to_tiles(data)
     counts = get_counts(edges)
 
     # Empirically it seems that there are no duplicated edges (ie 2 or more pairs the same)
@@ -182,13 +175,13 @@ def _add_match(tiles, row, other, horizontal):
             print(tile, tile.edges)
 
 
-def part2() -> int:
-    edge_length = int(len(DATA) ** 0.5)
+def part2(data) -> int:
+    edge_length = int(len(data) ** 0.5)
     # print(edge_length)
-    edges = edges_to_tiles(DATA)
+    edges = edges_to_tiles(data)
     counts = get_counts(edges)
 
-    tiles = {tile.tile_id: tile for tile in DATA}
+    tiles = {tile.tile_id: tile for tile in data}
 
     corners = []
 
@@ -273,12 +266,3 @@ def part2() -> int:
             monsters += len(matches)
 
     return total_hashes - (monsters * hashes_per_monster)
-
-
-def main() -> None:
-    print(f"Part 1: {part1()}")
-    print(f"Part 2: {part2()}")
-
-
-if __name__ == "__main__":
-    main()
