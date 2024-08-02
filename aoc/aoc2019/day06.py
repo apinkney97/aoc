@@ -1,11 +1,8 @@
-from aoc import utils
-
-
-def load_data():
+def parse_data(data):
     orbits = {}
     inverse_orbits = {}
 
-    for d in utils.load_data(2019, 6):
+    for d in data:
         centre, orbiter = d.split(")")
         orbits[orbiter] = centre
         inverse_orbits.setdefault(centre, []).append(orbiter)
@@ -27,14 +24,14 @@ def path_to_com(orbits, node):
     return path
 
 
-def part1() -> int:
-    orbits, inverse_orbits = load_data()
+def part1(data) -> int:
+    orbits, inverse_orbits = data
 
     return count_orbits(inverse_orbits, "COM", 0)
 
 
-def part2() -> int:
-    orbits, inverse_orbits = load_data()
+def part2(data) -> int:
+    orbits, inverse_orbits = data
 
     you_to_com = path_to_com(orbits, "YOU")
     san_to_com = path_to_com(orbits, "SAN")
@@ -44,12 +41,3 @@ def part2() -> int:
         san_to_com.pop()
 
     return len(you_to_com) + len(san_to_com)
-
-
-def main() -> None:
-    print(f"Part 1: {part1()}")
-    print(f"Part 2: {part2()}")
-
-
-if __name__ == "__main__":
-    main()

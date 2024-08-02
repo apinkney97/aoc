@@ -10,23 +10,12 @@ from typing import Iterable, Iterator
 
 from rich import print
 
+from aoc import config
 from aoc.utils.types import TNum
-
-DEBUG = False
-
-
-def enable_logging():
-    global DEBUG
-    DEBUG = True
-
-
-def disable_logging():
-    global DEBUG
-    DEBUG = False
 
 
 def log(*args, **kwargs):
-    if DEBUG:
+    if config.DEBUG:
         print(*args, **kwargs)
 
 

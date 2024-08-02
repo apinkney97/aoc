@@ -3,16 +3,19 @@ from itertools import cycle, permutations
 
 from aoc import utils
 from aoc.aoc2019.intcode import IntCodeProcessor, RunState
+from aoc.aoc2019.intcode import parse_data as parse_data
 
 
-async def intcode_eval(phase_settings) -> int:
-    memory = [int(i) for i in utils.load_data(2019, 7)[0].split(",")]
+async def intcode_eval(memory, phase_settings) -> int:
     processors = []
 
+    tasks = set()
     for phase_setting in phase_settings:
         processor = IntCodeProcessor(memory)
         processors.append(processor)
-        asyncio.create_task(processor.run())
+        task = asyncio.create_task(processor.run())
+        tasks.add(task)
+        task.add_done_callback(tasks.discard)
         await processor.input(phase_setting)
 
     output = 0
@@ -25,26 +28,17 @@ async def intcode_eval(phase_settings) -> int:
     return output
 
 
-def part1():
+def part1(data):
     max_ = None
     for phase_settings in permutations(range(5), 5):
-        max_ = utils.safe_max(max_, asyncio.run(intcode_eval(phase_settings)))
+        max_ = utils.safe_max(max_, asyncio.run(intcode_eval(data, phase_settings)))
 
     return max_
 
 
-def part2():
+def part2(data):
     max_ = None
     for phase_settings in permutations(range(5, 10), 5):
-        max_ = utils.safe_max(max_, asyncio.run(intcode_eval(phase_settings)))
+        max_ = utils.safe_max(max_, asyncio.run(intcode_eval(data, phase_settings)))
 
     return max_
-
-
-def main() -> None:
-    print(f"Part 1: {part1()}")
-    print(f"Part 2: {part2()}")
-
-
-if __name__ == "__main__":
-    main()

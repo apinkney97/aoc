@@ -5,6 +5,7 @@ from typing import MutableMapping, NamedTuple
 
 from aoc import utils
 from aoc.aoc2019 import intcode
+from aoc.aoc2019.intcode import parse_data as parse_data
 
 # 0 is an empty tile. No game object appears in this tile.
 # 1 is a wall tile. Walls are indestructible barriers.
@@ -27,9 +28,9 @@ class Coord(NamedTuple):
 
 
 DISP = {
-    Tile.EMPTY: "  ",
+    Tile.EMPTY: utils.BACKGROUND_BLOCK,
     Tile.WALL: "##",
-    Tile.BLOCK: "\u2588" * 2,
+    Tile.BLOCK: utils.FOREGROUND_BLOCK,
     Tile.PADDLE: "==",
     Tile.BALL: "{}",
 }
@@ -51,8 +52,16 @@ class Arcade:
         self._min_y = None
         self._max_y = None
 
+    @property
+    def score(self):
+        return self._score
+
+    @property
+    def block_count(self):
+        return Counter(self._grid.values())[Tile.BLOCK]
+
     def __str__(self):
-        score = f"## Score: {self._score} ##"
+        score = f"## Score: {self.score} ##"
         top = "#" * len(score)
         bits = [top, "\n", score, "\n"]
         for y in range(self._min_y, self._max_y + 1):
@@ -64,7 +73,7 @@ class Arcade:
 
     async def _read_board_state(self):
         blocks_read = 0
-        print(f"{self._processor.state=} {self._processor.has_output()=}")
+        utils.log(f"{self._processor.state=} {self._processor.has_output()=}")
         while (
             self._processor.state
             not in {intcode.RunState.TERMINATED, intcode.RunState.AWAITING_INPUT}
@@ -94,49 +103,39 @@ class Arcade:
             self._max_x = utils.safe_max(self._max_x, x)
             self._min_y = utils.safe_min(self._min_y, y)
             self._max_y = utils.safe_max(self._max_y, y)
-        # print(f"{blocks_read=} {self._grid=}")
+        # utils.log(f"{blocks_read=} {self._grid=}")
 
     async def run(self):
-        asyncio.create_task(self._processor.run())
+        _ = asyncio.create_task(self._processor.run())
         await self._read_board_state()
-        print("Part 1:", Counter(self._grid.values())[Tile.BLOCK])
-        print(str(self))
+        utils.log("Part 1:", Counter(self._grid.values())[Tile.BLOCK])
+        utils.log(str(self))
 
         while self._processor.state is not intcode.RunState.TERMINATED:
-            print(f"{self._ball_x=} {self._paddle_x=}")
+            utils.log(f"{self._ball_x=} {self._paddle_x=}")
             if self._ball_x < self._paddle_x:
                 inp = -1
-                print("MOVING LEFT")
+                utils.log("MOVING LEFT")
             elif self._ball_x > self._paddle_x:
                 inp = 1
-                print("MOVING RIGHT")
+                utils.log("MOVING RIGHT")
             else:
                 inp = 0
-                print("NOT MOVING")
+                utils.log("NOT MOVING")
             await self._processor.input(inp)
             await self._read_board_state()
-            print(str(self))
+            utils.log(str(self))
 
 
-async def run():
-    memory = [int(i) for i in utils.load_data(2019, 13)[0].split(",")]
-    arcade = Arcade(memory, add_credit=True)
-    result = await arcade.run()
-    return result
+async def run(memory, add_credit: bool):
+    arcade = Arcade(memory, add_credit=add_credit)
+    await arcade.run()
+    return arcade
 
 
-def part1():
-    return asyncio.run(run())
+def part1(data):
+    return asyncio.run(run(data, add_credit=False)).block_count
 
 
-# def part2():
-#     return asyncio.run(run(1))
-
-
-def main() -> None:
-    print(f"Part 1: {part1()}")
-    # print(f"Part 2: {part2()}")
-
-
-if __name__ == "__main__":
-    main()
+def part2(data):
+    return asyncio.run(run(data, add_credit=True)).score

@@ -1,5 +1,7 @@
+import re
 from dataclasses import dataclass
 from itertools import combinations
+from math import lcm
 from typing import List
 
 
@@ -16,16 +18,17 @@ class Body:
     velocity: Triple
 
 
-def gcd(a, b):
-    """Compute the greatest common divisor of a and b"""
-    while b > 0:
-        a, b = b, a % b
-    return a
+def parse_data(data):
+    matcher = re.compile(r"<x=(-?\d+), y=(-?\d+), z=(-?\d+)>")
+    parsed = []
+    for line in data:
+        match = matcher.fullmatch(line)
+        parsed.append((int(match.group(1)), int(match.group(2)), int(match.group(3))))
+    return parsed
 
 
-def lcm(a, b):
-    """Compute the lowest common multiple of a and b"""
-    return a * b // gcd(a, b)
+def build_moons(data):
+    return [get_moon(*coord) for coord in data]
 
 
 def get_moon(x, y, z, dx=0, dy=0, dz=0) -> Body:
@@ -74,24 +77,18 @@ def get_energy(moon: Body):
     return potential * kinetic
 
 
-def main():
-    def input_moons():
-        return [
-            get_moon(-14, -4, -11),
-            get_moon(-9, 6, -7),
-            get_moon(4, 1, 4),
-            get_moon(2, -14, -9),
-        ]
-
-    moons = input_moons()
+def part1(data):
+    moons = build_moons(data)
 
     for i in range(1000):
         for dimension in "xyz":
             step(moons, dimension)
 
-    print("Part 1:", sum(get_energy(moon) for moon in moons))
+    return sum(get_energy(moon) for moon in moons)
 
-    moons = input_moons()
+
+def part2(data):
+    moons = build_moons(data)
     seen_states = {}
     for dimension in "xyz":
         seen = set()
@@ -103,10 +100,6 @@ def main():
             state = get_state(moons, dimension)
 
     periodicity = lcm(
-        len(seen_states["x"]), lcm(len(seen_states["y"]), len(seen_states["z"]))
+        len(seen_states["x"]), len(seen_states["y"]), len(seen_states["z"])
     )
-    print("Part 2:", periodicity)
-
-
-if __name__ == "__main__":
-    main()
+    return periodicity

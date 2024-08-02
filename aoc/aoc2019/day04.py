@@ -1,5 +1,8 @@
-INPUT = [146810, 612564]
 PASSCODE_LEN = 6
+
+
+def parse_data(data):
+    return [int(i) for i in data[0].split("-")]
 
 
 def is_valid(passcode: int, strict_doubles=False) -> bool:
@@ -30,26 +33,17 @@ def is_valid(passcode: int, strict_doubles=False) -> bool:
             return True
 
 
-def part1() -> int:
+def part1(data) -> int:
     valid_count = 0
-    for i in range(*INPUT):
+    for i in range(data[0], data[1]):
         if is_valid(i):
             valid_count += 1
     return valid_count
 
 
-def part2() -> int:
+def part2(data) -> int:
     valid_count = 0
-    for i in range(*INPUT):
+    for i in range(data[0], data[1]):
         if is_valid(i, strict_doubles=True):
             valid_count += 1
     return valid_count
-
-
-def main() -> None:
-    print(f"Part 1: {part1()}")
-    print(f"Part 2: {part2()}")
-
-
-if __name__ == "__main__":
-    main()

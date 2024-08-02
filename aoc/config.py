@@ -1,1 +1,2 @@
 EXAMPLE = False
+DEBUG = False

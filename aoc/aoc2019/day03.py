@@ -13,6 +13,16 @@ DIRECTIONS = {
 Point = Tuple[int, int]
 
 
+def parse_data(data):
+    wire1 = data[0].split(",")
+    wire2 = data[1].split(",")
+
+    w1_points = get_points(wire1)
+    w2_points = get_points(wire2)
+
+    return w1_points, w2_points
+
+
 def get_points(wire: List[str], start: Point = (0, 0)) -> Mapping[Point, int]:
     points = {}
     x, y = start
@@ -40,15 +50,10 @@ def manhattan_distance(p1: Point, p2: Point) -> int:
     return abs(x1 - x2) + abs(y1 - y2)
 
 
-def part1() -> int:
-    data = utils.load_data(2019, 3)
-    wire1 = data[0].split(",")
-    wire2 = data[1].split(",")
-
+def part1(data) -> int:
     origin = (0, 0)
 
-    w1_points = get_points(wire1, origin)
-    w2_points = get_points(wire2, origin)
+    w1_points, w2_points = data
 
     intersections = set(w1_points).intersection(set(w2_points))
 
@@ -62,13 +67,8 @@ def part1() -> int:
     return min_dist
 
 
-def part2() -> int:
-    data = utils.load_data(2019, 3)
-    wire1 = data[0].split(",")
-    wire2 = data[1].split(",")
-
-    w1_points = get_points(wire1)
-    w2_points = get_points(wire2)
+def part2(data) -> int:
+    w1_points, w2_points = data
 
     intersections = set(w1_points).intersection(set(w2_points))
 
@@ -79,12 +79,3 @@ def part2() -> int:
         min_dist = utils.safe_min(min_dist, dist)
 
     return min_dist
-
-
-def main() -> None:
-    print(f"Part 1: {part1()}")
-    print(f"Part 2: {part2()}")
-
-
-if __name__ == "__main__":
-    main()

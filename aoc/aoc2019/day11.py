@@ -3,6 +3,7 @@ from enum import Enum
 
 from aoc import utils
 from aoc.aoc2019.intcode import IntCodeProcessor, RunState
+from aoc.aoc2019.intcode import parse_data as parse_data
 
 
 class Direction(Enum):
@@ -59,12 +60,14 @@ class Painter:
         for y in range(self._min_y, self._max_y + 1):
             for x in range(self._min_x, self._max_x + 1):
                 value = self.panels.get((x, y), 0)
-                bits.append({0: " ", 1: "\u2588"}[value] * 2)
+                bits.append(
+                    {0: utils.BACKGROUND_BLOCK, 1: utils.FOREGROUND_BLOCK}[value]
+                )
             bits.append("\n")
         return "".join(bits)
 
     async def run(self) -> int:
-        asyncio.create_task(self.processor.run())
+        _ = asyncio.create_task(self.processor.run())
 
         # Read in value of current pos
         # Read out colour to paint
@@ -86,26 +89,16 @@ class Painter:
         return len(self.panels)
 
 
-async def run(start):
-    memory = [int(i) for i in utils.load_data(2019, 11)[0].split(",")]
+async def run(memory, start):
     painter = Painter(memory, start)
     result = await painter.run()
     print(str(painter))
     return result
 
 
-def part1():
-    return asyncio.run(run(0))
+def part1(data):
+    return asyncio.run(run(data, 0))
 
 
-def part2():
-    return asyncio.run(run(1))
-
-
-def main() -> None:
-    print(f"Part 1: {part1()}")
-    print(f"Part 2: {part2()}")
-
-
-if __name__ == "__main__":
-    main()
+def part2(data):
+    return asyncio.run(run(data, 1))

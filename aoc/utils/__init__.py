@@ -6,8 +6,6 @@ from aoc.utils.setdeque import SetDeque
 from aoc.utils.types import T, TNum
 from aoc.utils.utils import (
     PQ,
-    disable_logging,
-    enable_logging,
     log,
     magnitude,
     manhattan,
@@ -32,8 +30,6 @@ __all__ = [
     "T",
     "TNum",
     "PQ",
-    "disable_logging",
-    "enable_logging",
     "log",
     "magnitude",
     "manhattan",

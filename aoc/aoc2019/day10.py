@@ -3,8 +3,6 @@ import math
 from fractions import Fraction
 from itertools import product
 
-from aoc import utils
-
 
 class Vector:
     def __init__(self, origin, destination):
@@ -28,8 +26,8 @@ class Vector:
             # simplify the ratio
             f = Fraction(abs(self.dx), abs(self.dy))
             self.direction = (f.numerator * sign_x, f.denominator * sign_y)
-            # SOH CAH TOA...
 
+        # SOH CAH TOA...
         self.angle = math.atan2(-self.dx, self.dy)
         # atan2 gives us angles in the interval [-pi, pi], but we want [0, 2*pi]
         if self.angle < 0:
@@ -48,8 +46,7 @@ class Vector:
         return f"{repr(self):30s} {direction=:10s} {manhattan = :3d}   {angle = :3.0f}"
 
 
-def main() -> None:
-    data = utils.load_data(2019, 10)
+def calculate_visibility(data):
     asteroid_coords = []
     for y, row in enumerate(data):
         for x, sector in enumerate(row):
@@ -71,9 +68,16 @@ def main() -> None:
     max_visible, max_coord = max(
         (len(directions), coord) for coord, directions in visible_asteroids.items()
     )
+    return all_vectors, max_visible, max_coord
 
-    print(f"Part 1: {max_visible}")
 
+def part1(data):
+    _, max_visible, _ = calculate_visibility(data)
+    return max_visible
+
+
+def part2(data):
+    all_vectors, _, max_coord = calculate_visibility(data)
     other_asteroids = sorted(all_vectors[max_coord], key=lambda x: x.magnitude)
     asteroids_by_angle = {}
     for asteroid in other_asteroids:
@@ -88,11 +92,6 @@ def main() -> None:
             count += 1
             coord = coords.popleft()
             if count == 200:
-                print(f"Part 2: {100 * coord[0] + coord[1]}")
-                return
+                return 100 * coord[0] + coord[1]
             if not len(coords):
                 asteroids_by_angle.pop(angle)
-
-
-if __name__ == "__main__":
-    main()

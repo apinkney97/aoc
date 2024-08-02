@@ -3,6 +3,10 @@ from enum import Enum, auto
 from typing import Callable, List, Mapping, NamedTuple, Optional, Tuple, Union
 
 
+def parse_data(data):
+    return [int(i) for i in data[0].split(",")]
+
+
 class RunState(Enum):
     NOT_STARTED = auto()
     RUNNING = auto()

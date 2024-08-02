@@ -24,6 +24,7 @@ def main():
     parser.add_argument("-2", "--part-2", action="store_true")
 
     parser.add_argument("-p", "--print-data", action="store_true")
+    parser.add_argument("-d", "--debug", action="store_true")
 
     args = parser.parse_args()
 
@@ -46,6 +47,7 @@ def main():
 
     example = args.example
     config.EXAMPLE = example
+    config.DEBUG = args.debug
 
     part_1 = args.part_1
     part_2 = args.part_2
