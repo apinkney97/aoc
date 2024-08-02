@@ -1,23 +1,16 @@
 from aoc import utils
 
-# EXAMPLE = True
-EXAMPLE = False
 
-
-def load_data():
-    data = utils.load_data(
-        2021, 15, example=EXAMPLE, fn=lambda line: [int(i) for i in line]
-    )
+def parse_data(data):
+    data = utils.parse_data(data, fn=lambda line: [int(i) for i in line])
 
     return data
 
 
-DATA = load_data()
-
 Coord = tuple[int, int]
 
 
-def part1(data=DATA) -> int:
+def part1(data) -> int:
     edges: dict[Coord, dict[Coord, int]] = {}
 
     size = len(data)
@@ -59,9 +52,9 @@ def mod_1(n: int) -> int:
     return 1 + ((n - 1) % 9)
 
 
-def part2() -> int:
+def part2(data) -> int:
     new_data = []
-    for row in DATA:
+    for row in data:
         new_row = row[:]
         for i in range(4):
             new_row.extend([mod_1(r + i + 1) for r in row])
@@ -75,14 +68,3 @@ def part2() -> int:
     # print("\n".join("".join(str(i) for i in row) for row in new_data))
 
     return part1(new_data)
-
-
-def main() -> None:
-    with utils.timed():
-        print(f"Part 1: {part1()}")
-    with utils.timed():
-        print(f"Part 2: {part2()}")
-
-
-if __name__ == "__main__":
-    main()

@@ -1,8 +1,4 @@
-from aoc import utils
-
-
-def load_data():
-    data = utils.load_data(2021, 8, example=False)
+def parse_data(data):
     parsed_data = []
     for row in data:
         sample_digits, output = row.split("|")
@@ -12,8 +8,6 @@ def load_data():
 
     return parsed_data
 
-
-DATA = load_data()
 
 DIGITS = {
     0: set("abcefg"),
@@ -29,19 +23,19 @@ DIGITS = {
 }
 
 
-def part1() -> int:
+def part1(data) -> int:
     count = 0
-    for _, output in DATA:
+    for _, output in data:
         for digit in output:
             if len(digit) in (2, 4, 3, 7):
                 count += 1
     return count
 
 
-def part2() -> int:
+def part2(data) -> int:
     total = 0
 
-    for sample_digits, output in DATA:
+    for sample_digits, output in data:
         # We know 1, 4, 7, 8
         known_digits = {}
 
@@ -108,12 +102,3 @@ def part2() -> int:
         total += n
 
     return total
-
-
-def main() -> None:
-    print(f"Part 1: {part1()}")
-    print(f"Part 2: {part2()}")
-
-
-if __name__ == "__main__":
-    main()

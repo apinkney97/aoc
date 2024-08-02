@@ -1,17 +1,14 @@
 from aoc import utils
 
 
-def load_data():
-    data = utils.load_data(2021, 1, fn=int)
+def parse_data(data):
+    data = utils.parse_data(data, fn=int)
 
     return data
 
 
-DATA = load_data()
-
-
-def part1() -> int:
-    return count_increases(DATA)
+def part1(data) -> int:
+    return count_increases(data)
 
 
 def count_increases(data):
@@ -22,15 +19,6 @@ def count_increases(data):
     return increases
 
 
-def part2() -> int:
-    windows = [sum(x) for x in zip(DATA, DATA[1:], DATA[2:])]
+def part2(data) -> int:
+    windows = [sum(x) for x in zip(data, data[1:], data[2:])]
     return count_increases(windows)
-
-
-def main() -> None:
-    print(f"Part 1: {part1()}")
-    print(f"Part 2: {part2()}")
-
-
-if __name__ == "__main__":
-    main()

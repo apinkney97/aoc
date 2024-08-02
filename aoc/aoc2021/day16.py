@@ -4,9 +4,6 @@ from abc import ABC, abstractmethod
 
 from aoc import utils
 
-# EXAMPLE = True
-EXAMPLE = False
-
 # this is a bit nasty, but avoids needing to add leading zeros
 HEX_TO_BYTES = {
     "0": (0, 0, 0, 0),
@@ -28,9 +25,7 @@ HEX_TO_BYTES = {
 }
 
 
-def load_data():
-    data = utils.load_data(2021, 16, example=EXAMPLE)
-
+def parse_data(data):
     bits = []
 
     for c in data[0]:
@@ -216,25 +211,11 @@ class Operator(Packet):
                 return 1 if sps[0].value == sps[1].value else 0
 
 
-DATA = load_data()
-
-
-def part1() -> int:
-    packet = Packet.deserialize(DATA)
+def part1(data) -> int:
+    packet = Packet.deserialize(data)
     return packet.version_sum()
 
 
-def part2() -> int:
-    packet = Packet.deserialize(DATA)
+def part2(data) -> int:
+    packet = Packet.deserialize(data)
     return packet.value
-
-
-def main() -> None:
-    with utils.timed():
-        print(f"Part 1: {part1()}")
-    with utils.timed():
-        print(f"Part 2: {part2()}")
-
-
-if __name__ == "__main__":
-    main()

@@ -1,19 +1,7 @@
-from aoc import utils
-
-
-def load_data():
-    data = utils.load_data(2021, 2, example=False)
-
-    return data
-
-
-DATA = load_data()
-
-
-def part1() -> int:
+def part1(data) -> int:
     x = 0
     y = 0
-    for line in DATA:
+    for line in data:
         match line.split():
             case ["forward", dist]:
                 x += int(dist)
@@ -25,11 +13,11 @@ def part1() -> int:
     return x * y
 
 
-def part2() -> int:
+def part2(data) -> int:
     aim = 0
     x = 0
     y = 0
-    for line in DATA:
+    for line in data:
         match line.split():
             case ["forward", dist]:
                 dist = int(dist)
@@ -41,12 +29,3 @@ def part2() -> int:
                 aim -= int(dist)
 
     return x * y
-
-
-def main() -> None:
-    print(f"Part 1: {part1()}")
-    print(f"Part 2: {part2()}")
-
-
-if __name__ == "__main__":
-    main()

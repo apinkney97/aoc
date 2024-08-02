@@ -1,8 +1,7 @@
 from aoc import utils
 
 
-def load_data():
-    data = utils.load_data(2021, 13, example=False)
+def parse_data(data):
     grid = utils.Grid2D()
     folds = []
     for line in data:
@@ -16,9 +15,6 @@ def load_data():
     return grid, folds
 
 
-DATA = load_data()
-
-
 def fold(grid: utils.Grid2D, axis: str, value: int) -> utils.Grid2D:
     new_grid = utils.Grid2D()
     for x, y in grid:
@@ -30,26 +26,15 @@ def fold(grid: utils.Grid2D, axis: str, value: int) -> utils.Grid2D:
     return new_grid
 
 
-def part1() -> int:
-    grid, folds = DATA
+def part1(data) -> int:
+    grid, folds = data
     grid = fold(grid, folds[0][0], folds[0][1])
     return len(grid)
 
 
-def part2() -> str:
-    grid, folds = DATA
+def part2(data) -> str:
+    grid, folds = data
     for axis, pos in folds:
         grid = fold(grid, axis, pos)
 
     return "\n" + str(grid)
-
-
-def main() -> None:
-    with utils.timed():
-        print(f"Part 1: {part1()}")
-    with utils.timed():
-        print(f"Part 2: {part2()}")
-
-
-if __name__ == "__main__":
-    main()

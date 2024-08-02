@@ -1,9 +1,4 @@
-from aoc import utils
-
-
-def load_data():
-    data = utils.load_data(2021, 4, example=False)
-
+def parse_data(data):
     called_numbers = [int(i) for i in data[0].split(",")]
     boards = []
     board = None
@@ -17,11 +12,8 @@ def load_data():
     return called_numbers, boards
 
 
-DATA = load_data()
-
-
-def part1() -> int:
-    called_numbers, boards = DATA
+def part1(data) -> int:
+    called_numbers, boards = data
     nums_to_boards = {}
     for board in boards:
         for num in board:
@@ -50,8 +42,8 @@ def is_winning(board: list[int], called: set[int]) -> bool:
     return False
 
 
-def part2() -> int:
-    called_numbers, boards = DATA
+def part2(data) -> int:
+    called_numbers, boards = data
     nums_to_boards = {}
     for i, board in enumerate(boards):
         for num in board:
@@ -70,12 +62,3 @@ def part2() -> int:
                     return sum(unmarked) * num
 
     return -999
-
-
-def main() -> None:
-    print(f"Part 1: {part1()}")
-    print(f"Part 2: {part2()}")
-
-
-if __name__ == "__main__":
-    main()

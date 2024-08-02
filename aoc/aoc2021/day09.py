@@ -1,15 +1,10 @@
 from aoc import utils
 
 
-def load_data():
-    data = utils.load_data(
-        2021, 9, fn=lambda line: [int(c) for c in line], example=False
-    )
+def _parse_data(data):
+    data = utils.parse_data(data, fn=lambda line: [int(c) for c in line])
 
     return data
-
-
-DATA = load_data()
 
 
 def neighbours(x, y, w, h):
@@ -36,22 +31,24 @@ def get_low_points(data):
                 yield x, y
 
 
-def part1() -> int:
+def part1(data) -> int:
+    data = _parse_data(data)
     score = 0
-    for x, y in get_low_points(DATA):
-        score += 1 + DATA[x][y]
+    for x, y in get_low_points(data):
+        score += 1 + data[x][y]
 
     return score
 
 
-def part2() -> int:
+def part2(data) -> int:
     basins = []
-    w = len(DATA)
-    h = len(DATA[0])
+    w = len(data)
+    h = len(data[0])
 
-    data_copy = load_data()
+    data_copy = _parse_data(data)
+    data = _parse_data(data)
 
-    for x, y in get_low_points(DATA):
+    for x, y in get_low_points(data):
         stack = [(x, y)]
         size = 0
         seen = set()
@@ -67,12 +64,3 @@ def part2() -> int:
         basins.append(size)
 
     return utils.product(sorted(basins)[-3:])
-
-
-def main() -> None:
-    print(f"Part 1: {part1()}")
-    print(f"Part 2: {part2()}")
-
-
-if __name__ == "__main__":
-    main()

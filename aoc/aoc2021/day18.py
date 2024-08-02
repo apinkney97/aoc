@@ -5,19 +5,13 @@ from itertools import permutations
 
 from aoc import utils
 
-EXAMPLE = True
-EXAMPLE = False
-
 # utils.enable_logging()
 
 
-def load_data():
-    data = utils.load_data(2021, 18, example=EXAMPLE, fn=eval)
+def parse_data(data):
+    data = utils.parse_data(data, fn=eval)
 
     return data
-
-
-DATA = load_data()
 
 
 class SnailPair:
@@ -198,31 +192,20 @@ class SnailPair:
         return 3 * left + 2 * right
 
 
-def part1() -> int:
-    initial = SnailPair.from_list(DATA[0])
+def part1(data) -> int:
+    initial = SnailPair.from_list(data[0])
 
-    for n in DATA[1:]:
+    for n in data[1:]:
         num = SnailPair.from_list(n)
         initial = initial + num
 
     return initial.magnitude
 
 
-def part2() -> int:
+def part2(data) -> int:
     max_ = 0
-    for a, b in permutations(DATA, 2):
+    for a, b in permutations(data, 2):
         n1 = SnailPair.from_list(a)
         n2 = SnailPair.from_list(b)
         max_ = max(max_, (n1 + n2).magnitude)
     return max_
-
-
-def main() -> None:
-    with utils.timed():
-        print(f"Part 1: {part1()}")
-    with utils.timed():
-        print(f"Part 2: {part2()}")
-
-
-if __name__ == "__main__":
-    main()

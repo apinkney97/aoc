@@ -1,16 +1,5 @@
 from statistics import median
 
-from aoc import utils
-
-
-def load_data():
-    data = utils.load_data(2021, 10, example=False)
-
-    return data
-
-
-DATA = load_data()
-
 MATCHES = {
     ")": "(",
     "]": "[",
@@ -26,9 +15,9 @@ BAD_SCORES = {
 }
 
 
-def part1() -> int:
+def part1(data) -> int:
     score = 0
-    for line in DATA:
+    for line in data:
         stack = []
         for c in line:
             if c in "([{<":
@@ -50,9 +39,9 @@ GOOD_SCORES = {
 }
 
 
-def part2() -> int:
+def part2(data) -> int:
     scores = []
-    for line in DATA:
+    for line in data:
         score = 0
         stack = []
         for c in line:
@@ -68,12 +57,3 @@ def part2() -> int:
             scores.append(score)
 
     return median(scores)
-
-
-def main() -> None:
-    print(f"Part 1: {part1()}")
-    print(f"Part 2: {part2()}")
-
-
-if __name__ == "__main__":
-    main()

@@ -47,14 +47,6 @@ def main():
     example = args.example
     config.EXAMPLE = example
 
-    with utils.timed("Load data"):
-        data_raw = utils.load_data_raw(year=year, day=day, example=example)
-
-    if args.print_data:
-        for line in data_raw:
-            print(line)
-        return
-
     part_1 = args.part_1
     part_2 = args.part_2
 
@@ -68,6 +60,14 @@ def main():
         day_module = import_module(module_name)
     except ModuleNotFoundError as e:
         print(e)
+        return
+
+    with utils.timed("Load data"):
+        data_raw = utils.load_data_raw(year=year, day=day, example=example)
+
+    if args.print_data:
+        for line in data_raw:
+            print(line)
         return
 
     try:

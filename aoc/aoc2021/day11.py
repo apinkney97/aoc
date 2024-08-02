@@ -3,10 +3,8 @@ import itertools
 from aoc import utils
 
 
-def load_data():
-    data = utils.load_data(
-        2021, 11, fn=lambda line: [int(c) for c in line], example=False
-    )
+def _parse_data(data):
+    data = utils.parse_data(data, fn=lambda line: [int(c) for c in line])
 
     return data
 
@@ -16,8 +14,7 @@ def p(data):
         print("".join(str(i) for i in row))
 
 
-def run():
-    data = load_data()
+def run(data, max_step=None, flash_threshold=None):
     total_flashes = 0
     for step in itertools.count():
         will_flash = set()
@@ -41,17 +38,16 @@ def run():
 
         total_flashes += len(will_flash)
 
-        if step == 99:
-            print(f"Part 1: {total_flashes}")
+        if step == max_step:
+            return total_flashes
 
-        if len(will_flash) == 100:
-            print(f"Part 2: {step + 1}")
-            break
-
-
-def main() -> None:
-    run()
+        if len(will_flash) == flash_threshold:
+            return step + 1
 
 
-if __name__ == "__main__":
-    main()
+def part1(data) -> int:
+    return run(_parse_data(data), max_step=99)
+
+
+def part2(data) -> int:
+    return run(_parse_data(data), flash_threshold=100)

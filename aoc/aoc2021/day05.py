@@ -3,19 +3,16 @@ from collections import Counter
 from aoc import utils
 
 
-def load_data():
+def parse_data(data):
     def parse(line):
         parts = line.split(" -> ")
         x1, y1 = parts[0].split(",")
         x2, y2 = parts[1].split(",")
         return tuple(int(n) for n in (x1, y1, x2, y2))
 
-    data = utils.load_data(2021, 5, fn=parse, example=False)
+    data = utils.parse_data(data, fn=parse)
 
     return data
-
-
-DATA = load_data()
 
 
 def get_line_coords(x1, y1, x2, y2, *, ignore_diagonals=True):
@@ -39,26 +36,17 @@ def get_line_coords(x1, y1, x2, y2, *, ignore_diagonals=True):
     return zip(x_range, y_range)
 
 
-def part1() -> int:
+def part1(data) -> int:
     board = Counter()
-    for line in DATA:
+    for line in data:
         board.update(get_line_coords(*line))
 
     return len([v for v in board.values() if v >= 2])
 
 
-def part2() -> int:
+def part2(data) -> int:
     board = Counter()
-    for line in DATA:
+    for line in data:
         board.update(get_line_coords(*line, ignore_diagonals=False))
 
     return len([v for v in board.values() if v >= 2])
-
-
-def main() -> None:
-    print(f"Part 1: {part1()}")
-    print(f"Part 2: {part2()}")
-
-
-if __name__ == "__main__":
-    main()

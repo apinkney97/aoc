@@ -1,15 +1,8 @@
 from collections import Counter
 
-from aoc import utils
 
-
-def load_data():
-    data = utils.load_data(2021, 6, example=False)
-
+def parse_data(data):
     return [int(i) for i in data[0].split(",")]
-
-
-DATA = load_data()
 
 
 def step(fish: dict[int, int]) -> dict[int, int]:
@@ -22,22 +15,13 @@ def step(fish: dict[int, int]) -> dict[int, int]:
     return new_fish
 
 
-def part1(steps=80) -> int:
-    fish = Counter(DATA)
+def part1(data, steps=80) -> int:
+    fish = Counter(data)
     for _ in range(steps):
         fish = step(fish)
 
     return sum(fish.values())
 
 
-def part2() -> int:
-    return part1(256)
-
-
-def main() -> None:
-    print(f"Part 1: {part1()}")
-    print(f"Part 2: {part2()}")
-
-
-if __name__ == "__main__":
-    main()
+def part2(data) -> int:
+    return part1(data, 256)

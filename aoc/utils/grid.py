@@ -3,9 +3,11 @@ from __future__ import annotations
 from collections.abc import MutableMapping
 from typing import Iterator, TypeVar
 
+from aoc.utils.output import BACKGROUND_BLOCK, FOREGROUND_BLOCK
+
 DEFAULT_DISPLAY_MAP = {
-    0: "  ",
-    1: "██",
+    0: BACKGROUND_BLOCK,
+    1: FOREGROUND_BLOCK,
 }
 
 

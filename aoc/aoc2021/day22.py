@@ -4,9 +4,6 @@ from typing import NamedTuple
 
 from aoc import utils
 
-EXAMPLE = True
-EXAMPLE = False
-
 
 class Action(NamedTuple):
     action: str
@@ -18,7 +15,7 @@ class Action(NamedTuple):
     z2: int
 
 
-def load_data():
+def parse_data(data):
     # on x=-34154..-5635,y=-24345..11649,z=71769..88510
     r = re.compile(
         r"""
@@ -29,7 +26,7 @@ def load_data():
         """,
         re.VERBOSE,
     )
-    data = utils.load_data(2021, 22, example=EXAMPLE, fn=r.fullmatch)
+    data = utils.parse_data(data, fn=r.fullmatch)
 
     return [
         Action(
@@ -45,12 +42,9 @@ def load_data():
     ]
 
 
-DATA = load_data()
-
-
-def part1() -> int:
+def part1(data) -> int:
     g = utils.Grid3D(default_val=0)
-    for action in DATA:
+    for action in data:
         if any(
             abs(c) > 50
             for c in (action.x1, action.x2, action.y1, action.y2, action.z1, action.z2)
@@ -66,9 +60,9 @@ def part1() -> int:
     return len(g)
 
 
-def part2() -> int:
+def part2(data) -> int:
     g = utils.Grid3D(default_val=0)
-    for action in DATA:
+    for action in data:
         value = 0 if action.action == "off" else 1
         for coord in product(
             range(action.x1, action.x2 + 1),
@@ -77,14 +71,3 @@ def part2() -> int:
         ):
             g[coord] = value
     return len(g)
-
-
-def main() -> None:
-    with utils.timed():
-        print(f"Part 1: {part1()}")
-    with utils.timed():
-        print(f"Part 2: {part2()}")
-
-
-if __name__ == "__main__":
-    main()

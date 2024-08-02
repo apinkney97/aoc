@@ -4,12 +4,8 @@ import dataclasses
 from collections import defaultdict, deque
 from typing import Optional
 
-from aoc import utils
 
-
-def load_data():
-    data = utils.load_data(2021, 12, example=False)
-
+def parse_data(data):
     adjacencies = defaultdict(list)
 
     small = set()
@@ -29,9 +25,6 @@ def load_data():
     return adjacencies, small
 
 
-DATA = load_data()
-
-
 @dataclasses.dataclass
 class Node:
     name: str
@@ -47,7 +40,7 @@ def is_ancestor(node: Node, name: str):
     return False
 
 
-def part1() -> int:
+def part1(data) -> int:
     start = Node("start", None)
 
     queue = deque()
@@ -55,7 +48,7 @@ def part1() -> int:
 
     ends = []
 
-    adjacencies, small = DATA
+    adjacencies, small = data
 
     while queue:
         current = queue.popleft()
@@ -70,7 +63,7 @@ def part1() -> int:
     return len(ends)
 
 
-def part2() -> int:
+def part2(data) -> int:
     start = Node("start", None)
 
     queue = deque()
@@ -78,7 +71,7 @@ def part2() -> int:
 
     ends = []
 
-    adjacencies, small = DATA
+    adjacencies, small = data
 
     while queue:
         current = queue.popleft()
@@ -94,15 +87,3 @@ def part2() -> int:
             queue.append(new_node)
 
     return len(ends)
-
-
-def main() -> None:
-    with utils.timed():
-        print(f"Part 1: {part1()}")
-
-    with utils.timed():
-        print(f"Part 2: {part2()}")
-
-
-if __name__ == "__main__":
-    main()

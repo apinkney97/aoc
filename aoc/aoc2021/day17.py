@@ -2,22 +2,16 @@ import re
 
 from aoc import utils
 
-# EXAMPLE = True
-EXAMPLE = False
 
-
-def load_data():
+def parse_data(data):
     r = re.compile(r"target area: x=(-?\d+)\.\.(-?\d+), y=(-?\d+)\.\.(-?\d+)")
-    data = utils.load_data(2021, 17, example=EXAMPLE, fn=r.fullmatch)
+    data = utils.parse_data(data, fn=r.fullmatch)
     match = data[0]
     return tuple(int(match.group(n + 1)) for n in range(4))
 
 
-DATA = load_data()
-
-
-def part1() -> int:
-    x1, x2, y1, y2 = DATA
+def part1(data) -> int:
+    x1, x2, y1, y2 = data
 
     # dy downwards will equal dy upwards at the same y value
     # so, initial velocities higher than abs(y1) will make us overshoot in 1 step
@@ -36,8 +30,8 @@ def part1() -> int:
     return global_max_y
 
 
-def part2() -> int:
-    x1, x2, y1, y2 = DATA
+def part2(data) -> int:
+    x1, x2, y1, y2 = data
 
     initial_velocities = set()
 
@@ -58,14 +52,3 @@ def part2() -> int:
                     initial_velocities.add((initial_dx, initial_dy))
 
     return len(initial_velocities)
-
-
-def main() -> None:
-    with utils.timed():
-        print(f"Part 1: {part1()}")
-    with utils.timed():
-        print(f"Part 2: {part2()}")
-
-
-if __name__ == "__main__":
-    main()
