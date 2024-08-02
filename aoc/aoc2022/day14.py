@@ -1,19 +1,13 @@
 import itertools
 import typing
 
-from aoc import utils
-
-# EXAMPLE = True
-EXAMPLE = False
-
 
 class Coord(typing.NamedTuple):
     x: int
     y: int
 
 
-def load_data():
-    data = utils.load_data(2022, 14, example=EXAMPLE)
+def build_grid(data):
     grid = {}
 
     for line in data:
@@ -82,8 +76,8 @@ def drop2(grid, limit):
             return True
 
 
-def part1() -> int:
-    grid = load_data()
+def part1(data) -> int:
+    grid = build_grid(data)
 
     max_y = max(c.y for c in grid)
 
@@ -97,8 +91,8 @@ def part1() -> int:
     return count
 
 
-def part2() -> int:
-    grid = load_data()
+def part2(data) -> int:
+    grid = build_grid(data)
 
     max_y = max(c.y for c in grid)
 
@@ -110,14 +104,3 @@ def part2() -> int:
             break
 
     return count
-
-
-def main() -> None:
-    with utils.timed():
-        print(f"Part 1: {part1()}")
-    with utils.timed():
-        print(f"Part 2: {part2()}")
-
-
-if __name__ == "__main__":
-    main()

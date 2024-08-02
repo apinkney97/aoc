@@ -1,16 +1,13 @@
 import re
 
-from aoc import utils
-
-# EXAMPLE = True
-EXAMPLE = False
+from aoc import config, utils
 
 
-def load_data():
+def parse_data(data):
     matcher = re.compile(
         r"Sensor at x=(-?\d+), y=(-?\d+): closest beacon is at x=(-?\d+), y=(-?\d+)"
     )
-    data = utils.load_data(2022, 15, example=EXAMPLE, fn=matcher.fullmatch)
+    data = utils.parse_data(data, fn=matcher.fullmatch)
 
     return [
         ((int(d.group(1)), int(d.group(2))), (int(d.group(3)), int(d.group(4))))
@@ -18,14 +15,11 @@ def load_data():
     ]
 
 
-DATA = load_data()
-
-
-def part1() -> int:
+def part1(data) -> int:
     grid = {}
     radii = {}
     x_bounds = []
-    for (sx, sy), (bx, by) in DATA:
+    for (sx, sy), (bx, by) in data:
         grid[sx, sy] = "S"
         grid[bx, by] = "B"
         radius = utils.manhattan(sx - bx, sy - by)
@@ -35,7 +29,7 @@ def part1() -> int:
     x_min = min(x_bounds)
     x_max = max(x_bounds)
 
-    y = 10 if EXAMPLE else 2000000
+    y = 10 if config.EXAMPLE else 2000000
 
     empty = 0
     for x in range(x_min, x_max + 1):
@@ -51,14 +45,14 @@ def part1() -> int:
     return empty
 
 
-def part2() -> int:
-    if EXAMPLE:
+def part2(data) -> int:
+    if config.EXAMPLE:
         max_x = max_y = 20
     else:
         max_x = max_y = 4000000
 
     radii: dict[tuple[int, int], int] = {}
-    for (sx, sy), (bx, by) in DATA:
+    for (sx, sy), (bx, by) in data:
         radius = utils.manhattan(sx - bx, sy - by)
         radii[sx, sy] = radius
 
@@ -75,14 +69,3 @@ def part2() -> int:
                 return x * 4000000 + y
 
     return -1
-
-
-def main() -> None:
-    with utils.timed():
-        print(f"Part 1: {part1()}")
-    with utils.timed():
-        print(f"Part 2: {part2()}")
-
-
-if __name__ == "__main__":
-    main()

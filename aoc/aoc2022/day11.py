@@ -1,9 +1,6 @@
 import typing
 
-from aoc import utils
-
-# EXAMPLE = True
-EXAMPLE = False
+from aoc import config, utils
 
 
 class Throw(typing.NamedTuple):
@@ -39,8 +36,8 @@ class Monkey:
         return throws
 
 
-def get_monkeys():
-    if EXAMPLE:
+def get_monkeys(example=False):
+    if example:
         return [
             Monkey(
                 number=0,
@@ -144,17 +141,8 @@ def get_monkeys():
         ]
 
 
-def load_data():
-    data = utils.load_data(2022, 11, example=EXAMPLE)
-
-    return data
-
-
-DATA = load_data()
-
-
-def part1() -> int:
-    monkeys = get_monkeys()
+def part1(data) -> int:
+    monkeys = get_monkeys(config.EXAMPLE)
     for _ in range(20):
         for monkey in monkeys:
             throws = monkey.take_turn()
@@ -164,8 +152,8 @@ def part1() -> int:
     return utils.product(sorted([m.inspect_count for m in monkeys])[-2:])
 
 
-def part2() -> int:
-    monkeys = get_monkeys()
+def part2(data) -> int:
+    monkeys = get_monkeys(config.EXAMPLE)
     modulo = utils.product([m.divisor for m in monkeys])
     for _ in range(10000):
         for monkey in monkeys:
@@ -174,14 +162,3 @@ def part2() -> int:
                 monkeys[throw.to].items.append(throw.item)
 
     return utils.product(sorted([m.inspect_count for m in monkeys])[-2:])
-
-
-def main() -> None:
-    with utils.timed():
-        print(f"Part 1: {part1()}")
-    with utils.timed():
-        print(f"Part 2: {part2()}")
-
-
-if __name__ == "__main__":
-    main()

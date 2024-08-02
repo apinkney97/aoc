@@ -4,15 +4,12 @@ import re
 
 from aoc import utils
 
-# EXAMPLE = True
-EXAMPLE = False
 
-
-def load_data():
+def parse_data(data):
     matcher = re.compile(
         r"Valve (..) has flow rate=(\d+); tunnels? leads? to valves? (.*)$"
     )
-    data = utils.load_data(2022, 16, example=EXAMPLE, fn=matcher.fullmatch)
+    data = utils.parse_data(data, fn=matcher.fullmatch)
 
     valves = {}
     for row in data:
@@ -58,12 +55,7 @@ def get_distances(valves):
     return dists
 
 
-DATA = load_data()
-
-
-def search(time_limit: int) -> dict[frozenset[str], int]:
-    valves, dists = DATA
-
+def search(valves, dists, time_limit: int) -> dict[frozenset[str], int]:
     best_by_valves = {}
 
     useful_valves = [name for name, valve in valves.items() if valve[0] > 0]
@@ -98,13 +90,15 @@ def search(time_limit: int) -> dict[frozenset[str], int]:
     return best_by_valves
 
 
-def part1() -> int:
-    return max(search(30).values())
+def part1(data) -> int:
+    valves, dists = data
+    return max(search(valves, dists, 30).values())
 
 
-def part2() -> int:
+def part2(data) -> int:
+    valves, dists = data
     # Find all "best" paths by open valves
-    best_by_valves = search(26)
+    best_by_valves = search(valves, dists, 26)
 
     best = 0
 
@@ -117,14 +111,3 @@ def part2() -> int:
             best = best_total
 
     return best
-
-
-def main() -> None:
-    with utils.timed():
-        print(f"Part 1: {part1()}")
-    with utils.timed():
-        print(f"Part 2: {part2()}")
-
-
-if __name__ == "__main__":
-    main()

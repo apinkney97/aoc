@@ -5,13 +5,18 @@ from zoneinfo import ZoneInfo
 
 from rich import print
 
-from aoc import utils
+from aoc import config, utils
 
 
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("day", type=int, nargs="?")
-    parser.add_argument("year", type=int, nargs="?")
+    parser.add_argument(
+        "-y",
+        "--year",
+        type=int,
+        help="In December defaults to this year, otherwise last year",
+    )
     parser.add_argument(
         "-e", "--example", action="store_true", help="Use example input"
     )
@@ -39,8 +44,11 @@ def main():
             f"You must specify a day and year (got day:{day}, year:{year})"
         )
 
+    example = args.example
+    config.EXAMPLE = example
+
     with utils.timed("Load data"):
-        data_raw = utils.load_data_raw(year=year, day=day, example=args.example)
+        data_raw = utils.load_data_raw(year=year, day=day, example=example)
 
     if args.print_data:
         for line in data_raw:

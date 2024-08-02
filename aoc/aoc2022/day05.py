@@ -1,11 +1,6 @@
 import re
 import typing
 
-from aoc import utils
-
-# EXAMPLE = True
-EXAMPLE = False
-
 
 class Move(typing.NamedTuple):
     num: int
@@ -13,12 +8,10 @@ class Move(typing.NamedTuple):
     dst: int
 
 
-def load_data():
-    data = utils.load_data(2022, 5, example=EXAMPLE, strip=False)
+def build_stacks(data):
     d_it = iter(data)
     stack_rows = []
     for row in d_it:
-        row = row.strip("\n")
         if not row:
             break
         stack_rows.append(row)
@@ -53,8 +46,8 @@ def get_tops(stacks: list[list[str]]) -> str:
     return "".join(tops)
 
 
-def part1() -> str:
-    stacks, moves = load_data()
+def part1(data) -> str:
+    stacks, moves = build_stacks(data)
 
     for move in moves:
         for _ in range(move.num):
@@ -63,8 +56,8 @@ def part1() -> str:
     return get_tops(stacks)
 
 
-def part2() -> str:
-    stacks, moves = load_data()
+def part2(data) -> str:
+    stacks, moves = build_stacks(data)
     for move in moves:
         tmp_stack = []
         for _ in range(move.num):
@@ -73,14 +66,3 @@ def part2() -> str:
             stacks[move.dst].append(item)
 
     return get_tops(stacks)
-
-
-def main() -> None:
-    with utils.timed():
-        print(f"Part 1: {part1()}")
-    with utils.timed():
-        print(f"Part 2: {part2()}")
-
-
-if __name__ == "__main__":
-    main()

@@ -1,11 +1,4 @@
-from aoc import utils
-
-# EXAMPLE = True
-EXAMPLE = False
-
-
-def load_data():
-    data = utils.load_data(2022, 9, example=EXAMPLE)
+def parse_data(data):
     parsed = []
 
     for line in data:
@@ -15,8 +8,6 @@ def load_data():
 
     return parsed
 
-
-DATA = load_data()
 
 DIRS = {
     "R": (1, 0),
@@ -46,12 +37,12 @@ def get_tail_pos(head: tuple[int, int], tail: tuple[int, int]) -> tuple[int, int
     return tx, ty
 
 
-def part1(rope_len=2) -> int:
+def part1(data, rope_len=2) -> int:
     rope = [(0, 0)] * rope_len
 
     visited = set()
 
-    for direction, distance in DATA:
+    for direction, distance in data:
         move = DIRS[direction]
         for _ in range(distance):
             # move head
@@ -66,12 +57,5 @@ def part1(rope_len=2) -> int:
     return len(visited)
 
 
-def main() -> None:
-    with utils.timed():
-        print(f"Part 1: {part1()}")
-    with utils.timed():
-        print(f"Part 2: {part1(10)}")
-
-
-if __name__ == "__main__":
-    main()
+def part2(data):
+    return part1(data, rope_len=10)

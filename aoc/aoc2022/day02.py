@@ -8,12 +8,6 @@ C: scissors, 3, Z
 6 win
 """
 
-from aoc import utils
-
-# EXAMPLE = True
-EXAMPLE = False
-
-
 LOSE = 0
 DRAW = 3
 WIN = 6
@@ -23,16 +17,7 @@ PAPER = 2
 SCISSORS = 3
 
 
-def load_data():
-    data = utils.load_data(2022, 2, example=EXAMPLE)
-
-    return data
-
-
-DATA = load_data()
-
-
-def part1() -> int:
+def part1(data) -> int:
     scores = {
         "A X": ROCK + DRAW,
         "B X": ROCK + LOSE,
@@ -44,10 +29,10 @@ def part1() -> int:
         "B Z": SCISSORS + WIN,
         "C Z": SCISSORS + DRAW,
     }
-    return sum(scores[row] for row in DATA)
+    return sum(scores[row] for row in data)
 
 
-def part2() -> int:
+def part2(data) -> int:
     # X: lose
     # Y: draw
     # Z: win
@@ -62,15 +47,4 @@ def part2() -> int:
         "B Z": SCISSORS + WIN,
         "C Z": ROCK + WIN,
     }
-    return sum(scores[row] for row in DATA)
-
-
-def main() -> None:
-    with utils.timed():
-        print(f"Part 1: {part1()}")
-    with utils.timed():
-        print(f"Part 2: {part2()}")
-
-
-if __name__ == "__main__":
-    main()
+    return sum(scores[row] for row in data)

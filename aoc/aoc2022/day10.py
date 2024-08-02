@@ -1,12 +1,7 @@
-from aoc import utils
-
-# EXAMPLE = True
-EXAMPLE = False
+from aoc.utils import BACKGROUND_BLOCK, FOREGROUND_BLOCK
 
 
-def load_data():
-    data = utils.load_data(2022, 10, example=EXAMPLE)
-
+def parse_data(data):
     instructions = []
     for line in data:
         if line != "noop":
@@ -16,14 +11,11 @@ def load_data():
     return instructions
 
 
-DATA = load_data()
-
-
-def part1() -> int:
+def part1(data) -> int:
     x = 1
 
     total = 0
-    for cycle, instruction in enumerate(DATA, start=1):
+    for cycle, instruction in enumerate(data, start=1):
         if cycle in {20, 60, 100, 140, 180, 220}:
             total += cycle * x
 
@@ -33,14 +25,14 @@ def part1() -> int:
     return total
 
 
-def part2() -> int:
+def part2(data) -> int:
     sprite_x = 1
 
-    for cycle, instruction in enumerate(DATA, start=0):
+    for cycle, instruction in enumerate(data, start=0):
         if sprite_x - 1 <= cycle % 40 <= sprite_x + 1:
-            print("██", end="")
+            print(FOREGROUND_BLOCK, end="")
         else:
-            print("░░", end="")
+            print(BACKGROUND_BLOCK, end="")
 
         if (cycle + 1) % 40 == 0:
             print()
@@ -50,14 +42,3 @@ def part2() -> int:
             sprite_x += value
 
     return 0
-
-
-def main() -> None:
-    with utils.timed():
-        print(f"Part 1: {part1()}")
-    with utils.timed():
-        print(f"Part 2: {part2()}")
-
-
-if __name__ == "__main__":
-    main()

@@ -1,10 +1,5 @@
 import typing
 
-from aoc import utils
-
-# EXAMPLE = True
-EXAMPLE = False
-
 
 class Command(typing.NamedTuple):
     command: str
@@ -43,9 +38,7 @@ class Dir(BaseFile):
         self._contents.append(file)
 
 
-def load_data():
-    data = utils.load_data(2022, 7, example=EXAMPLE)
-
+def parse_data(data):
     commands = []
 
     command = ""
@@ -66,18 +59,15 @@ def load_data():
     return commands
 
 
-DATA = load_data()
-
-
 def to_path(cwd):
     return "/" + "/".join(cwd)
 
 
-def get_dirs() -> dict[str, Dir]:
+def get_dirs(commands) -> dict[str, Dir]:
     cwd = []
     dirs: dict[str, Dir] = {"/": Dir("/")}
 
-    for command in DATA:
+    for command in commands:
         if command.command == "cd /":
             cwd = []
         elif command.command == "cd ..":
@@ -97,8 +87,8 @@ def get_dirs() -> dict[str, Dir]:
     return dirs
 
 
-def part1() -> int:
-    dirs = get_dirs()
+def part1(data) -> int:
+    dirs = get_dirs(data)
 
     total = 0
     for dir_ in dirs.values():
@@ -109,11 +99,11 @@ def part1() -> int:
     return total
 
 
-def part2() -> int:
+def part2(data) -> int:
     available = 70000000
     need = 30000000
 
-    dirs = get_dirs()
+    dirs = get_dirs(data)
     used = dirs["/"].size
     free = available - used
 
@@ -128,14 +118,3 @@ def part2() -> int:
             best = min(size, best)
 
     return best
-
-
-def main() -> None:
-    with utils.timed():
-        print(f"Part 1: {part1()}")
-    with utils.timed():
-        print(f"Part 2: {part2()}")
-
-
-if __name__ == "__main__":
-    main()

@@ -3,7 +3,6 @@ import itertools
 from aoc import utils
 
 
-
 def parse_data(data):
     data = utils.parse_data(data, fn=lambda line: [int(i) for i in line.split()])
 

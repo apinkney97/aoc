@@ -1,8 +1,5 @@
 import enum
 
-
-
-
 DISPLAY_MAP = {
     "-": "━",
     "|": "┃",
