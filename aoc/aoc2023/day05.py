@@ -5,9 +5,6 @@ from enum import Enum
 
 from aoc import utils
 
-# EXAMPLE = True
-EXAMPLE = False
-
 
 class MapType(str, Enum):
     seed_to_soil = "seed-to-soil"
@@ -99,9 +96,7 @@ class MapRange(Range):
         return self.dst - self.start
 
 
-def load_data():
-    data = utils.load_data(2023, 5, example=EXAMPLE)
-
+def parse_data(data):
     seeds = []
     maps = {}
     mode = None
@@ -124,14 +119,10 @@ def load_data():
     return seeds, maps
 
 
-with utils.timed("Load data"):
-    DATA = load_data()
-
-
-def part1() -> int:
+def part1(data) -> int:
     locations = []
     # utils.enable_logging()
-    seeds, maps = DATA
+    seeds, maps = data
     for seed in seeds:
         for map_type in MapType:
             for map_range in maps[map_type]:
@@ -142,9 +133,9 @@ def part1() -> int:
     return min(locations)
 
 
-def part2() -> int:
+def part2(data) -> int:
     # Seeds are now ranges
-    seeds, maps = DATA
+    seeds, maps = data
 
     seed_ranges = utils.PQ()
     while seeds:
@@ -179,15 +170,3 @@ def part2() -> int:
 
         seed_ranges = new_ranges
     return seed_ranges.pop_item().start
-
-
-def main() -> None:
-    with utils.timed():
-        print(f"Part 1: {part1()}")
-    with utils.timed():
-        print(f"Part 2: {part2()}")
-
-
-if __name__ == "__main__":
-    main()
-    # tests()

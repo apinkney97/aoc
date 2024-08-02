@@ -2,23 +2,12 @@ import itertools
 
 from aoc import utils
 
-# EXAMPLE = True
-EXAMPLE = False
 
 
-def load_data():
-    data = utils.load_data(
-        2023,
-        9,
-        example=EXAMPLE,
-        fn=lambda line: [int(i) for i in line.split()],
-    )
+def parse_data(data):
+    data = utils.parse_data(data, fn=lambda line: [int(i) for i in line.split()])
 
     return data
-
-
-with utils.timed("Load data"):
-    DATA = load_data()
 
 
 def reduce(line: list[int]) -> list[int]:
@@ -35,20 +24,9 @@ def extrapolate(line: list[int]) -> int:
     return sum(line[-1] for line in next_lines)
 
 
-def part1() -> int:
-    return sum(extrapolate(line) for line in DATA)
+def part1(data) -> int:
+    return sum(extrapolate(line) for line in data)
 
 
-def part2() -> int:
-    return sum(extrapolate(line[::-1]) for line in DATA)
-
-
-def main() -> None:
-    with utils.timed():
-        print(f"Part 1: {part1()}")
-    with utils.timed():
-        print(f"Part 2: {part2()}")
-
-
-if __name__ == "__main__":
-    main()
+def part2(data) -> int:
+    return sum(extrapolate(line[::-1]) for line in data)

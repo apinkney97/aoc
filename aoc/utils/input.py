@@ -2,6 +2,7 @@ from typing import Callable, Optional
 
 import platformdirs
 import requests
+from rich import print
 
 from aoc.utils.types import T
 
@@ -26,14 +27,7 @@ def multiline_input(message: str) -> str:
     return "\n".join(lines)
 
 
-def load_data(
-    year: int,
-    day: int,
-    strip: bool = True,
-    *,
-    fn: Optional[Callable[[str], T]] = None,
-    example: bool = False,
-) -> list[T] | list[str]:
+def load_data_raw(year: int, day: int, example: bool) -> list[str]:
     suffix = "-example" if example else ""
     CACHE_PATH.mkdir(mode=0o700, parents=True, exist_ok=True)
 
@@ -51,12 +45,24 @@ def load_data(
         path.write_text(data)
 
     with open(path) as f:
-        data = f.readlines()
-        if strip:
-            data = [line.strip() for line in data]
-        if fn is not None:
-            data = [fn(line) for line in data]
-        return data
+        data = [line.rstrip("\n") for line in f]
+
+    return data
+
+
+def parse_data(
+    data: list[str],
+    *,
+    strip: bool = True,
+    fn: Optional[Callable[[str], T]] = None,
+) -> list[T] | list[str]:
+    if strip:
+        data = [line.strip() for line in data]
+
+    if fn is not None:
+        data = [fn(line) for line in data]
+
+    return data
 
 
 def _get_cookie(force_refresh: bool = False):

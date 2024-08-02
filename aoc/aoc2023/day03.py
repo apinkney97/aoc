@@ -2,18 +2,6 @@ import re
 
 from aoc import utils
 
-# EXAMPLE = True
-EXAMPLE = False
-
-
-def load_data():
-    data = utils.load_data(2023, 3, example=EXAMPLE)
-
-    return data
-
-
-DATA = load_data()
-
 
 class Number:
     def __init__(self, value: int) -> None:
@@ -23,10 +11,10 @@ class Number:
         return f"{self.value}"
 
 
-def part1() -> int:
+def part1(data) -> int:
     numbers_by_coord = {}
     symbols_by_coord = {}
-    for y, line in enumerate(DATA):
+    for y, line in enumerate(data):
         numbers = re.finditer(r"\d+", line)
         for number in numbers:
             n = Number(int(number.group(0)))
@@ -47,10 +35,10 @@ def part1() -> int:
     return sum(pn.value for pn in part_numbers)
 
 
-def part2() -> int:
+def part2(data) -> int:
     numbers_by_coord = {}
     gears_coords = []
-    for y, line in enumerate(DATA):
+    for y, line in enumerate(data):
         numbers = re.finditer(r"\d+", line)
         for number in numbers:
             n = Number(int(number.group(0)))
@@ -71,14 +59,3 @@ def part2() -> int:
         if len(neighbour_nums) == 2:
             total += utils.product(n.value for n in neighbour_nums)
     return total
-
-
-def main() -> None:
-    with utils.timed():
-        print(f"Part 1: {part1()}")
-    with utils.timed():
-        print(f"Part 2: {part2()}")
-
-
-if __name__ == "__main__":
-    main()

@@ -1,29 +1,15 @@
 import re
 
-from aoc import utils
 
-# EXAMPLE = True
-EXAMPLE = False
-
-
-def load_data():
-    data = utils.load_data(2023, 1, example=EXAMPLE)
-
-    return data
-
-
-DATA = load_data()
-
-
-def part1() -> int:
+def part1(data) -> int:
     total = 0
-    for line in DATA:
+    for line in data:
         line = re.sub(r"\D", "", line)
         total += 10 * int(line[0]) + int(line[-1])
     return total
 
 
-def part2() -> int:
+def part2(data) -> int:
     numbers = {
         "one": "1",
         "two": "2",
@@ -39,7 +25,7 @@ def part2() -> int:
     rev_matcher = re.compile("|".join(k[::-1] for k in numbers.keys()) + r"|\d")
 
     total = 0
-    for line in DATA:
+    for line in data:
         first_digit = matcher.search(line).group(0)
         first_digit = numbers.get(first_digit, first_digit)
 
@@ -51,14 +37,3 @@ def part2() -> int:
         total += 10 * int(first_digit) + int(last_digit)
 
     return total
-
-
-def main() -> None:
-    with utils.timed():
-        print(f"Part 1: {part1()}")
-    with utils.timed():
-        print(f"Part 2: {part2()}")
-
-
-if __name__ == "__main__":
-    main()

@@ -1,25 +1,13 @@
-from aoc import utils
-
-# EXAMPLE = True
-EXAMPLE = False
-
-
-def load_data():
-    data = utils.load_data(2023, 6, example=EXAMPLE)
-
+def parse_data(data):
     times = [int(n) for n in data[0].split(":")[1].split()]
     distances = [int(n) for n in data[1].split(":")[1].split()]
     return times, distances
 
 
-with utils.timed("Load data"):
-    DATA = load_data()
-
-
-def part1() -> int:
+def part1(data) -> int:
     result = 1
 
-    for time, record in zip(*DATA):
+    for time, record in zip(*data):
         wins = 0
         for speed in range(1, time):
             run_time = time - speed
@@ -31,8 +19,8 @@ def part1() -> int:
     return result
 
 
-def part2() -> int:
-    time, record = DATA
+def part2(data) -> int:
+    time, record = data
     time = int("".join(str(t) for t in time))
     record = int("".join(str(r) for r in record))
     print(time, record)
@@ -56,14 +44,3 @@ def part2() -> int:
             break
 
     return last_win - first_win + 1
-
-
-def main() -> None:
-    with utils.timed():
-        print(f"Part 1: {part1()}")
-    with utils.timed():
-        print(f"Part 2: {part2()}")
-
-
-if __name__ == "__main__":
-    main()

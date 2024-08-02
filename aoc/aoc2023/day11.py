@@ -1,20 +1,5 @@
 import itertools
 
-from aoc import utils
-
-# EXAMPLE = True
-EXAMPLE = False
-
-
-def load_data():
-    data = utils.load_data(2023, 11, example=EXAMPLE)
-
-    return data
-
-
-with utils.timed("Load data"):
-    DATA = load_data()
-
 
 def get_sizes(universe: list[str], expand: int) -> tuple[list[int], list[int]]:
     row_sizes = []
@@ -48,11 +33,11 @@ def get_gx_coords(universe: list[str]) -> list[tuple[int, int]]:
     return galaxies
 
 
-def part1(expand=1) -> int:
+def part1(data, expand=2) -> int:
     result = 0
 
-    row_sizes, col_sizes = get_sizes(DATA, expand=expand)
-    galaxies = get_gx_coords(DATA)
+    row_sizes, col_sizes = get_sizes(data, expand=expand)
+    galaxies = get_gx_coords(data)
 
     for (x1, y1), (x2, y2) in itertools.combinations(galaxies, 2):
         if x1 > x2:
@@ -64,16 +49,5 @@ def part1(expand=1) -> int:
     return result
 
 
-def part2() -> int:
-    return part1(1000000)
-
-
-def main() -> None:
-    with utils.timed():
-        print(f"Part 1: {part1()}")
-    with utils.timed():
-        print(f"Part 2: {part2()}")
-
-
-if __name__ == "__main__":
-    main()
+def part2(data) -> int:
+    return part1(data, expand=1000000)

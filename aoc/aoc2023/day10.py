@@ -1,9 +1,6 @@
 import enum
 
-from aoc import utils
 
-# EXAMPLE = True
-EXAMPLE = False
 
 
 DISPLAY_MAP = {
@@ -56,9 +53,7 @@ def display(lines: list[str]) -> str:
     return "\n".join(out)
 
 
-def load_data():
-    data = utils.load_data(2023, 10, example=EXAMPLE)
-
+def parse_data(data):
     start_x = -1
     start_y = -1
     for start_y, line in enumerate(data):
@@ -66,10 +61,6 @@ def load_data():
             start_x = line.index("S")
             break
     return (start_x, start_y), data
-
-
-with utils.timed("Load data"):
-    DATA = load_data()
 
 
 def get_loop_tiles(
@@ -117,14 +108,14 @@ def get_loop_tiles(
     return start_tile, tiles_in_loop
 
 
-def part1() -> int:
-    start_pos, lines = DATA
+def part1(data) -> int:
+    start_pos, lines = data
 
     return round(len(get_loop_tiles(start_pos, lines)[1]) / 2)
 
 
-def part2() -> int:
-    start_pos, lines = DATA
+def part2(data) -> int:
+    start_pos, lines = data
 
     start_tile, loop_tiles = get_loop_tiles(start_pos, lines)
     lines[start_pos[1]] = lines[start_pos[1]].replace("S", start_tile)
@@ -143,14 +134,3 @@ def part2() -> int:
                 result += 1
 
     return result
-
-
-def main() -> None:
-    with utils.timed():
-        print(f"Part 1: {part1()}")
-    with utils.timed():
-        print(f"Part 2: {part2()}")
-
-
-if __name__ == "__main__":
-    main()

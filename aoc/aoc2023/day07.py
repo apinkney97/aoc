@@ -3,9 +3,6 @@ from collections import Counter
 
 from aoc import utils
 
-# EXAMPLE = True
-EXAMPLE = False
-
 VALUES = {
     "2": 2,
     "3": 3,
@@ -86,21 +83,17 @@ class Hand:
         return self.values < other.values
 
 
-def load_data():
-    data = utils.load_data(2023, 7, example=EXAMPLE, fn=lambda s: s.split())
+def parse_data(data):
+    data = utils.parse_data(data, fn=lambda s: s.split())
 
     return data
 
 
-with utils.timed("Load data"):
-    DATA = load_data()
-
-
-def part1() -> int:
+def part1(data) -> int:
     result = 0
 
     hands = []
-    for cards, bid in DATA:
+    for cards, bid in data:
         hands.append((Hand(cards), int(bid)))
 
     for rank, (hand, bid) in enumerate(sorted(hands), start=1):
@@ -109,25 +102,14 @@ def part1() -> int:
     return result
 
 
-def part2() -> int:
+def part2(data) -> int:
     result = 0
 
     hands = []
-    for cards, bid in DATA:
+    for cards, bid in data:
         hands.append((Hand(cards, wild=True), int(bid)))
 
     for rank, (hand, bid) in enumerate(sorted(hands), start=1):
         result += rank * bid
 
     return result
-
-
-def main() -> None:
-    with utils.timed():
-        print(f"Part 1: {part1()}")
-    with utils.timed():
-        print(f"Part 2: {part2()}")
-
-
-if __name__ == "__main__":
-    main()

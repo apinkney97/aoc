@@ -3,6 +3,8 @@ import datetime
 from importlib import import_module
 from zoneinfo import ZoneInfo
 
+from rich import print
+
 from aoc import utils
 
 
@@ -15,6 +17,8 @@ def main():
     )
     parser.add_argument("-1", "--part-1", action="store_true")
     parser.add_argument("-2", "--part-2", action="store_true")
+
+    parser.add_argument("-p", "--print-data", action="store_true")
 
     args = parser.parse_args()
 
@@ -35,10 +39,13 @@ def main():
             f"You must specify a day and year (got day:{day}, year:{year})"
         )
 
-    module_name = f"aoc.aoc{year}.day{day:02d}"
-    print(f"Loading {module_name}")
+    with utils.timed("Load data"):
+        data_raw = utils.load_data_raw(year=year, day=day, example=args.example)
 
-    day_module = import_module(module_name)
+    if args.print_data:
+        for line in data_raw:
+            print(line)
+        return
 
     part_1 = args.part_1
     part_2 = args.part_2
@@ -46,13 +53,35 @@ def main():
     if not part_1 and not part_2:
         part_1 = part_2 = True
 
+    module_name = f"aoc.aoc{year}.day{day:02d}"
+    print(f"Loading {module_name}")
+
+    try:
+        day_module = import_module(module_name)
+    except ModuleNotFoundError as e:
+        print(e)
+        return
+
+    try:
+        parse_data = day_module.parse_data
+    except AttributeError:
+        print("parse_data not found; using raw data")
+        data = data_raw
+    else:
+        with utils.timed("Parse data"):
+            data = parse_data(data_raw)
+
     if part_1:
         with utils.timed():
-            print(f"Part 1: {day_module.part1()}")
+            answer = day_module.part1(data=data)
+            print()
+            print(f"Part 1: {answer}")
 
     if part_2:
         with utils.timed():
-            print(f"Part 2: {day_module.part2()}")
+            answer = day_module.part2(data=data)
+            print()
+            print(f"Part 2: {answer}")
 
 
 if __name__ == "__main__":

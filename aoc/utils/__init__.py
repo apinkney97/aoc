@@ -1,6 +1,6 @@
 from aoc.utils.cmp import safe_max, safe_min
 from aoc.utils.grid import Coord2D, Grid2D, Grid3D
-from aoc.utils.input import load_data
+from aoc.utils.input import load_data_raw, parse_data
 from aoc.utils.setdeque import SetDeque
 from aoc.utils.types import T, TNum
 from aoc.utils.utils import (
@@ -23,7 +23,8 @@ __all__ = [
     "Coord2D",
     "Grid2D",
     "Grid3D",
-    "load_data",
+    "load_data_raw",
+    "parse_data",
     "SetDeque",
     "T",
     "TNum",

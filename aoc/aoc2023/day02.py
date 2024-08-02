@@ -2,9 +2,6 @@ from typing import NamedTuple
 
 from aoc import utils
 
-# EXAMPLE = True
-EXAMPLE = False
-
 
 class Draw(NamedTuple):
     red: int
@@ -12,9 +9,8 @@ class Draw(NamedTuple):
     blue: int
 
 
-def load_data():
+def parse_data(data):
     # Game 1: 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green
-    data = utils.load_data(2023, 2, example=EXAMPLE)
     games = []
     for line in data:
         game, desc = line.split(": ")
@@ -41,15 +37,12 @@ def load_data():
     return games
 
 
-DATA = load_data()
-
-
-def part1() -> int:
+def part1(data) -> int:
     limit_r = 12
     limit_g = 13
     limit_b = 14
     total = 0
-    for game_id, draws in DATA:
+    for game_id, draws in data:
         for draw in draws:
             if draw.red > limit_r or draw.green > limit_g or draw.blue > limit_b:
                 break
@@ -58,9 +51,9 @@ def part1() -> int:
     return total
 
 
-def part2() -> int:
+def part2(data) -> int:
     total = 0
-    for game_id, draws in DATA:
+    for game_id, draws in data:
         min_r = min_g = min_b = 0
         for draw in draws:
             min_r = max(min_r, draw.red)
@@ -68,14 +61,3 @@ def part2() -> int:
             min_b = max(min_b, draw.blue)
         total += utils.product((min_r, min_g, min_b))
     return total
-
-
-def main() -> None:
-    with utils.timed():
-        print(f"Part 1: {part1()}")
-    with utils.timed():
-        print(f"Part 2: {part2()}")
-
-
-if __name__ == "__main__":
-    main()

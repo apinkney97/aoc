@@ -8,6 +8,8 @@ from functools import reduce
 from operator import mul
 from typing import Iterable, Iterator
 
+from rich import print
+
 from aoc.utils.types import TNum
 
 DEBUG = False
