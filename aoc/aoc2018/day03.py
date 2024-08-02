@@ -1,7 +1,5 @@
 import re
 
-from aoc import utils
-
 CLAIM_RE = re.compile(
     r"#(?P<claim_id>\d+) @ (?P<x>\d+),(?P<y>\d+): (?P<w>\d+)x(?P<h>\d+)"
 )
@@ -17,11 +15,11 @@ def get_claim(claim_str):
     return claim_id, x, y, w, h
 
 
-def part1():
+def part1(data):
     taken = set()
     overlapping = set()
 
-    for claim in utils.load_data(2018, 3):
+    for claim in data:
         claim_id, x, y, w, h = get_claim(claim)
         for i in range(x, x + w):
             for j in range(y, y + h):
@@ -32,8 +30,8 @@ def part1():
     return len(overlapping)
 
 
-def part2():
-    claims = [get_claim(claim) for claim in utils.load_data(2018, 3)]
+def part2(data):
+    claims = [get_claim(claim) for claim in data]
 
     taken = {}
     overlapping = set()
@@ -53,8 +51,3 @@ def part2():
                     taken[coord] = claim_id
 
     return claim_ids - overlapping
-
-
-if __name__ == "__main__":
-    print(f"Part 1: {part1()}")
-    print(f"Part 2: {part2()}")
