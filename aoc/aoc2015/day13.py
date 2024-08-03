@@ -4,19 +4,16 @@ from itertools import permutations
 from aoc import utils
 
 
-def _load_data():
+def parse_data(data):
     re_ = re.compile(
         r"(?P<name1>\w+) would (?P<action>\w+) (?P<n>\d+) happiness units by sitting next to (?P<name2>\w+)\."
     )
-    data = utils.load_data(2015, 13, fn=re_.fullmatch)
+    data = utils.parse_data(data, fn=re_.fullmatch)
     scores = {}
     for row in data:
         score = int(row["n"]) * (-1 if row["action"] == "lose" else 1)
         scores.setdefault(row["name1"], {})[row["name2"]] = score
     return scores
-
-
-DATA = _load_data()
 
 
 def circular_arrangements(names):
@@ -42,22 +39,13 @@ def max_happiness(data):
     return max_h
 
 
-def part1() -> int:
-    return max_happiness(DATA)
+def part1(data) -> int:
+    return max_happiness(data)
 
 
-def part2() -> int:
-    others = list(DATA.keys())
-    DATA["me"] = {name: 0 for name in others}
+def part2(data) -> int:
+    others = list(data.keys())
+    data["me"] = {name: 0 for name in others}
     for name in others:
-        DATA[name]["me"] = 0
-    return max_happiness(DATA)
-
-
-def main() -> None:
-    print(f"Part 1: {part1()}")
-    print(f"Part 2: {part2()}")
-
-
-if __name__ == "__main__":
-    main()
+        data[name]["me"] = 0
+    return max_happiness(data)

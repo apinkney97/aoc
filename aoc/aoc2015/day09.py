@@ -5,17 +5,19 @@ from aoc import utils
 
 RE = re.compile(r"(?P<place_1>\w+) to (?P<place_2>\w+) = (?P<dist>\d+)")
 
-DATA = utils.load_data(2015, 9, fn=RE.fullmatch)
+
+def parse_data(data):
+    return utils.parse_data(data, fn=RE.fullmatch)
 
 
 def _get_key(place_1, place_2):
     return tuple(sorted([place_1, place_2]))
 
 
-def _get_distance(cmp_fn):
+def _get_distance(data, cmp_fn):
     distances = {}
     places = set()
-    for line in DATA:
+    for line in data:
         place_1 = line["place_1"]
         place_2 = line["place_2"]
         places.add(place_1)
@@ -31,18 +33,9 @@ def _get_distance(cmp_fn):
     return output_distance
 
 
-def part1() -> int:
-    return _get_distance(utils.safe_min)
+def part1(data) -> int:
+    return _get_distance(data, utils.safe_min)
 
 
-def part2() -> int:
-    return _get_distance(utils.safe_max)
-
-
-def main() -> None:
-    print(f"Part 1: {part1()}")
-    print(f"Part 2: {part2()}")
-
-
-if __name__ == "__main__":
-    main()
+def part2(data) -> int:
+    return _get_distance(data, utils.safe_max)

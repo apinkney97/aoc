@@ -1,15 +1,14 @@
-from aoc import utils
-
-DATA = utils.load_data(2015, 1)
-
-
-def part1() -> int:
-    return DATA[0].count("(") - DATA[0].count(")")
+def parse_data(data):
+    return data[0]
 
 
-def part2() -> int:
+def part1(data) -> int:
+    return data.count("(") - data.count(")")
+
+
+def part2(data) -> int:
     floor = 0
-    for i, char in enumerate(DATA[0]):
+    for i, char in enumerate(data):
         if char == "(":
             floor += 1
         elif char == ")":
@@ -19,12 +18,3 @@ def part2() -> int:
             return i + 1
 
     raise Exception("No solution found")
-
-
-def main() -> None:
-    print(f"Part 1: {part1()}")
-    print(f"Part 2: {part2()}")
-
-
-if __name__ == "__main__":
-    main()

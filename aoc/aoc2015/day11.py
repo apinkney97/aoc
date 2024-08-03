@@ -1,9 +1,10 @@
 import re
 import string
 
-from aoc import utils
 
-DATA = utils.load_data(2015, 11)
+def parse_data(data):
+    return data[0]
+
 
 VALUE_TO_LETTER = dict(enumerate(string.ascii_lowercase))
 LETTER_TO_VALUE = {letter: value for value, letter in VALUE_TO_LETTER.items()}
@@ -47,8 +48,8 @@ def _num_to_str(number: int) -> str:
     return VALUE_TO_LETTER[m]
 
 
-def get_passwords():
-    for candidate in enumerate_lower_str(DATA[0]):
+def get_passwords(data):
+    for candidate in enumerate_lower_str(data):
         if any(c in candidate for c in "iol"):
             continue
         if len(set(PAIR_RE.findall(candidate))) < 2:
@@ -62,20 +63,11 @@ def get_passwords():
         yield candidate
 
 
-def part1() -> str:
-    return next(get_passwords())
+def part1(data) -> str:
+    return next(get_passwords(data))
 
 
-def part2() -> str:
-    gp = get_passwords()
+def part2(data) -> str:
+    gp = get_passwords(data)
     next(gp)
     return next(gp)
-
-
-def main() -> None:
-    print(f"Part 1: {part1()}")
-    print(f"Part 2: {part2()}")
-
-
-if __name__ == "__main__":
-    main()

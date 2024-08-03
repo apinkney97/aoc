@@ -1,10 +1,9 @@
 import json
+from functools import singledispatch
 
-from singledispatch import singledispatch
 
-from aoc import utils
-
-DATA = json.loads(utils.load_data(2015, 12)[0])
+def parse_data(data):
+    return json.loads(data[0])
 
 
 @singledispatch
@@ -51,18 +50,9 @@ def _(num):
     return num
 
 
-def part1() -> int:
-    return totalise(DATA)
+def part1(data) -> int:
+    return totalise(data)
 
 
-def part2() -> int:
-    return totalise_no_red(DATA)
-
-
-def main() -> None:
-    print(f"Part 1: {part1()}")
-    print(f"Part 2: {part2()}")
-
-
-if __name__ == "__main__":
-    main()
+def part2(data) -> int:
+    return totalise_no_red(data)

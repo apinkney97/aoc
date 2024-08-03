@@ -1,13 +1,8 @@
 from aoc import utils
 
-# EXAMPLE = True
-EXAMPLE = False
 
-
-def load_data():
-    data = utils.load_data(
-        2015, 18, example=EXAMPLE, fn=lambda line: [0 if c == "." else 1 for c in line]
-    )
+def parse_data(data):
+    data = utils.parse_data(data, fn=lambda line: [0 if c == "." else 1 for c in line])
 
     bounds = (0, len(data[0]), 0, len(data))
     grid = utils.Grid2D(display_map={0: ".", 1: "#"}, bounds=bounds)
@@ -16,9 +11,6 @@ def load_data():
             grid[x, y] = val
 
     return grid
-
-
-DATA = load_data()
 
 
 def light_corners(grid: utils.Grid2D) -> None:
@@ -55,28 +47,17 @@ def step(grid: utils.Grid2D) -> utils.Grid2D:
     return new_grid
 
 
-def part1() -> int:
-    grid = DATA
+def part1(data) -> int:
+    grid = data
     for _ in range(100):
         grid = step(grid)
     return len(grid)
 
 
-def part2() -> int:
-    grid = DATA
+def part2(data) -> int:
+    grid = data
     light_corners(grid)
     for _ in range(100):
         grid = step(grid)
         light_corners(grid)
     return len(grid)
-
-
-def main() -> None:
-    with utils.timed():
-        print(f"Part 1: {part1()}")
-    with utils.timed():
-        print(f"Part 2: {part2()}")
-
-
-if __name__ == "__main__":
-    main()

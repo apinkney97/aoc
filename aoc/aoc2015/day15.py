@@ -1,9 +1,7 @@
+import re
 import typing
 
 from aoc import utils
-
-# EXAMPLE = True
-EXAMPLE = False
 
 
 class Ingredient(typing.NamedTuple):
@@ -14,22 +12,24 @@ class Ingredient(typing.NamedTuple):
     calories: int
 
 
-def load_data():
-    if EXAMPLE:
-        return [
-            Ingredient(capacity=-1, durability=-2, flavor=6, texture=3, calories=8),
-            Ingredient(capacity=2, durability=3, flavor=-2, texture=-1, calories=3),
-        ]
+def parse_data(data):
+    # Example:
+    # Butterscotch: capacity -1, durability -2, flavor 6, texture 3, calories 8
+    ingredient_re = re.compile(
+        r".*: \w+ (-?\d+), \w+ (-?\d+), \w+ (-?\d+), \w+ (-?\d+), \w+ (-?\d+)"
+    )
+    data = utils.parse_data(data, fn=ingredient_re.fullmatch)
 
     return [
-        Ingredient(capacity=2, durability=0, flavor=-2, texture=0, calories=3),
-        Ingredient(capacity=0, durability=5, flavor=-3, texture=0, calories=3),
-        Ingredient(capacity=0, durability=0, flavor=5, texture=-1, calories=8),
-        Ingredient(capacity=0, durability=-1, flavor=0, texture=5, calories=8),
+        Ingredient(
+            capacity=int(match.group(1)),
+            durability=int(match.group(2)),
+            flavor=int(match.group(3)),
+            texture=int(match.group(4)),
+            calories=int(match.group(5)),
+        )
+        for match in data
     ]
-
-
-DATA = load_data()
 
 
 def bake(ingredients, *quantity):
@@ -49,12 +49,12 @@ def bake(ingredients, *quantity):
     return score, calories
 
 
-def part1(calories=None) -> int:
+def part1(data, calories=None) -> int:
     best = 0
-    if len(DATA) == 2:
+    if len(data) == 2:
         for i in range(101):
             j = 100 - i
-            score, cals = bake(DATA, i, j)
+            score, cals = bake(data, i, j)
             if calories is None or cals == calories:
                 best = max(best, score)
 
@@ -63,23 +63,12 @@ def part1(calories=None) -> int:
             for j in range(101 - i):
                 for k in range(101 - (i + j)):
                     h = 100 - (i + j + k)
-                    score, cals = bake(DATA, i, j, k, h)
+                    score, cals = bake(data, i, j, k, h)
                     if calories is None or cals == calories:
                         best = max(best, score)
 
     return best
 
 
-def part2() -> int:
-    return part1(calories=500)
-
-
-def main() -> None:
-    with utils.timed():
-        print(f"Part 1: {part1()}")
-    with utils.timed():
-        print(f"Part 2: {part2()}")
-
-
-if __name__ == "__main__":
-    main()
+def part2(data) -> int:
+    return part1(data, calories=500)

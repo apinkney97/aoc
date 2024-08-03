@@ -3,16 +3,13 @@ import re
 from aoc import utils
 
 
-def _load_data():
+def parse_data(data):
     match = re.compile(
         r"(?P<name>\w+) can fly (?P<speed>\d+) km/s for (?P<time>\d+) "
         r"seconds, but then must rest for (?P<rest>\d+) seconds\."
     )
 
-    return utils.load_data(2015, 14, fn=match.fullmatch)
-
-
-DATA = _load_data()
+    return utils.parse_data(data, fn=match.fullmatch)
 
 
 class Reindeer:
@@ -34,9 +31,12 @@ class Reindeer:
                 yield self
 
 
-def part1():
+MAX_SCORE = -1
+
+
+def part1(data):
     reindeer = []
-    for d in DATA:
+    for d in data:
         reindeer.append(
             Reindeer(
                 name=d.group("name"),
@@ -55,13 +55,11 @@ def part1():
             if r.position == reindeer[0].position:
                 r.score += 1
 
-    print(f"Part 1: {max(r.position for r in reindeer)}")
-    print(f"Part 2: {max(r.score for r in reindeer)}")
+    global MAX_SCORE
+    MAX_SCORE = max(r.score for r in reindeer)
+
+    return max(r.position for r in reindeer)
 
 
-def main() -> None:
-    part1()
-
-
-if __name__ == "__main__":
-    main()
+def part2(data):
+    return MAX_SCORE

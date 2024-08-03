@@ -1,8 +1,6 @@
 import re
 import typing
 
-from aoc import utils
-
 
 class Sue(typing.NamedTuple):
     num: int
@@ -18,9 +16,7 @@ class Sue(typing.NamedTuple):
     perfumes: int | None = None
 
 
-def load_data():
-    data = utils.load_data(2015, 16, example=False)
-
+def parse_data(data):
     sues = []
 
     for line in data:
@@ -47,9 +43,6 @@ def load_data():
     return sues
 
 
-DATA = load_data()
-
-
 MATCH_SUE = Sue(
     num=0,
     children=3,
@@ -65,8 +58,8 @@ MATCH_SUE = Sue(
 )
 
 
-def part1() -> int:
-    sues = DATA
+def part1(data) -> int:
+    sues = data
 
     for field in Sue._fields:
         if field == "num":
@@ -81,8 +74,8 @@ def part1() -> int:
     return -1
 
 
-def part2() -> int:
-    sues = DATA
+def part2(data) -> int:
+    sues = data
 
     # GT cats trees
     # LE pomeranians goldfish
@@ -112,14 +105,3 @@ def part2() -> int:
         return sues[0].num
 
     return -1
-
-
-def main() -> None:
-    with utils.timed():
-        print(f"Part 1: {part1()}")
-    with utils.timed():
-        print(f"Part 2: {part2()}")
-
-
-if __name__ == "__main__":
-    main()

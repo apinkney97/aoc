@@ -1,14 +1,8 @@
 import itertools
 import re
 
-from aoc import utils
 
-# EXAMPLE = True
-EXAMPLE = False
-
-
-def load_data():
-    data = utils.load_data(2015, 19, example=EXAMPLE)
+def parse_data(data):
     rules = {}
     for line in data:
         if not line:
@@ -20,11 +14,8 @@ def load_data():
     return molecule, rules
 
 
-DATA = load_data()
-
-
-def part1() -> int:
-    input_mol, rules = DATA
+def part1(data) -> int:
+    input_mol, rules = data
 
     new_molecules = set()
 
@@ -39,11 +30,11 @@ def part1() -> int:
     return len(new_molecules)
 
 
-def part2() -> int:
-    target = DATA[0]
+def part2(data) -> int:
+    target = data[0]
     inverted_rules: dict[str, str] = {}
-    for src in DATA[1]:
-        for dst in DATA[1][src]:
+    for src in data[1]:
+        for dst in data[1][src]:
             inverted_rules[dst] = src
 
     sorted_rules: list[str] = sorted(inverted_rules, key=len)
@@ -66,14 +57,3 @@ def part2() -> int:
             break
 
     return -1
-
-
-def main() -> None:
-    with utils.timed():
-        print(f"Part 1: {part1()}")
-    with utils.timed():
-        print(f"Part 2: {part2()}")
-
-
-if __name__ == "__main__":
-    main()

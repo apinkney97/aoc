@@ -1,46 +1,29 @@
 import itertools
 
-from aoc import utils
-
-# EXAMPLE = True
-EXAMPLE = False
+from aoc import config, utils
 
 
-def load_data():
-    data = utils.load_data(2015, 17, example=EXAMPLE, fn=int)
+def parse_data(data):
+    data = utils.parse_data(data, fn=int)
 
     return data
 
 
-DATA = load_data()
-
-
-def part1() -> int:
+def part1(data) -> int:
     count = 0
-    for r in range(len(DATA)):
-        for comb in itertools.combinations(DATA, r + 1):
-            if sum(comb) == (25 if EXAMPLE else 150):
+    for r in range(len(data)):
+        for comb in itertools.combinations(data, r + 1):
+            if sum(comb) == (25 if config.EXAMPLE else 150):
                 count += 1
     return count
 
 
-def part2() -> int:
+def part2(data) -> int:
     count = 0
-    for r in range(len(DATA)):
-        for comb in itertools.combinations(DATA, r + 1):
-            if sum(comb) == (25 if EXAMPLE else 150):
+    for r in range(len(data)):
+        for comb in itertools.combinations(data, r + 1):
+            if sum(comb) == (25 if config.EXAMPLE else 150):
                 count += 1
         if count:
             break
     return count
-
-
-def main() -> None:
-    with utils.timed():
-        print(f"Part 1: {part1()}")
-    with utils.timed():
-        print(f"Part 2: {part2()}")
-
-
-if __name__ == "__main__":
-    main()

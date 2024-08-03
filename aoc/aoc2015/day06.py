@@ -6,7 +6,9 @@ INSTRUCTION_RE = re.compile(
     r"(?P<action>.*) (?P<x1>\d+),(?P<y1>\d+) through (?P<x2>\d+),(?P<y2>\d+)"
 )
 
-DATA = utils.load_data(2015, 6, fn=INSTRUCTION_RE.fullmatch)
+
+def parse_data(data):
+    return utils.parse_data(data, fn=INSTRUCTION_RE.fullmatch)
 
 
 def get_coords(x1, y1, x2, y2):
@@ -20,10 +22,10 @@ def get_coords(x1, y1, x2, y2):
             yield 1000 * x + y
 
 
-def part1() -> int:
+def part1(data) -> int:
     grid = [0] * (1000 * 1000)
 
-    for instruction in DATA:
+    for instruction in data:
         coords = get_coords(
             int(instruction["x1"]),
             int(instruction["y1"]),
@@ -46,10 +48,10 @@ def part1() -> int:
     return sum(grid)
 
 
-def part2() -> int:
+def part2(data) -> int:
     grid = [0] * (1000 * 1000)
 
-    for instruction in DATA:
+    for instruction in data:
         coords = get_coords(
             int(instruction["x1"]),
             int(instruction["y1"]),
@@ -70,12 +72,3 @@ def part2() -> int:
             raise Exception(f"Bad action: {action}")
 
     return sum(grid)
-
-
-def main() -> None:
-    print(f"Part 1: {part1()}")
-    print(f"Part 2: {part2()}")
-
-
-if __name__ == "__main__":
-    main()

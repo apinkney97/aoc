@@ -11,11 +11,11 @@ class Gate(NamedTuple):
     args: List[str]
 
 
-def _load_data() -> Dict[str, Gate]:
-    raw_data = utils.load_data(2015, 7, fn=INSTRUCTIONS_RE.fullmatch)
+def parse_data(data) -> Dict[str, Gate]:
+    data = utils.parse_data(data, fn=INSTRUCTIONS_RE.fullmatch)
 
-    data: Dict[str, Gate] = {}
-    for item in raw_data:
+    parsed_data: Dict[str, Gate] = {}
+    for item in data:
         raw_input = item["input"]
         parts = raw_input.split()
         if len(parts) == 1:
@@ -27,11 +27,8 @@ def _load_data() -> Dict[str, Gate]:
         else:
             raise Exception(f"Bad item: {item}")
 
-        data[item["output"]] = gate
-    return data
-
-
-DATA = _load_data()
+        parsed_data[item["output"]] = gate
+    return parsed_data
 
 
 def _get_value(values: Dict[str, int], arg: str):
@@ -41,6 +38,7 @@ def _get_value(values: Dict[str, int], arg: str):
 
 
 def evaluate(data):
+    data = dict(data)
     values = {}
     passes = 0
     while data:
@@ -86,22 +84,13 @@ def evaluate(data):
     return values
 
 
-def part1() -> int:
-    values = evaluate(dict(DATA))
+def part1(data) -> int:
+    values = evaluate(data)
     return values["a"]
 
 
-def part2() -> int:
-    values = evaluate(dict(DATA))
-    data = dict(DATA)
+def part2(data) -> int:
+    values = evaluate(data)
+    data = dict(data)
     data["b"] = Gate(type="LITERAL", args=[str(values["a"])])
     return evaluate(data)["a"]
-
-
-def main() -> None:
-    print(f"Part 1: {part1()}")
-    print(f"Part 2: {part2()}")
-
-
-if __name__ == "__main__":
-    main()
