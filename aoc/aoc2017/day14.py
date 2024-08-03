@@ -1,16 +1,13 @@
-from aoc import utils
 from aoc.aoc2017.day10 import knot_hash
 
 
-def get_grid():
-    hashes = [
-        knot_hash(utils.load_data(2017, 14)[0] + "-" + str(i)) for i in range(128)
-    ]
+def get_grid(data):
+    hashes = [knot_hash(data[0] + "-" + str(i)) for i in range(128)]
     return [list(bin(int(h, 16))[2:].zfill(128)) for h in hashes]
 
 
-def part1():
-    grid = get_grid()
+def part1(data):
+    grid = get_grid(data)
     ones = 0
     for row in grid:
         ones += row.count("1")
@@ -41,8 +38,8 @@ def flood_fill(grid, i, j, fill="0"):
                 to_expand.add((i2, j2))
 
 
-def part2():
-    grid = get_grid()
+def part2(data):
+    grid = get_grid(data)
     groups = 0
     for i in range(128):
         for j in range(128):
@@ -50,8 +47,3 @@ def part2():
                 flood_fill(grid, i, j)
                 groups += 1
     return groups
-
-
-if __name__ == "__main__":
-    print("Part 1: {}".format(part1()))
-    print("Part 2: {}".format(part2()))

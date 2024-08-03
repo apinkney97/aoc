@@ -1,10 +1,11 @@
 import string
 
-from aoc import utils
-
 
 class NoPathFoundError(Exception):
     pass
+
+
+TOTAL_STEPS = -1
 
 
 def get_next_pos(path, been, curr, prev):
@@ -33,8 +34,8 @@ def is_valid_pos(path, x, y):
     return 0 <= x < len(path) and 0 <= y < len(path[x])
 
 
-def follow_path():
-    path = utils.load_data(2017, 19, strip=False)
+def part1(data):
+    path = data
 
     # path = [
     #     "     |          ",
@@ -55,7 +56,9 @@ def follow_path():
 
     been = set()
     letters = []
-    steps = 0
+
+    global TOTAL_STEPS
+    TOTAL_STEPS = 0
 
     while True:
         val = path[curr[0]][curr[1]]
@@ -63,15 +66,13 @@ def follow_path():
             letters.append(val)
         elif val == " ":
             break
-        steps += 1
+        TOTAL_STEPS += 1
         been.add(curr)
         next_pos = get_next_pos(path, been, curr, prev)
         prev = curr
         curr = next_pos
-    return "".join(letters), steps
+    return "".join(letters)
 
 
-if __name__ == "__main__":
-    part1, part2 = follow_path()
-    print("Part 1: {}".format(part1))
-    print("Part 2: {}".format(part2))
+def part2(data):
+    return TOTAL_STEPS

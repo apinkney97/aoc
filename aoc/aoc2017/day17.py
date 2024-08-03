@@ -1,6 +1,3 @@
-from aoc import utils
-
-
 class Node:
     def __init__(self, value, next_node):
         self.value = value
@@ -32,12 +29,12 @@ class SpinLock:
             self.curr = self.curr.next_node
 
 
-def get_data():
-    return int(utils.load_data(2017, 17)[0])
+def parse_data(data):
+    return int(data[0])
 
 
-def part1():
-    step = get_data()
+def part1(data):
+    step = data
     spinlock = SpinLock()
 
     max_val = 2017
@@ -49,8 +46,8 @@ def part1():
     return spinlock.curr.next_node.value
 
 
-def part2():
-    step = get_data()
+def part2(data):
+    step = data
     curr = 0
     val = 0
     for i in range(1, 50000000 + 1):
@@ -58,8 +55,3 @@ def part2():
             val = i
         curr = (curr + step + 1) % (i + 1)
     return val
-
-
-if __name__ == "__main__":
-    print("Part 1: {}".format(part1()))
-    print("Part 2: {}".format(part2()))

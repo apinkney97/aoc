@@ -1,17 +1,14 @@
 import re
 
-from aoc import utils
-
 CANCEL_RE = re.compile("!.")
 GARBAGE_RE = re.compile("<[^>]*>")
 
 
-def get_data():
-    return utils.load_data(2017, 9)[0]
+def parse_data(data):
+    return data[0]
 
 
-def part1():
-    data = get_data()
+def part1(data):
     data = CANCEL_RE.sub("", data)
     data = GARBAGE_RE.sub("", data)
 
@@ -28,8 +25,7 @@ def part1():
     return total
 
 
-def part2():
-    data = get_data()
+def part2(data):
     data = CANCEL_RE.sub("", data)
     total = 0
 
@@ -37,8 +33,3 @@ def part2():
         total += len(garbage) - 2
 
     return total
-
-
-if __name__ == "__main__":
-    print("Part 1: {}".format(part1()))
-    print("Part 2: {}".format(part2()))

@@ -1,12 +1,9 @@
-from aoc import utils
+def parse_data(data):
+    return [int(i) for i in data[0].split("\t")]
 
 
-def get_data():
-    return [int(i) for i in utils.load_data(2017, 6)[0].split("\t")]
-
-
-def part1():
-    banks = get_data()
+def part1(data):
+    banks = data[:]
     # banks = [0, 2, 7, 0]
     seen = {tuple(banks)}
 
@@ -25,8 +22,8 @@ def part1():
         seen.add(state)
 
 
-def part2():
-    banks = get_data()
+def part2(data):
+    banks = data[:]
     # banks = [0, 2, 7, 0]
     seen = {tuple(banks): 0}
 
@@ -43,8 +40,3 @@ def part2():
         if state in seen:
             return len(seen) - seen[state]
         seen[state] = len(seen)
-
-
-if __name__ == "__main__":
-    print("Part 1: {}".format(part1()))
-    print("Part 2: {}".format(part2()))

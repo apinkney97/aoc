@@ -1,12 +1,8 @@
 import asyncio
 from collections import defaultdict
 
-from aoc import utils
 
-event_loop = asyncio.get_event_loop()
-
-
-def get_instructions():
+def parse_data(data):
     instructions = []
 
     def try_int(val):
@@ -15,7 +11,7 @@ def get_instructions():
         except ValueError:
             return val
 
-    for line in utils.load_data(2017, 18):
+    for line in data:
         instructions.append(tuple(try_int(v) for v in line.split(" ")))
 
     return instructions
@@ -147,27 +143,24 @@ class AsyncDuetPlayer(DuetPlayer):
                 break
 
 
-def part1():
-    dp = DuetPlayer(get_instructions())
+def part1(data):
+    dp = DuetPlayer(data)
     dp.play()
     return dp.last_played
 
 
-async def part2():
-    instructions = get_instructions()
+def part2(data):
+    return asyncio.run(_part2(data))
+
+
+async def _part2(data):
     queue0 = asyncio.Queue()
     queue1 = asyncio.Queue()
 
-    dp0 = AsyncDuetPlayer(instructions, 0, queue0, None)
-    dp1 = AsyncDuetPlayer(instructions, 1, queue1, dp0)
+    dp0 = AsyncDuetPlayer(data, 0, queue0, None)
+    dp1 = AsyncDuetPlayer(data, 1, queue1, dp0)
     dp0.other = dp1
 
     await asyncio.gather(dp0.play(), dp1.play())
 
     return dp1.send_count
-
-
-if __name__ == "__main__":
-    print("Part 1: {}".format(part1()))
-    print("Part 2: {}".format(event_loop.run_until_complete(part2())))
-    event_loop.close()

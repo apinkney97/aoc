@@ -1,17 +1,12 @@
-from aoc import utils
-
-
-def get_data():
-    data = {}
-    for line in utils.load_data(2017, 12):
+def parse_data(data):
+    parsed_data = {}
+    for line in data:
         val, _, neighbours = line.split(" ", 2)
-        data[val] = {n for n in neighbours.split(", ")}
-    return data
+        parsed_data[val] = {n for n in neighbours.split(", ")}
+    return parsed_data
 
 
-def part1():
-    data = get_data()
-
+def part1(data):
     seen = set()
     to_expand = ["0"]
 
@@ -25,9 +20,7 @@ def part1():
     return len(seen)
 
 
-def part2():
-    data = get_data()
-
+def part2(data):
     seen = set()
     not_seen = set(data.keys())
     to_expand = {"0"}
@@ -46,8 +39,3 @@ def part2():
             subgraphs += 1
 
     return subgraphs
-
-
-if __name__ == "__main__":
-    print("Part 1: {}".format(part1()))
-    print("Part 2: {}".format(part2()))

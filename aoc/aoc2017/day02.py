@@ -1,15 +1,9 @@
-from aoc import utils
+def parse_data(data):
+    return [[int(i) for i in line.split("\t") if i] for line in data]
 
 
-def get_data():
-    return [
-        [int(i) for i in line.split("\t") if i] for line in utils.load_data(2017, 2)
-    ]
-
-
-def part1():
+def part1(data):
     total = 0
-    data = get_data()
     for row in data:
         total += max(row) - min(row)
     return total
@@ -25,14 +19,8 @@ def get_row_quotient(row):
     raise Exception("Didn't find any divisible pairs")
 
 
-def part2():
+def part2(data):
     total = 0
-    data = get_data()
     for row in data:
         total += get_row_quotient(row)
     return total
-
-
-if __name__ == "__main__":
-    print("Part 1: {}".format(part1()))
-    print("Part 2: {}".format(part2()))

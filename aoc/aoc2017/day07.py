@@ -1,18 +1,16 @@
 from collections import defaultdict, deque
 
-from aoc import utils
 
-
-def get_data():
-    data = {}
-    for line in utils.load_data(2017, 7):
+def parse_data(data):
+    parsed_data = {}
+    for line in data:
         bits = line.split(" ")
         name = bits[0]
         weight = int(bits[1][1:-1])
         children = sorted(n.strip(",") for n in bits[3:])
-        data[name] = weight, children
+        parsed_data[name] = weight, children
 
-    return data
+    return parsed_data
 
 
 def part1(data):
@@ -92,13 +90,3 @@ def part2(data):
         raise Exception("Couldn't determine bad node")
 
     return bad.weight - bad.total_weight() + good.total_weight()
-
-
-def main():
-    data = get_data()
-    print("Part 1: {}".format(part1(data)))
-    print("Part 2: {}".format(part2(data)))
-
-
-if __name__ == "__main__":
-    main()

@@ -1,10 +1,8 @@
 from functools import reduce
 
-from aoc import utils
 
-
-def get_data():
-    return utils.load_data(2017, 10)[0]
+def parse_data(data):
+    return data[0]
 
 
 def circular_slice(sliceable, start, length):
@@ -47,16 +45,11 @@ def knot_hash(data):
     return ("%02x" * 16) % ns
 
 
-def part1():
+def part1(data):
     list_ = list(range(256))
-    knot_hash_round(list_, (int(i) for i in get_data().split(",")))
+    knot_hash_round(list_, (int(i) for i in data.split(",")))
     return list_[0] * list_[1]
 
 
-def part2():
-    return knot_hash(get_data())
-
-
-if __name__ == "__main__":
-    print("Part 1: {}".format(part1()))
-    print("Part 2: {}".format(part2()))
+def part2(data):
+    return knot_hash(data)

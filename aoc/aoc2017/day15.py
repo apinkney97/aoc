@@ -1,9 +1,11 @@
-from aoc import utils
-
 MUL_A = 16807
 MUL_B = 48271
 MOD = 2147483647
 MASK = 2**16 - 1
+
+
+def parse_data(data):
+    return [int(line.rsplit(" ", 1)[1]) for line in data]
 
 
 def gen(start, mul, mod=1):
@@ -14,7 +16,8 @@ def gen(start, mul, mod=1):
             yield val
 
 
-def part1(a_start, b_start):
+def part1(data):
+    a_start, b_start = data
     a_gen = gen(a_start, MUL_A)
     b_gen = gen(b_start, MUL_B)
     count = 0
@@ -24,7 +27,8 @@ def part1(a_start, b_start):
     return count
 
 
-def part2(a_start, b_start):
+def part2(data):
+    a_start, b_start = data
     a_gen = gen(a_start, MUL_A, 4)
     b_gen = gen(b_start, MUL_B, 8)
     count = 0
@@ -32,9 +36,3 @@ def part2(a_start, b_start):
         if next(a_gen) & MASK == next(b_gen) & MASK:
             count += 1
     return count
-
-
-if __name__ == "__main__":
-    a, b = (int(line.rsplit(" ", 1)[1]) for line in utils.load_data(2017, 15))
-    print("Part 1: {}".format(part1(a, b)))
-    print("Part 2: {}".format(part2(a, b)))

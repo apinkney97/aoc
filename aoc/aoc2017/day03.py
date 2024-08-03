@@ -1,9 +1,11 @@
 from math import ceil, sqrt
 
-from aoc import utils
+
+def parse_data(data):
+    return int(data[0])
 
 
-def part1(num):
+def part1(data):
     """
     17  16  15  14  13
     18   5   4   3  12
@@ -13,6 +15,7 @@ def part1(num):
 
     utilise fact that squares of odd numbers are at bottom right of spiral segment of that length
     """
+    num = data
     if num == 1:
         return 0
     side_len = int(ceil(sqrt(num)))
@@ -32,7 +35,7 @@ def part1(num):
     return d1 + d2
 
 
-def part2(target):
+def part2(data):
     """
     Neighbours:
 
@@ -67,6 +70,8 @@ def part2(target):
     The square after a corner has 4 (2 lower and 2 immediate predecessors)
     Other edge squares have 4 (3 lower and immediate predecessor)
     """
+    target = data
+
     sl = 1.0
     n = 1
 
@@ -118,9 +123,3 @@ def part2(target):
 
         n += actual_side_length
         sl += 0.5
-
-
-if __name__ == "__main__":
-    input_val = int(utils.load_data(2017, 3)[0])
-    print("Part 1: {}".format(part1(input_val)))
-    print("Part 2: {}".format(part2(input_val)))

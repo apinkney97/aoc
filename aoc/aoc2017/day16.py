@@ -1,13 +1,15 @@
 import string
 
-from aoc import utils
-
 MOVES = []
 
 
-def dance(progs):
+def parse_data(data):
+    return data[0].split(",")
+
+
+def dance(moves, progs):
     if not MOVES:
-        for move in utils.load_data(2017, 16)[0].split(","):
+        for move in moves:
             if move[0] == "s":
                 MOVES.append(("s", int(move[1:])))
             elif move[0] == "x":
@@ -32,12 +34,12 @@ def dance(progs):
     return progs
 
 
-def part1():
-    progs = dance(list(string.ascii_lowercase[:16]))
+def part1(data):
+    progs = dance(data, list(string.ascii_lowercase[:16]))
     return "".join(progs)
 
 
-def part2():
+def part2(data):
     repeat = 1000000000
 
     progs = list(string.ascii_lowercase[:16])
@@ -45,7 +47,7 @@ def part2():
     seen_list = [progs[:]]
 
     for _ in range(repeat):
-        progs = dance(progs)
+        progs = dance(data, progs)
         if tuple(progs) in seen:
             break
         seen.add(tuple(progs))
@@ -55,8 +57,3 @@ def part2():
     assert "".join(progs) == string.ascii_lowercase[:16]
 
     return "".join(seen_list[repeat % len(seen)])
-
-
-if __name__ == "__main__":
-    print("Part 1: {}".format(part1()))
-    print("Part 2: {}".format(part2()))

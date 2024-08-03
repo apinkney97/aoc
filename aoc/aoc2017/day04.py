@@ -1,6 +1,3 @@
-from aoc import utils
-
-
 def contains_dupes(words):
     return len(words) != len(set(words))
 
@@ -10,15 +7,18 @@ def contains_anags(words):
     return contains_dupes(words)
 
 
-def get_valid_count(invalidation_fn):
+def get_valid_count(data, invalidation_fn):
     count = 0
-    for line in utils.load_data(2017, 4):
+    for line in data:
         words = line.strip().split(" ")
         if not invalidation_fn(words):
             count += 1
     return count
 
 
-if __name__ == "__main__":
-    print("Part 1: {}".format(get_valid_count(contains_dupes)))
-    print("Part 2: {}".format(get_valid_count(contains_anags)))
+def part1(data):
+    return get_valid_count(data, contains_dupes)
+
+
+def part2(data):
+    return get_valid_count(data, contains_anags)

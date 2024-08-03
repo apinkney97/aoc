@@ -22,7 +22,7 @@ class Particle:
     a: Vector
 
 
-def load_data():
+def make_particles(data):
     particle_re = re.compile(
         r"p=<(?P<px>-?\d+),(?P<py>-?\d+),(?P<pz>-?\d+)>, "
         r"v=<(?P<vx>-?\d+),(?P<vy>-?\d+),(?P<vz>-?\d+)>, "
@@ -37,7 +37,7 @@ def load_data():
             a=Vector(int(match["ax"]), int(match["ay"]), int(match["az"])),
         )
 
-    data = utils.load_data(2017, 20, fn=process)
+    data = utils.parse_data(data, fn=process)
 
     return data
 
@@ -52,11 +52,11 @@ def tick(particle: Particle):
     particle.p.z += particle.v.z
 
 
-def part1() -> int:
+def part1(data) -> int:
     # It will be one of the particles with the smallest acceleration
     # However it appears there are 3 of them
 
-    data = load_data()
+    data = make_particles(data)
     min_a = None
     min_accels = {}
 
@@ -125,8 +125,8 @@ def remove_collisions(particles: List[Particle]) -> List[Particle]:
     return list(seen.values())
 
 
-def part2() -> int:
-    particles = load_data()
+def part2(data) -> int:
+    particles = make_particles(data)
 
     ticks_since_collision = 0
     while True:
@@ -145,12 +145,3 @@ def part2() -> int:
             break
 
     return len(particles)
-
-
-def main() -> None:
-    print(f"Part 1: {part1()}")
-    print(f"Part 2: {part2()}")
-
-
-if __name__ == "__main__":
-    main()
