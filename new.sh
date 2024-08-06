@@ -13,6 +13,10 @@ mkdir -p "${dirname}/data/"
 touch "${dirname}/data/${day_str}.data"
 touch "${dirname}/data/${day_str}-example.data"
 cat > "${dirname}/${day_str}.py" <<EOF
+def parse_data(data):
+    return data
+
+
 def part1(data) -> int:
     result = 0
     return result
