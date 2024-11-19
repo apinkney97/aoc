@@ -8,15 +8,25 @@ from functools import reduce
 from operator import mul
 from typing import Iterable, Iterator
 
-from rich import print
+from rich.console import Console
+from rich.pretty import Pretty
 
 from aoc import config
 from aoc.utils.types import TNum
 
+CONSOLE = Console()
+
 
 def log(*args, **kwargs):
     if config.DEBUG:
-        print(*args, **kwargs)
+        CONSOLE.print(*args, **kwargs)
+
+
+def pprint(*args, **kwargs):
+    if config.DEBUG:
+        prettified = Pretty(*args, **kwargs)
+        # aside: "pretty" is a dreadful spelling...
+        CONSOLE.print(prettified)
 
 
 def product(nums: Iterable[TNum]) -> TNum:
@@ -64,8 +74,8 @@ class timed(ContextDecorator):
         duration_ns = time.perf_counter_ns() - self.start
         duration_td = timedelta(microseconds=duration_ns // 1000)
         if self.text:
-            print(f"Timing {self.text}")
-        print(f"Took {duration_td} ({duration_ns} ns)")
+            CONSOLE.print(f"Timing {self.text}")
+        CONSOLE.print(f"Took {duration_td} ({duration_ns} ns)")
 
 
 def neighbours(coord: tuple[int, ...], *, include_diagonals: bool):
