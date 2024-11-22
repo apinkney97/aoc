@@ -65,6 +65,16 @@ def parse_data(
     return data
 
 
+def split_by_blank_lines(data: list[str]) -> list[list[str]]:
+    groups = [[]]
+    for line in data:
+        if line:
+            groups[-1].append(line)
+        else:
+            groups.append([])
+    return groups
+
+
 def _get_cookie(force_refresh: bool = False):
     CONFIG_PATH.mkdir(mode=0o700, parents=True, exist_ok=True)
     cookie = CONFIG_PATH / "cookie"

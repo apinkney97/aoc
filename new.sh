@@ -8,6 +8,8 @@ year=${2:-$(date +'%Y')}
 
 dirname="aoc/aoc${year}"
 
+mkdir -p "${dirname}"
+
 cat > "${dirname}/${day_str}.py" <<EOF
 def parse_data(data):
     return data
