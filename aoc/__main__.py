@@ -24,8 +24,12 @@ def main():
     parser.add_argument("-1", "--part-1", action="store_true", help="Run part 1 only")
     parser.add_argument("-2", "--part-2", action="store_true", help="Run part 2 only")
 
-    parser.add_argument("-p", "--print-input", action="store_true", help="Print input to console")
-    parser.add_argument("-d", "--debug", action="store_true", help="Enable debug output")
+    parser.add_argument(
+        "-p", "--print-input", action="store_true", help="Print input to console"
+    )
+    parser.add_argument(
+        "-d", "--debug", action="store_true", help="Enable debug output"
+    )
 
     args = parser.parse_args()
 
