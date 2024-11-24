@@ -1,7 +1,7 @@
 import functools
 import operator
 
-from aoc.utils import split_by_blank_lines
+from aoc.utils import split_by_blank_lines, transpose
 
 
 def parse_data(data):
@@ -43,14 +43,6 @@ def find_common_reflection_indices(pattern: list[str]) -> dict[int, set[int]]:
     return reflections_per_line
 
 
-def to_columns(rows: list[str]) -> list[str]:
-    # Assumes all rows are of equal length
-    return [
-        "".join(row[column_index] for row in rows)
-        for column_index in range(len(rows[0]))
-    ]
-
-
 def part1(data) -> int:
     result = 0
     for pattern in data:
@@ -64,7 +56,7 @@ def part1(data) -> int:
             result += horizontal_indices.pop()
         else:
             vertical_indices_per_line = find_common_reflection_indices(
-                to_columns(pattern)
+                transpose(pattern)
             )
             vertical_indices = functools.reduce(
                 operator.and_, vertical_indices_per_line.values()
@@ -105,7 +97,9 @@ def part2(data) -> int:
             result += horizontal_match
 
         else:
-            vertical_match = find_smudged_reflections(to_columns(pattern))
+            vertical_match = find_smudged_reflections(
+                ["".join(line) for line in transpose(pattern)]
+            )
             result += 100 * vertical_match
 
     return result

@@ -1,5 +1,5 @@
 [project]
-requires-python = ">=3.11"
+requires-python = ">=3.13"
 
 [tool.poetry]
 name = "aoc"
@@ -9,7 +9,7 @@ authors = ["Alex Pinkney"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.11"
+python = "^3.13"
 cachetools = "^5.3.2"
 more-itertools = "^10.1.0"
 requests = "^2.31.0"

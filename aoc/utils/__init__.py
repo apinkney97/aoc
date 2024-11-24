@@ -13,7 +13,10 @@ from aoc.utils.utils import (
     neighbours,
     pprint,
     product,
+    rotate_anticlockwise,
+    rotate_clockwise,
     timed,
+    transpose,
     triangle,
 )
 
@@ -39,6 +42,9 @@ __all__ = [
     "manhattan_border",
     "neighbours",
     "product",
+    "rotate_anticlockwise",
+    "rotate_clockwise",
     "timed",
+    "transpose",
     "triangle",
 ]

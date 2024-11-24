@@ -2,6 +2,7 @@ import heapq
 import itertools
 import math
 import time
+from collections.abc import Sequence
 from contextlib import ContextDecorator
 from datetime import timedelta
 from functools import reduce
@@ -143,3 +144,63 @@ class PQ:
     def __iter__(self):
         for entry in sorted(self._entry_finder.values()):
             yield entry[2]
+
+
+def transpose[T](rows: Sequence[Sequence[T]]) -> list[list[T]]:
+    """
+    Transposes a sequence of sequences, returning one row per column of input.
+
+    ABCD
+    EFGH
+    IJKL
+
+    turns into
+
+    AEI
+    BFJ
+    CGK
+    DHL
+
+    Assumes all input rows are of equal length.
+    """
+    return [[row[column_index] for row in rows] for column_index in range(len(rows[0]))]
+
+
+def rotate_clockwise[T](rows: Sequence[Sequence[T]]) -> list[list[T]]:
+    """
+    Rotates a sequence of sequences, returning one row per column of input.
+
+    ABCD
+    EFGH
+    IJKL
+
+    turns into
+
+    IEA
+    JFB
+    KGC
+    LHD
+
+    Assumes all input rows are of equal length.
+    """
+    return [row[::-1] for row in transpose(rows)]
+
+
+def rotate_anticlockwise[T](rows: Sequence[Sequence[T]]) -> list[list[T]]:
+    """
+    Rotates a sequence of sequences, returning one row per column of input.
+
+    ABCD
+    EFGH
+    IJKL
+
+    turns into
+
+    DHL
+    CGK
+    BFJ
+    AEI
+
+    Assumes all input rows are of equal length.
+    """
+    return transpose(rows)[::-1]
