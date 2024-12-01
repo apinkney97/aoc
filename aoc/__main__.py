@@ -39,7 +39,7 @@ def main():
     # AoC runs on US Eastern time
     now = datetime.datetime.now(tz=ZoneInfo("America/New_York"))
     if now.month == 12:
-        if day <= 25:
+        if now.day <= 25:
             day = day or now.day
         year = year or now.year
     else:
