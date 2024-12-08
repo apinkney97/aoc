@@ -2,18 +2,7 @@ import collections
 from enum import Enum
 from typing import NamedTuple
 
-
-class Vector(NamedTuple):
-    x: int
-    y: int
-
-
-class Coord(NamedTuple):
-    x: int
-    y: int
-
-    def __add__(self, other: Vector) -> "Coord":
-        return type(self)(self.x + other.x, self.y + other.y)
+from aoc.utils.coords import Coord, Vector
 
 
 # [0, 0] is top left
