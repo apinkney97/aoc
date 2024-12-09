@@ -4,8 +4,12 @@ from typing import NamedTuple, overload
 
 
 class Vector(NamedTuple):
-    x: int
-    y: int
+    """
+    A relative offset between two points on a 2d grid
+    """
+
+    x: int | float
+    y: int | float
 
     def __add__(self, other: Vector) -> Vector:
         if not isinstance(other, Vector):
@@ -19,8 +23,12 @@ class Vector(NamedTuple):
 
 
 class Coord(NamedTuple):
-    x: int
-    y: int
+    """
+    An absolute coordinate on a 2d grid
+    """
+
+    x: int | float
+    y: int | float
 
     def __add__(self, other: Vector) -> Coord:
         if not isinstance(other, Vector):

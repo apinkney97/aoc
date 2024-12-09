@@ -98,7 +98,7 @@ def neighbours(coord: tuple[int, ...], *, include_diagonals: bool):
                 yield new_coord
 
 
-class PQ:
+class PQ[T]:
     """Heavily "borrowed" from
     https://docs.python.org/3/library/heapq.html?highlight=heapq#priority-queue-implementation-notes
     """
@@ -110,7 +110,7 @@ class PQ:
         self._counter = itertools.count()  # unique sequence count
         self._max_heap = max_heap
 
-    def add_item(self, item, priority=0):
+    def add_item(self, item: T, priority: int = 0) -> None:
         """Add a new item or update the priority of an existing item"""
         if item in self._entry_finder:
             self.remove_item(item)
@@ -121,12 +121,12 @@ class PQ:
         self._entry_finder[item] = entry
         heapq.heappush(self._pq, entry)
 
-    def remove_item(self, item):
+    def remove_item(self, item: T) -> None:
         """Mark an existing item as removed.  Raise KeyError if not found."""
         entry = self._entry_finder.pop(item)
-        entry[-1] = self._REMOVED
+        entry[2] = self._REMOVED
 
-    def pop_item(self):
+    def pop_item(self) -> T:
         """Remove and return the lowest priority item. Raise KeyError if empty."""
         while self._pq:
             priority, count, item = heapq.heappop(self._pq)
@@ -135,13 +135,23 @@ class PQ:
                 return item
         raise KeyError("pop from an empty priority queue")
 
-    def __len__(self):
+    def peek(self) -> T:
+        """Show the item with the lowest priority, but do not remove it. Raise KeyError if empty."""
+        while self._pq:
+            item = self._pq[0][-2]
+            if item is not self._REMOVED:
+                return item
+            heapq.heappop(self._pq)
+
+        raise KeyError("peek at empty priority queue")
+
+    def __len__(self) -> int:
         return len(self._entry_finder)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"PQ({list(self)})"
 
-    def __iter__(self):
+    def __iter__(self) -> Iterator[T]:
         for entry in sorted(self._entry_finder.values()):
             yield entry[2]
 
