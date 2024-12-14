@@ -21,6 +21,11 @@ class Vector(NamedTuple):
             raise TypeError(f"Can't add {type(other).__name__} to a Vector")
         return Vector(self.x - other.x, self.y - other.y)
 
+    def __mul__(self, other: int | float) -> Vector:
+        if not isinstance(other, int | float):
+            raise TypeError(f"Can't multiply Vector by a {type(other).__name__}")
+        return Vector(self.x * other, self.y * other)
+
 
 class Coord(NamedTuple):
     """
@@ -48,3 +53,6 @@ class Coord(NamedTuple):
             return Vector(self.x - other.x, self.y - other.y)
 
         raise TypeError(f"Can't subtract {type(other).__name__} from a Coord")
+
+    def __mod__(self, other: Vector | Coord) -> Coord:
+        return Coord(self.x % other.x, self.y % other.y)
