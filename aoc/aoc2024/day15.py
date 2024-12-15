@@ -82,6 +82,12 @@ class WallError(Exception):
 
 
 def find_affected_cells(grid: utils.Grid2D, coord: Coord, vector: Vector) -> set[Coord]:
+    # Up and down are more complicated.
+    # Aligned boxes work the same as before
+    # For misaligned boxes, need to check all boxes in a pyramid shape
+    # If any are touching a wall, none move
+    # Otherwise, all move
+
     # Names in this function assume we're pushing up, but should work equivalently for down
 
     this_cell = grid[coord]
@@ -91,38 +97,24 @@ def find_affected_cells(grid: utils.Grid2D, coord: Coord, vector: Vector) -> set
     if this_cell == WALL:
         raise WallError
 
-    if this_cell == BOX_LEFT:
-        left_coord = coord
-        right_coord = coord + DIRECTIONS[">"]
-    elif this_cell == BOX_RIGHT:
-        right_coord = coord
-        left_coord = coord + DIRECTIONS["<"]
-    else:
-        raise ValueError(f"Can't move cell {coord=}: {this_cell=}")
+    if this_cell == ROBOT:
+        return {coord} | find_affected_cells(grid, coord + vector, vector)
 
-    above_left = grid[left_coord + vector]
-    above_right = grid[right_coord + vector]
+    if this_cell in {BOX_LEFT, BOX_RIGHT}:
+        if this_cell == BOX_LEFT:
+            left_coord = coord
+            right_coord = coord + DIRECTIONS[">"]
+        else:
+            right_coord = coord
+            left_coord = coord + DIRECTIONS["<"]
 
-    if above_left == above_right == EMPTY:
-        return {left_coord, right_coord}
-    if WALL in {above_left, above_right}:
-        raise WallError
-
-    affected = {left_coord, right_coord}
-
-    if above_left == BOX_LEFT:
-        # Aligned
-        affected_above = find_affected_cells(grid, left_coord + vector, vector=vector)
-        return affected | affected_above
-
-    # Not aligned, could be a box on either diagonal
-    affected_left = affected_right = set()
-    if above_left == BOX_RIGHT:
+        affected = {left_coord, right_coord}
         affected_left = find_affected_cells(grid, left_coord + vector, vector=vector)
-    if above_right == BOX_LEFT:
         affected_right = find_affected_cells(grid, right_coord + vector, vector=vector)
 
-    return affected | affected_left | affected_right
+        return affected | affected_left | affected_right
+
+    raise ValueError(f"Can't move cell {coord=}: {this_cell=}")
 
 
 def part2(data) -> int:
@@ -152,49 +144,28 @@ def part2(data) -> int:
         if move in {"<", ">"}:
             # Left and right are broadly the same as before.
             # Step until we find an empty space or a wall
-            pos = robot + vector
+            pos = robot
+            affected = set()
             while grid[pos] not in {WALL, EMPTY}:
+                affected.add(pos)
                 pos += vector
 
-            # If it's wall, no need to do anything, nothing moves
-
-            if grid[pos] == EMPTY:
-                # Everything slides
-                while pos != robot:
-                    grid[pos] = grid[pos - vector]
-                    pos -= vector
-                    grid[pos] = EMPTY
-
-                robot += vector
-
-                utils.log(
-                    f"Move {i}, {move}: Went from {robot} to {pos}, found {grid[pos]}"
-                )
-                utils.log(grid)
+            if grid[pos] == WALL:
+                continue
 
         else:
-            # Up and down are more complicated.
-            # Aligned boxes work the same as before
-            # For misaligned boxes, need to check all boxes in a pyramid shape
-            # If any are touching a wall, none move
-            # Otherwise, all move
-            vector = DIRECTIONS[move]
             try:
-                affected = find_affected_cells(grid, robot + vector, vector)
+                affected = find_affected_cells(grid, robot, vector)
             except WallError:
-                # print(f"Move {i}, {move}: No move")
-                pass
-            else:
-                for coord in sorted(
-                    affected, key=lambda c: (c.y, c.x), reverse=move == "v"
-                ):
-                    grid[coord + vector] = grid[coord]
-                    grid[coord] = EMPTY
-                grid[robot + vector] = ROBOT
-                grid[robot] = EMPTY
-                robot += vector
-                utils.log(f"Move {i}, {move}, {affected = }")
-                utils.log(grid)
+                continue
+
+        for coord in sorted(
+            affected, key=lambda c: (c.y, c.x), reverse=move in {"v", ">"}
+        ):
+            grid[coord + vector] = grid[coord]
+            grid[coord] = EMPTY
+
+        robot += vector
 
     result = 0
     for coord in grid:
