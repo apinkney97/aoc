@@ -26,6 +26,9 @@ class Vector(NamedTuple):
             raise TypeError(f"Can't multiply Vector by a {type(other).__name__}")
         return Vector(self.x * other, self.y * other)
 
+    def __neg__(self) -> Vector:
+        return self * -1
+
 
 class Coord(NamedTuple):
     """

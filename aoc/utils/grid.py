@@ -5,8 +5,9 @@ N-dimensional unbounded sparse grids.
 from __future__ import annotations
 
 from collections.abc import MutableMapping
-from typing import Iterator, TypeVar
+from typing import Iterator
 
+from aoc.utils.coords import Coord as Coord2D
 from aoc.utils.output import BACKGROUND_BLOCK, FOREGROUND_BLOCK
 
 DEFAULT_DISPLAY_MAP = {
@@ -15,14 +16,10 @@ DEFAULT_DISPLAY_MAP = {
 }
 
 
-KT = TypeVar("KT")
-VT = TypeVar("VT")
-
-Coord2D = tuple[int, int]
 Coord3D = tuple[int, int, int]
 
 
-class Grid(MutableMapping[KT, VT]):
+class Grid[KT, VT](MutableMapping[KT, VT]):
     def __init__(self, default_val: VT):
         self._default_val = default_val
         self._grid: dict[KT, VT] = {}
