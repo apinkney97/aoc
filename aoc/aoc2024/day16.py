@@ -1,7 +1,7 @@
 from enum import Enum
 from typing import NamedTuple
 
-from aoc.utils import PQ, Grid2D
+from aoc.utils import BACKGROUND_BLOCK, FOREGROUND_BLOCK, PQ, Grid2D
 from aoc.utils.coords import Coord, Vector
 
 
@@ -22,6 +22,8 @@ TURNS = {
 EMPTY = 0
 WALL = 1
 
+PART_2 = -1
+
 
 class Node(NamedTuple):
     coord: Coord
@@ -30,7 +32,13 @@ class Node(NamedTuple):
 
 def parse_data(data):
     start = end = None
-    maze = Grid2D()
+    maze = Grid2D(
+        display_map={
+            EMPTY: "  ",
+            WALL: BACKGROUND_BLOCK,
+            2: FOREGROUND_BLOCK,
+        }
+    )
     for y, line in enumerate(data):
         for x, char in enumerate(line):
             coord = Coord(x, y)
@@ -55,14 +63,17 @@ def part1(data) -> int:
     queue.add_item(start_node, priority=0)
 
     costs: dict[Node, int] = {start_node: 0}
+    parents: dict[Node, list[Node]] = {start_node: []}
+
+    end_node = None
 
     while queue:
         curr = queue.pop_item()
         cost = costs[curr]
 
         if curr.coord == end_coord:
-            curr_cost = costs[curr]
-            return curr_cost
+            end_node = curr
+            continue
 
         # Make moves
 
@@ -82,12 +93,31 @@ def part1(data) -> int:
 
         for new_node, new_cost in new_nodes:
             if new_node not in costs or new_cost <= costs[new_node]:
+                if new_node not in costs or new_cost < costs[new_node]:
+                    parents[new_node] = [curr]
+                elif new_node in costs and new_cost == costs[new_node]:
+                    parents[new_node].append(curr)
+
                 costs[new_node] = new_cost
                 queue.add_item(new_node, priority=new_cost)
 
-    return -1
+    visited = set()
+    to_visit: list[Node] = [end_node]
+
+    while to_visit:
+        curr = to_visit.pop()
+        visited.add(curr.coord)
+        to_visit.extend(parents[curr])
+
+    # for coord in visited:
+    #     maze[coord] = 2
+    # print(maze)
+
+    global PART_2
+    PART_2 = len(visited)
+
+    return costs[end_node]
 
 
 def part2(data) -> int:
-    result = 0
-    return result
+    return PART_2
