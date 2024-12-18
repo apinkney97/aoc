@@ -2,6 +2,8 @@ from __future__ import annotations
 
 from typing import NamedTuple, overload
 
+from aoc.utils.utils import manhattan, neighbours
+
 
 class Vector(NamedTuple):
     """
@@ -28,6 +30,10 @@ class Vector(NamedTuple):
 
     def __neg__(self) -> Vector:
         return self * -1
+
+    @property
+    def manhattan(self) -> int | float:
+        return manhattan(self.x, self.y)
 
 
 class Coord(NamedTuple):
@@ -59,3 +65,7 @@ class Coord(NamedTuple):
 
     def __mod__(self, other: Vector | Coord) -> Coord:
         return Coord(self.x % other.x, self.y % other.y)
+
+    def neighbours(self, include_diagonals: bool = False) -> ...:
+        for neighbour in neighbours(self, include_diagonals=include_diagonals):
+            yield Coord(*neighbour)

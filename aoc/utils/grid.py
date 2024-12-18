@@ -8,11 +8,19 @@ from collections.abc import MutableMapping
 from typing import Iterator
 
 from aoc.utils.coords import Coord as Coord2D
-from aoc.utils.output import BACKGROUND_BLOCK, FOREGROUND_BLOCK
+from aoc.utils.output import (
+    BACKGROUND_BLOCK,
+    FOREGROUND_BLOCK,
+    NEAR_BG_BLOCK,
+    NEAR_FG_BLOCK,
+)
 
 DEFAULT_DISPLAY_MAP = {
-    0: BACKGROUND_BLOCK,
+    0: "  ",
     1: FOREGROUND_BLOCK,
+    2: BACKGROUND_BLOCK,
+    3: NEAR_FG_BLOCK,
+    4: NEAR_BG_BLOCK,
 }
 
 

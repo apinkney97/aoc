@@ -1,3 +1,4 @@
+import enum
 import heapq
 import itertools
 import math
@@ -98,22 +99,42 @@ def neighbours(coord: tuple[int, ...], *, include_diagonals: bool):
                 yield new_coord
 
 
+class PQUpdates(enum.Enum):
+    ANY = enum.auto()
+    NONE = enum.auto()
+    GREATER = enum.auto()
+    LESSER = enum.auto()
+
+
 class PQ[T]:
     """Heavily "borrowed" from
     https://docs.python.org/3/library/heapq.html?highlight=heapq#priority-queue-implementation-notes
     """
 
-    def __init__(self, max_heap: bool = False):
+    def __init__(
+        self, max_heap: bool = False, allow_updates: PQUpdates = PQUpdates.ANY
+    ):
         self._pq = []  # list of entries arranged in a heap
         self._entry_finder = {}  # mapping of item to entries
         self._REMOVED = object()  # sentinel for a removed item
         self._counter = itertools.count()  # unique sequence count
         self._max_heap = max_heap
+        self._allow_updates = allow_updates
 
     def add_item(self, item: T, priority: int = 0) -> None:
         """Add a new item or update the priority of an existing item"""
         if item in self._entry_finder:
+            # Prevent updates to existing entries
+            if self._allow_updates is PQUpdates.NONE:
+                return
+            old_priority = self._entry_finder[item][0]
+            if self._allow_updates is PQUpdates.GREATER and priority <= old_priority:
+                return
+            if self._allow_updates is PQUpdates.LESSER and priority >= old_priority:
+                return
+
             self.remove_item(item)
+
         count = next(self._counter)
         if self._max_heap:
             priority = -priority
