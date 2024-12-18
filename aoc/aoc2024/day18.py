@@ -7,22 +7,10 @@ SIZE = 7 if EXAMPLE else 71
 
 
 def parse_data(data):
-    data = [tuple(map(int, line.split(","))) for line in data]
-    return data
+    return [Coord2D(*tuple(map(int, line.split(",")))) for line in data]
 
 
-def solve(data, limit) -> int:
-    grid = Grid2D()
-    for x, y in data[:limit]:
-        grid[Coord2D(x, y)] = WALL
-
-    for c in range(SIZE):
-        # Add walls
-        grid[Coord2D(-1, c)] = WALL
-        grid[Coord2D(SIZE, c)] = WALL
-        grid[Coord2D(c, -1)] = WALL
-        grid[Coord2D(c, SIZE)] = WALL
-
+def solve(grid: Grid2D) -> int:
     # print(grid)
 
     start = Coord2D(0, 0)
@@ -32,7 +20,6 @@ def solve(data, limit) -> int:
     queue.add_item(start, priority=0)
 
     distances = {start: 0}
-    parents = {start: None}
 
     while queue:
         curr = queue.pop_item()
@@ -46,18 +33,42 @@ def solve(data, limit) -> int:
                 new_dist = distances[curr] + 1
                 queue.add_item(neighbour, priority=new_dist)
                 distances[neighbour] = distances[curr] + 1
-                parents[neighbour] = curr
 
     return -1
 
 
 def part1(data) -> int:
     limit = 12 if EXAMPLE else 1024
-    return solve(data, limit)
+
+    grid = Grid2D()
+    for coord in data[:limit]:
+        grid[coord] = WALL
+
+    for c in range(SIZE):
+        # Add walls
+        grid[Coord2D(-1, c)] = WALL
+        grid[Coord2D(SIZE, c)] = WALL
+        grid[Coord2D(c, -1)] = WALL
+        grid[Coord2D(c, SIZE)] = WALL
+
+    return solve(grid)
 
 
 def part2(data) -> str:
-    for i in range(len(data), 0, -1):
-        if solve(data, i) != -1:
-            return ",".join(str(c) for c in data[i])
+    grid = Grid2D()
+    for coord in data:
+        grid[coord] = WALL
+
+    for c in range(SIZE):
+        # Add walls
+        grid[Coord2D(-1, c)] = WALL
+        grid[Coord2D(SIZE, c)] = WALL
+        grid[Coord2D(c, -1)] = WALL
+        grid[Coord2D(c, SIZE)] = WALL
+
+    for i in range(len(data) - 1, 0, -1):
+        if solve(grid) != -1:
+            return ",".join(str(c) for c in data[i + 1])
+        grid[data[i]] = 0
+
     return "???"
