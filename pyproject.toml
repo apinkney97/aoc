@@ -5,6 +5,7 @@ requires-python = ">=3.13"
 dependencies = [
     "cachetools>=5.5.0",
     "more-itertools>=10.5.0",
+    "networkx>=3.4.2",
     "platformdirs>=4.3.6",
     "requests>=2.32.3",
     "rich>=13.9.4",
