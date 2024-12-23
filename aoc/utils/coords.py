@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import NamedTuple, overload
+from typing import Iterator, NamedTuple, overload
 
 from aoc.utils.utils import manhattan, neighbours
 
@@ -69,3 +69,31 @@ class Coord(NamedTuple):
     def neighbours(self, include_diagonals: bool = False) -> ...:
         for neighbour in neighbours(self, include_diagonals=include_diagonals):
             yield Coord(*neighbour)
+
+
+def manhattan_border(centre: Coord, radius: int) -> Iterator[Coord]:
+    """
+    Returns an iterator of coordinates the specified radius away from the centre coordinate.
+
+    This effectively describes a diamond shape.
+    """
+    cx, cy = centre
+
+    if radius == 0:
+        yield centre
+
+    for r in range(radius):
+        yield Coord(cx + r, cy - r + radius)
+        yield Coord(cx - r + radius, cy - r)
+        yield Coord(cx - r, cy + r - radius)
+        yield Coord(cx + r - radius, cy + r)
+
+
+def manhattan_limit(centre: Coord, radius: int) -> Iterator[Coord]:
+    """
+    Returns an iterator of coordinates within the specified radius of the centre coordinate.
+
+    This effectively describes a filled diamond shape.
+    """
+    for r in range(radius + 1):
+        yield from manhattan_border(centre, r)

@@ -1,4 +1,5 @@
 from aoc.utils.cmp import safe_max, safe_min
+from aoc.utils.coords import manhattan_border, manhattan_limit
 from aoc.utils.grid import Coord2D, Grid2D, Grid3D
 from aoc.utils.input import load_data_raw, parse_data, split_by_blank_lines
 from aoc.utils.output import (
@@ -14,7 +15,6 @@ from aoc.utils.utils import (
     log,
     magnitude,
     manhattan,
-    manhattan_border,
     neighbours,
     pprint,
     product,
@@ -47,6 +47,7 @@ __all__ = [
     "magnitude",
     "manhattan",
     "manhattan_border",
+    "manhattan_limit",
     "neighbours",
     "product",
     "rotate_anticlockwise",

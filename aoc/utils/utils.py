@@ -45,21 +45,6 @@ def manhattan(*args: int) -> int:
     return sum(abs(a) for a in args)
 
 
-def manhattan_border(centre: tuple[int, int], radius: int) -> Iterator[tuple[int, int]]:
-    """
-    Returns an iterator of coordinates the specified radius away from the centre coordinate.
-
-    This effectively describes a diamond shape.
-    """
-    cx, cy = centre
-
-    for i in range(radius):
-        yield cx + i, cy - i + radius
-        yield cx - i + radius, cy - i
-        yield cx - i, cy + i - radius
-        yield cx + i - radius, cy + i
-
-
 def triangle(n: int) -> int:
     """Returns the nth triangle number"""
     return n * (n + 1) // 2
