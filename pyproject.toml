@@ -1,31 +1,28 @@
 [project]
-requires-python = ">=3.13"
-
-[tool.poetry]
 name = "aoc"
 version = "0.1.0"
-description = "Advent of Code solutions"
-authors = ["Alex Pinkney"]
-readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "cachetools>=5.5.0",
+    "more-itertools>=10.5.0",
+    "platformdirs>=4.3.6",
+    "requests>=2.32.3",
+    "rich>=13.9.4",
+]
 
-[tool.poetry.dependencies]
-python = "^3.13"
-cachetools = "^5.3.2"
-more-itertools = "^10.1.0"
-requests = "^2.31.0"
-platformdirs = "^4.2.2"
-rich = "^13.7.1"
+[project.scripts]
+aoc = 'aoc.__main__:main'
 
-[tool.poetry.group.dev.dependencies]
-ruff = "^0.5.5"
+[dependency-groups]
+dev = [
+    "ruff>=0.8.4",
+]
 
 [build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
 [tool.ruff.lint]
 # Enable isort rules.
 extend-select = ["I"]
 
-[tool.poetry.scripts]
-aoc = 'aoc.__main__:main'

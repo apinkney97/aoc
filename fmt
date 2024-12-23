@@ -2,6 +2,6 @@
 
 set -eux
 
-poetry run ruff check --fix
-poetry run ruff format
+uv run ruff check --fix
+uv run ruff format
 

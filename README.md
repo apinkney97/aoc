@@ -6,9 +6,9 @@ https://adventofcode.com/
 
 ## First time setup
 
-Run `poetry install` to install all dependencies.
+Run `uv sync` to install all dependencies.
 
-Nb. this Requires [Poetry](https://python-poetry.org/) itself to be installed first.
+Nb. this requires [uv](https://docs.astral.sh/uv/) itself to be installed first.
 
 
 ## Running
@@ -19,24 +19,24 @@ You will be prompted to enter your session cookie if no current cookie is stored
 
 ### Today's problem
 ```shell
-poetry run aoc
+uv run aoc
 ```
 Note: this only works between the 1st and 25th December.
 
 ### An arbitrary problem from the most recent AOC
 For example, day 6:
 ```shell
-poetry run aoc 6
+uv run aoc 6
 ```
 
 ### An arbitrary problem from a specific year:
 For example, 2015 day 21:
 ```shell
-poetry run -y 2015 21
+uv run -y 2015 21
 ```
 
 ### Extra options
 For additional options, see
 ```shell
-poetry run aoc --help
+uv run aoc --help
 ```
