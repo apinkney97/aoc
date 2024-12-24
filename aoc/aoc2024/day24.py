@@ -67,6 +67,7 @@ def parse_data(data):
             z_gates.append((name, g))
     return sorted(z_gates, reverse=True)
 
+
 def part1(data) -> int:
     result = 0
     for name, gate in data:
@@ -74,15 +75,22 @@ def part1(data) -> int:
         result += gate.value()
     return result
 
+
 def to_dot():
     print("digraph g {")
     for name, gate in GATES.items():
         gate_type = type(gate).__name__
-        color = {"OR": "yellow", "AND": "green", "XOR": "lightblue", "Wire": "pink"}[gate_type]
+        color = {"OR": "yellow", "AND": "green", "XOR": "lightblue", "Wire": "pink"}[
+            gate_type
+        ]
         if name.startswith("z"):
-            color="purple"
-        shape = {"OR": "circle", "AND": "square", "XOR": "triangle", "Wire": "ellipse"}[gate_type]
-        print(rf'    {name}[label="{name}\n{gate_type}", style=filled, fillcolor={color}, shape={shape}];')
+            color = "purple"
+        shape = {"OR": "circle", "AND": "square", "XOR": "triangle", "Wire": "ellipse"}[
+            gate_type
+        ]
+        print(
+            rf'    {name}[label="{name}\n{gate_type}", style=filled, fillcolor={color}, shape={shape}];'
+        )
         if not name.startswith(("x", "y")):
             print(f"    {gate._left} -> {name};")
             print(f"    {gate._right} -> {name};")
