@@ -1,4 +1,4 @@
-from typing import Callable, Optional
+from typing import Callable
 
 import platformdirs
 import requests
@@ -37,12 +37,12 @@ def load_data_raw(year: int, day: int, example: bool) -> list[str]:
 
     if not path.exists() or path.stat().st_size == 0:
         if example:
-            data = multiline_input(f"Paste example data for day {day} {year}")
+            fetched_data = multiline_input(f"Paste example data for day {day} {year}")
 
         else:
-            data = _fetch_input_data(year, day)
+            fetched_data = _fetch_input_data(year, day)
 
-        path.write_text(data)
+        path.write_text(fetched_data)
 
     with open(path) as f:
         data = [line.rstrip("\n") for line in f]
@@ -54,19 +54,20 @@ def parse_data(
     data: list[str],
     *,
     strip: bool = True,
-    fn: Optional[Callable[[str], T]] = None,
+    fn: Callable[[str], T] | None = None,
 ) -> list[T] | list[str]:
     if strip:
         data = [line.strip() for line in data]
 
-    if fn is not None:
-        data = [fn(line) for line in data]
+    if fn is None:
+        return data
 
-    return data
+    return [fn(line) for line in data]
+
 
 
 def split_by_blank_lines(data: list[str]) -> list[list[str]]:
-    groups = [[]]
+    groups: list[list[str]] = [[]]
     for line in data:
         if line:
             groups[-1].append(line)
@@ -75,7 +76,7 @@ def split_by_blank_lines(data: list[str]) -> list[list[str]]:
     return groups
 
 
-def _get_cookie(force_refresh: bool = False):
+def _get_cookie(force_refresh: bool = False) -> str:
     CONFIG_PATH.mkdir(mode=0o700, parents=True, exist_ok=True)
     cookie = CONFIG_PATH / "cookie"
     print("Cookie path:", cookie)

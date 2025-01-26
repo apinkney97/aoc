@@ -100,7 +100,7 @@ class Grid2D(Grid[Coord2D, int]):
         for y in range(min_y, max_y):
             line = []
             for x in range(min_x, max_x):
-                val = self[x, y]
+                val = self[Coord2D(x, y)]
                 if self._display_map:
                     line.append(self._display_map[val])
                 else:

@@ -26,7 +26,7 @@ class SetDeque(Generic[T]):
     def __contains__(self, item: T) -> bool:
         return item in self._dict
 
-    def __len__(self):
+    def __len__(self) -> int:
         return len(self._deque)
 
     def append(self, item: T) -> None:

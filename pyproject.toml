@@ -16,7 +16,10 @@ aoc = 'aoc.__main__:main'
 
 [dependency-groups]
 dev = [
+    "mypy>=1.14.1",
+    "pytest>=8.3.4",
     "ruff>=0.8.4",
+    "types-requests>=2.32.0.20241016",
 ]
 
 [build-system]
@@ -27,3 +30,5 @@ build-backend = "hatchling.build"
 # Enable isort rules.
 extend-select = ["I"]
 
+[tool.mypy]
+files = ["aoc"]

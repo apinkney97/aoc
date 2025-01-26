@@ -5,10 +5,12 @@ import math
 import time
 from collections.abc import Sequence
 from contextlib import ContextDecorator
+from dataclasses import dataclass
 from datetime import timedelta
 from functools import reduce
 from operator import mul
-from typing import Iterable, Iterator
+from types import TracebackType
+from typing import Any, Iterable, Iterator, Generator
 
 from rich.console import Console
 from rich.pretty import Pretty
@@ -19,12 +21,12 @@ from aoc.utils.types import TNum
 CONSOLE = Console()
 
 
-def log(*args, **kwargs):
+def log(*args: Any, **kwargs: Any) -> None:
     if config.DEBUG:
         CONSOLE.print(*args, **kwargs)
 
 
-def pprint(*args, **kwargs):
+def pprint(*args: Any, **kwargs: Any) -> None:
     if config.DEBUG:
         prettified = Pretty(*args, **kwargs)
         # aside: "pretty" is a dreadful spelling...
@@ -41,7 +43,8 @@ def magnitude(*args: TNum) -> float:
     return math.sqrt(sum(a**2 for a in args))
 
 
-def manhattan(*args: int) -> int:
+def manhattan(*args: TNum) -> TNum:
+    """Returns the manhattan distance between the given orthogonal distances"""
     return sum(abs(a) for a in args)
 
 
@@ -54,10 +57,15 @@ class timed(ContextDecorator):
     def __init__(self, text: str = ""):
         self.text = text
 
-    def __enter__(self):
+    def __enter__(self) -> None:
         self.start = time.perf_counter_ns()
 
-    def __exit__(self, exc_type, exc_val, exc_tb):
+    def __exit__(
+        self,
+        exc_type: type[BaseException] | None,
+        exc_val: BaseException | None,
+        exc_tb: TracebackType,
+    ) -> None:
         duration_ns = time.perf_counter_ns() - self.start
         duration_td = timedelta(microseconds=duration_ns // 1000)
         if self.text:
@@ -65,7 +73,7 @@ class timed(ContextDecorator):
         CONSOLE.print(f"Took {duration_td} ({duration_ns} ns)")
 
 
-def neighbours(coord: tuple[int, ...], *, include_diagonals: bool):
+def neighbours(coord: tuple[int, ...], *, include_diagonals: bool) -> Generator[tuple[int, ...]]:
     """Returns the neighbours of the specified coordinate."""
     dimensions = len(coord)
     if not include_diagonals:
@@ -91,6 +99,17 @@ class PQUpdates(enum.Enum):
     LESSER = enum.auto()
 
 
+class _PQRemoved:
+    pass
+
+
+@dataclass
+class _PQEntry[T]:
+    priority: int
+    count: int
+    item: T | _PQRemoved
+
+
 class PQ[T]:
     """Heavily "borrowed" from
     https://docs.python.org/3/library/heapq.html?highlight=heapq#priority-queue-implementation-notes
@@ -99,9 +118,10 @@ class PQ[T]:
     def __init__(
         self, max_heap: bool = False, allow_updates: PQUpdates = PQUpdates.ANY
     ):
-        self._pq = []  # list of entries arranged in a heap
-        self._entry_finder = {}  # mapping of item to entries
-        self._REMOVED = object()  # sentinel for a removed item
+        self._pq: list[_PQEntry[T]] = []  # list of entries arranged in a heap
+        self._entry_finder: dict[
+            T, _PQEntry[T]
+        ] = {}  # mapping of each item to its entry
         self._counter = itertools.count()  # unique sequence count
         self._max_heap = max_heap
         self._allow_updates = allow_updates
@@ -112,7 +132,7 @@ class PQ[T]:
             # Prevent updates to existing entries
             if self._allow_updates is PQUpdates.NONE:
                 return
-            old_priority = self._entry_finder[item][0]
+            old_priority = self._entry_finder[item].priority
             if self._allow_updates is PQUpdates.GREATER and priority <= old_priority:
                 return
             if self._allow_updates is PQUpdates.LESSER and priority >= old_priority:
@@ -123,20 +143,20 @@ class PQ[T]:
         count = next(self._counter)
         if self._max_heap:
             priority = -priority
-        entry = [priority, count, item]
+        entry = _PQEntry(priority, count, item)
         self._entry_finder[item] = entry
         heapq.heappush(self._pq, entry)
 
     def remove_item(self, item: T) -> None:
         """Mark an existing item as removed.  Raise KeyError if not found."""
         entry = self._entry_finder.pop(item)
-        entry[2] = self._REMOVED
+        entry.item = _PQRemoved()
 
     def pop_item(self) -> T:
         """Remove and return the lowest priority item. Raise KeyError if empty."""
         while self._pq:
-            priority, count, item = heapq.heappop(self._pq)
-            if item is not self._REMOVED:
+            item = heapq.heappop(self._pq).item
+            if not isinstance(item, _PQRemoved):
                 self._entry_finder.pop(item)
                 return item
         raise KeyError("pop from an empty priority queue")
@@ -144,8 +164,8 @@ class PQ[T]:
     def peek(self) -> T:
         """Show the item with the lowest priority, but do not remove it. Raise KeyError if empty."""
         while self._pq:
-            item = self._pq[0][-2]
-            if item is not self._REMOVED:
+            item = self._pq[0].item
+            if not isinstance(item, _PQRemoved):
                 return item
             heapq.heappop(self._pq)
 
@@ -158,8 +178,11 @@ class PQ[T]:
         return f"PQ({list(self)})"
 
     def __iter__(self) -> Iterator[T]:
-        for entry in sorted(self._entry_finder.values()):
-            yield entry[2]
+        for entry in sorted(
+            self._entry_finder.values(), key=lambda e: e.priority
+        ):
+            assert not isinstance(entry.item, _PQRemoved)
+            yield entry.item
 
 
 def transpose[T](rows: Sequence[Sequence[T]]) -> list[list[T]]:

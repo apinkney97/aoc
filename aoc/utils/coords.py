@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Iterator, NamedTuple, overload
+from typing import Iterator, NamedTuple, overload, Generator
 
 from aoc.utils.utils import manhattan, neighbours
 
@@ -13,7 +13,7 @@ class Vector(NamedTuple):
     x: int | float
     y: int | float
 
-    def __add__(self, other: Vector) -> Vector:
+    def __add__(self, other: Vector) -> Vector:  # type: ignore[override]
         if not isinstance(other, Vector):
             raise TypeError(f"Can't add {type(other).__name__} to a Vector")
         return Vector(self.x + other.x, self.y + other.y)
@@ -23,7 +23,7 @@ class Vector(NamedTuple):
             raise TypeError(f"Can't add {type(other).__name__} to a Vector")
         return Vector(self.x - other.x, self.y - other.y)
 
-    def __mul__(self, other: int | float) -> Vector:
+    def __mul__(self, other: int | float) -> Vector:  # type: ignore[override]
         if not isinstance(other, int | float):
             raise TypeError(f"Can't multiply Vector by a {type(other).__name__}")
         return Vector(self.x * other, self.y * other)
@@ -44,7 +44,7 @@ class Coord(NamedTuple):
     x: int | float
     y: int | float
 
-    def __add__(self, other: Vector) -> Coord:
+    def __add__(self, other: Vector) -> Coord:  # type: ignore[override]
         if not isinstance(other, Vector):
             raise TypeError(f"Can't add {type(other).__name__} to a Coord")
         return Coord(self.x + other.x, self.y + other.y)
@@ -66,9 +66,9 @@ class Coord(NamedTuple):
     def __mod__(self, other: Vector | Coord) -> Coord:
         return Coord(self.x % other.x, self.y % other.y)
 
-    def neighbours(self, include_diagonals: bool = False) -> ...:
-        for neighbour in neighbours(self, include_diagonals=include_diagonals):
-            yield Coord(*neighbour)
+    def neighbours(self, include_diagonals: bool = False) -> Generator[Coord]:
+        for neighbour in neighbours((self.x, self.y), include_diagonals=include_diagonals):
+            yield Coord(neighbour[0], neighbour[1])
 
 
 def manhattan_border(centre: Coord, radius: int) -> Iterator[Coord]:
@@ -77,16 +77,14 @@ def manhattan_border(centre: Coord, radius: int) -> Iterator[Coord]:
 
     This effectively describes a diamond shape.
     """
-    cx, cy = centre
-
     if radius == 0:
         yield centre
 
     for r in range(radius):
-        yield Coord(cx + r, cy - r + radius)
-        yield Coord(cx - r + radius, cy - r)
-        yield Coord(cx - r, cy + r - radius)
-        yield Coord(cx + r - radius, cy + r)
+        yield Coord(centre.x + r, centre.y - r + radius)
+        yield Coord(centre.x - r + radius, centre.y - r)
+        yield Coord(centre.x - r, centre.y + r - radius)
+        yield Coord(centre.x + r - radius, centre.y + r)
 
 
 def manhattan_limit(centre: Coord, radius: int) -> Iterator[Coord]:
