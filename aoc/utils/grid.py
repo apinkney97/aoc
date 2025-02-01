@@ -7,7 +7,7 @@ from __future__ import annotations
 from collections.abc import MutableMapping
 from typing import Iterator
 
-from aoc.utils.coords import Coord as Coord2D
+from aoc.utils.coords import Coord2D, Coord3D
 from aoc.utils.output import (
     BACKGROUND_BLOCK,
     FOREGROUND_BLOCK,
@@ -22,9 +22,6 @@ DEFAULT_DISPLAY_MAP = {
     3: NEAR_FG_BLOCK,
     4: NEAR_BG_BLOCK,
 }
-
-
-Coord3D = tuple[int, int, int]
 
 
 class Grid[KT, VT](MutableMapping[KT, VT]):

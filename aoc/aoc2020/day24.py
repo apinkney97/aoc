@@ -1,8 +1,10 @@
 from __future__ import annotations
 
-from typing import NamedTuple, Set
+from typing import Set
 
 from cachetools import cached
+
+from aoc.utils import Coord2D, Vector2D
 
 
 def parse_data(data):
@@ -20,37 +22,29 @@ def parse_data(data):
     return lines
 
 
-class Coord(NamedTuple):
-    x: int
-    y: int
-
-    def __add__(self, other: Coord):
-        return Coord(self.x + other.x, self.y + other.y)
-
-
 VECTORS = {
-    "e": Coord(1, 0),
-    "w": Coord(-1, 0),
-    "ne": Coord(0, 1),
-    "sw": Coord(0, -1),
-    "nw": Coord(-1, 1),
-    "se": Coord(1, -1),
+    "e": Vector2D(1, 0),
+    "w": Vector2D(-1, 0),
+    "ne": Vector2D(0, 1),
+    "sw": Vector2D(0, -1),
+    "nw": Vector2D(-1, 1),
+    "se": Vector2D(1, -1),
 }
 
 CACHE = {}
 
 
 @cached(CACHE)
-def get_neighbours(coord: Coord) -> Set[Coord]:
+def get_neighbours(coord: Coord2D) -> Set[Coord2D]:
     ns = set()
     for vector in VECTORS.values():
         ns.add(coord + vector)
     return ns
 
 
-def init_tiles(data) -> Set[Coord]:
-    tiles: Set[Coord] = set()
-    start = Coord(0, 0)
+def init_tiles(data) -> Set[Coord2D]:
+    tiles: Set[Coord2D] = set()
+    start = Coord2D(0, 0)
     for line in data:
         c = start
         for direction in line:
@@ -68,7 +62,7 @@ def part1(data) -> int:
     return len(tiles)
 
 
-def step(tiles: Set[Coord]) -> Set[Coord]:
+def step(tiles: Set[Coord2D]) -> Set[Coord2D]:
     next_grid = set()
 
     to_check = set(tiles)

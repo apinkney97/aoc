@@ -2,15 +2,23 @@
 
 set -euC
 
-day_num=${1:-$(date +'%-d')}
-day_str=$(printf 'day%02d' "${day_num}")
-year=${2:-$(date +'%Y')}
+default_day=$(date +'%-d')
+default_year=$(date +'%Y')
 
-dirname="aoc/aoc${year}"
+read -r -p "Enter year (${default_year}): " year
+read -r -p "Enter day (${default_day}): " day
 
-mkdir -p "${dirname}"
+day=${day:-${default_day}}
+year=${year:-${default_year}}
 
-cat > "${dirname}/${day_str}.py" <<EOF
+dir_name="aoc/aoc${year}"
+
+mkdir -p "${dir_name}"
+touch "${dir_name}/__init__.py"
+
+module_name=$(printf 'day%02d' "${day}")
+
+cat > "${dir_name}/${module_name}.py" <<EOF
 def parse_data(data):
     return data
 

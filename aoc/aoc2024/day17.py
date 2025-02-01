@@ -22,29 +22,31 @@ def dis(prog: list[int]) -> None:
         if op in COMBO and operand > 3:
             match operand:
                 case 4:
-                    operand = "A"
+                    operand_str = "A"
                 case 5:
-                    operand = "B"
+                    operand_str = "B"
                 case 6:
-                    operand = "C"
+                    operand_str = "C"
+                case _:
+                    operand_str = str(operand)
 
         match op:
             case Op.adv:
-                print(f"A = A >> {operand}")
+                print(f"A = A >> {operand_str}")
             case Op.bdv:
-                print(f"B = A >> {operand}")
+                print(f"B = A >> {operand_str}")
             case Op.cdv:
-                print(f"C = A >> {operand}")
+                print(f"C = A >> {operand_str}")
             case Op.bxl:
-                print(f"B = B ^ {operand}")
+                print(f"B = B ^ {operand_str}")
             case Op.bst:
-                print(f"B = {operand} % 8")
+                print(f"B = {operand_str} % 8")
             case Op.jnz:
-                print(f"JNZ {operand}")
+                print(f"JNZ {operand_str}")
             case Op.bxc:
                 print("B = B ^ C")
             case Op.out:
-                print(f"OUT {operand}")
+                print(f"OUT {operand_str}")
 
 
 class Computer:

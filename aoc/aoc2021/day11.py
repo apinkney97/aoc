@@ -9,11 +9,6 @@ def _parse_data(data):
     return data
 
 
-def p(data):
-    for row in data:
-        print("".join(str(i) for i in row))
-
-
 def run(data, max_step=None, flash_threshold=None):
     total_flashes = 0
     for step in itertools.count():

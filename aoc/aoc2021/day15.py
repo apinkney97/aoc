@@ -1,4 +1,5 @@
 from aoc import utils
+from aoc.utils import Coord2D
 
 
 def parse_data(data):
@@ -7,11 +8,8 @@ def parse_data(data):
     return data
 
 
-Coord = tuple[int, int]
-
-
 def part1(data) -> int:
-    edges: dict[Coord, dict[Coord, int]] = {}
+    edges: dict[Coord2D, dict[Coord2D, int]] = {}
 
     size = len(data)
     if size != len(data[0]):
@@ -21,14 +19,16 @@ def part1(data) -> int:
             for nx, ny in utils.neighbours((x, y), include_diagonals=False):
                 if not ((0 <= nx < size) and (0 <= ny < size)):
                     continue
-                edges.setdefault((x, y), {})[(nx, ny)] = data[nx][ny]
+                edges.setdefault(Coord2D(x, y), {})[Coord2D(nx, ny)] = data[nx][ny]
 
-    return dijkstra(edges, (0, 0), (size - 1, size - 1))
+    return dijkstra(edges, Coord2D(0, 0), Coord2D(size - 1, size - 1))
 
 
-def dijkstra(edges: dict[Coord, dict[Coord, int]], start: Coord, end: Coord) -> int:
-    unvisited: set[Coord] = set(edges.keys())
-    distances: dict[Coord, int] = {node: float("inf") for node in unvisited}
+def dijkstra(
+    edges: dict[Coord2D, dict[Coord2D, int]], start: Coord2D, end: Coord2D
+) -> int:
+    unvisited: set[Coord2D] = set(edges.keys())
+    distances: dict[Coord2D, float | int] = {node: float("inf") for node in unvisited}
     distances[start] = 0
 
     pq = utils.PQ()

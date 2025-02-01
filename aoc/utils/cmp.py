@@ -1,25 +1,22 @@
-from typing import Callable, Optional
+from __future__ import annotations
 
-from aoc.utils.types import TNum
+import typing
 
+if typing.TYPE_CHECKING:
+    from _typeshed import SupportsRichComparisonT
 
-def _safe_cmp(
-    *args: Optional[TNum], cmp_fn: Callable[[TNum, TNum], TNum]
-) -> Optional[TNum]:
-    val = None
-    for arg in args:
-        if arg is None:
-            continue
-        if val is None:
-            val = arg
-        else:
-            val = cmp_fn(val, arg)
-    return val
+NullableComparable = typing.Optional["SupportsRichComparisonT"]
 
 
-def safe_min(*args: Optional[TNum]) -> Optional[TNum]:
-    return _safe_cmp(*args, cmp_fn=min)
+def safe_min(*args: NullableComparable[typing.Any]) -> NullableComparable[typing.Any]:
+    filtered = [arg for arg in args if arg is not None]
+    if not filtered:
+        return None
+    return min(filtered)
 
 
-def safe_max(*args: Optional[TNum]) -> Optional[TNum]:
-    return _safe_cmp(*args, cmp_fn=max)
+def safe_max(*args: NullableComparable[typing.Any]) -> NullableComparable[typing.Any]:
+    filtered = [arg for arg in args if arg is not None]
+    if not filtered:
+        return None
+    return max(filtered)

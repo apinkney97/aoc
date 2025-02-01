@@ -88,7 +88,7 @@ def choose_items(maximise_cost=False) -> list[tuple[tuple[int, int], int]]:
     all_combinations = list(
         set(items) for items in itertools.product(WEAPONS, ARMOUR, RINGS, RINGS)
     )
-    cost_by_effect = {}
+    cost_by_effect: dict[tuple[int, int], int] = {}
     for comb in all_combinations:
         dam = 0
         arm = 0
@@ -120,6 +120,8 @@ def play_many(boss_stats, my_items, winner_is_me) -> int:
 
         if play_one(me, boss) is wanted_winner:
             return price
+
+    raise Exception("No winner")
 
 
 def part1(data) -> int:

@@ -1,6 +1,6 @@
 import heapq
 from collections import defaultdict, deque
-from typing import NamedTuple
+from typing import DefaultDict, NamedTuple
 
 
 class FilePart(NamedTuple):
@@ -53,7 +53,7 @@ def part1(data) -> int:
 
 
 def part2(data: list[FilePart]) -> int:
-    gaps = defaultdict(list)
+    gaps: DefaultDict[int, list[int]] = defaultdict(list)
 
     for file1, file2 in zip(data, data[1:]):
         gap = file2.start - file1.next

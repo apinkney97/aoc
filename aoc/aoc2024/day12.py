@@ -1,9 +1,9 @@
-from aoc.utils.coords import Coord, Vector
+from aoc.utils.coords import Coord2D, Vector2D
 
-UP = Vector(0, -1)
-LEFT = Vector(-1, 0)
-DOWN = Vector(0, 1)
-RIGHT = Vector(1, 0)
+UP = Vector2D(0, -1)
+LEFT = Vector2D(-1, 0)
+DOWN = Vector2D(0, 1)
+RIGHT = Vector2D(1, 0)
 
 DIRECTIONS = [UP, LEFT, DOWN, RIGHT]
 
@@ -12,11 +12,11 @@ def parse_data(data):
     grid = {}
     for y, row in enumerate(data):
         for x, cell in enumerate(row):
-            grid[Coord(x, y)] = cell
+            grid[Coord2D(x, y)] = cell
     return grid
 
 
-def get_regions(data) -> list[set[Coord]]:
+def get_regions(data) -> list[set[Coord2D]]:
     unvisited = set(data)
 
     regions = []

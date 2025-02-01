@@ -2,7 +2,7 @@ import fractions
 import re
 
 from aoc import utils
-from aoc.utils.coords import Coord, Vector
+from aoc.utils.coords import Coord2D, Vector2D
 
 A_COST = 3
 B_COST = 1
@@ -13,13 +13,13 @@ def parse_data(data):
 
     for button_a, button_b, prize in utils.split_by_blank_lines(data):
         match = re.findall(r"\d+", button_a)
-        a = Vector(int(match[0]), int(match[1]))
+        a = Vector2D(int(match[0]), int(match[1]))
 
         match = re.findall(r"\d+", button_b)
-        b = Vector(int(match[0]), int(match[1]))
+        b = Vector2D(int(match[0]), int(match[1]))
 
         match = re.findall(r"\d+", prize)
-        p = Coord(int(match[0]), int(match[1]))
+        p = Coord2D(int(match[0]), int(match[1]))
 
         parsed.append((a, b, p))
 
@@ -30,7 +30,7 @@ def part1(data, extra=0) -> int:
     result = 0
 
     for a, b, prize in data:
-        prize = prize + Vector(extra, extra)
+        prize = prize + Vector2D(extra, extra)
 
         m_a = fractions.Fraction(a.y, a.x)
         m_b = fractions.Fraction(b.y, b.x)

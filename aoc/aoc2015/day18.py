@@ -8,7 +8,7 @@ def parse_data(data):
     grid = utils.Grid2D(display_map={0: ".", 1: "#"}, bounds=bounds)
     for y, row in enumerate(data):
         for x, val in enumerate(row):
-            grid[x, y] = val
+            grid[utils.Coord2D(x, y)] = val
 
     return grid
 
@@ -17,10 +17,10 @@ def light_corners(grid: utils.Grid2D) -> None:
     xmin, xmax, ymin, ymax = grid._bounds
     xmax -= 1
     ymax -= 1
-    grid[xmin, ymin] = 1
-    grid[xmin, ymax] = 1
-    grid[xmax, ymin] = 1
-    grid[xmax, ymax] = 1
+    grid[utils.Coord2D(xmin, ymin)] = 1
+    grid[utils.Coord2D(xmin, ymax)] = 1
+    grid[utils.Coord2D(xmax, ymin)] = 1
+    grid[utils.Coord2D(xmax, ymax)] = 1
 
 
 def step(grid: utils.Grid2D) -> utils.Grid2D:

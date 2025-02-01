@@ -2,20 +2,20 @@ import re
 
 from aoc import config
 from aoc.utils import BACKGROUND_BLOCK, FOREGROUND_BLOCK
-from aoc.utils.coords import Coord, Vector
+from aoc.utils.coords import Coord2D, Vector2D
 
 if config.EXAMPLE:
-    BOUNDS = Coord(11, 7)
+    BOUNDS = Coord2D(11, 7)
 else:
-    BOUNDS = Coord(101, 103)
+    BOUNDS = Coord2D(101, 103)
 
 
 def parse_data(data):
     parsed = []
     for line in data:
         match = re.fullmatch(r"p=(\d+),(\d+) v=([\d-]+),([\d-]+)", line)
-        pos = Coord(int(match[1]), int(match[2]))
-        vec = Vector(int(match[3]), int(match[4]))
+        pos = Coord2D(int(match[1]), int(match[2]))
+        vec = Vector2D(int(match[3]), int(match[4]))
         parsed.append((pos, vec))
     return parsed
 
@@ -62,7 +62,7 @@ def part1(data) -> int:
 def print_board(positions):
     for y in range(BOUNDS.y):
         for x in range(BOUNDS.x):
-            if Coord(x, y) in positions:
+            if Coord2D(x, y) in positions:
                 print(FOREGROUND_BLOCK, end="")
             else:
                 print(BACKGROUND_BLOCK, end="")
@@ -72,6 +72,7 @@ def print_board(positions):
 def part2(data) -> int:
     for steps in range(10000):
         positions = get_positions(data, steps=steps)
-        print(steps)
-        print_board(positions)
+        if len(positions) == len(data):
+            print_board(positions)
+            return steps
     return -1

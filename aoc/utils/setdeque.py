@@ -1,10 +1,8 @@
 from collections import deque
-from typing import Deque, Dict, Generic, Iterable
-
-from aoc.utils.types import T
+from typing import Deque, Dict, Iterable
 
 
-class SetDeque(Generic[T]):
+class SetDeque[T]:
     def __init__(self, iterable: Iterable[T] | None = None):
         self._dict: Dict[T, int] = {}
         self._deque: Deque[T] = deque()

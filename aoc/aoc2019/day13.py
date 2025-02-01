@@ -1,7 +1,7 @@
 import asyncio
 from collections import Counter
 from enum import Enum
-from typing import MutableMapping, NamedTuple
+from typing import MutableMapping
 
 from aoc import utils
 from aoc.aoc2019 import intcode
@@ -22,11 +22,6 @@ class Tile(Enum):
     BALL = 4
 
 
-class Coord(NamedTuple):
-    x: int
-    y: int
-
-
 DISP = {
     Tile.EMPTY: utils.BACKGROUND_BLOCK,
     Tile.WALL: "##",
@@ -40,7 +35,7 @@ class Arcade:
     def __init__(self, memory, add_credit=False):
         if add_credit:
             memory[0] = 2
-        self._grid: MutableMapping[Coord, Tile] = {}
+        self._grid: MutableMapping[utils.Coord2D, Tile] = {}
         self._processor = intcode.IntCodeProcessor(memory, verbosity=0)
         self._ball_x = 0
         self._paddle_x = 0
@@ -66,7 +61,7 @@ class Arcade:
         bits = [top, "\n", score, "\n"]
         for y in range(self._min_y, self._max_y + 1):
             for x in range(self._min_x, self._max_x + 1):
-                tile = self._grid.get(Coord(x, y), Tile.EMPTY)
+                tile = self._grid.get(utils.Coord2D(x, y), Tile.EMPTY)
                 bits.append(DISP[tile])
             bits.append("\n")
         return "".join(bits)
@@ -90,7 +85,7 @@ class Arcade:
                 self._score = tile_id
                 continue
 
-            coord = Coord(x, y)
+            coord = utils.Coord2D(x, y)
             tile = Tile(tile_id)
             self._grid[coord] = tile
 

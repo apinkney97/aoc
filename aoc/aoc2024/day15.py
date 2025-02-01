@@ -1,7 +1,7 @@
 import itertools
 
 from aoc import utils
-from aoc.utils.coords import Coord, Vector
+from aoc.utils.coords import Coord2D, Vector2D
 
 EMPTY = 0
 BOX = 1
@@ -13,10 +13,10 @@ BOX_RIGHT = 5
 
 
 DIRECTIONS = {
-    "^": Vector(0, -1),
-    ">": Vector(1, 0),
-    "v": Vector(0, 1),
-    "<": Vector(-1, 0),
+    "^": Vector2D(0, -1),
+    ">": Vector2D(1, 0),
+    "v": Vector2D(0, 1),
+    "<": Vector2D(-1, 0),
 }
 
 
@@ -28,18 +28,18 @@ def parse_data(data):
 
 def part1(data) -> int:
     grid_lines, moves_lines = data
-    robot = Coord(-1, -1)
+    robot = Coord2D(-1, -1)
     grid = utils.Grid2D(display_map={EMPTY: ".", BOX: "O", WALL: "#", ROBOT: "@"})
     for y, line in enumerate(grid_lines):
         for x, char in enumerate(line):
             match char:
                 case "O":
-                    grid[Coord(x, y)] = BOX
+                    grid[Coord2D(x, y)] = BOX
                 case "#":
-                    grid[Coord(x, y)] = WALL
+                    grid[Coord2D(x, y)] = WALL
                 case "@":
-                    grid[Coord(x, y)] = ROBOT
-                    robot = Coord(x, y)
+                    grid[Coord2D(x, y)] = ROBOT
+                    robot = Coord2D(x, y)
 
     for i, move in enumerate(itertools.chain(*moves_lines)):
         vector = DIRECTIONS[move]
@@ -81,7 +81,9 @@ class WallError(Exception):
     pass
 
 
-def find_affected_cells(grid: utils.Grid2D, coord: Coord, vector: Vector) -> set[Coord]:
+def find_affected_cells(
+    grid: utils.Grid2D, coord: Coord2D, vector: Vector2D
+) -> set[Coord2D]:
     # Up and down are more complicated.
     # Aligned boxes work the same as before
     # For misaligned boxes, need to check all boxes in a pyramid shape
@@ -119,13 +121,13 @@ def find_affected_cells(grid: utils.Grid2D, coord: Coord, vector: Vector) -> set
 
 def part2(data) -> int:
     grid_lines, moves_lines = data
-    robot = Coord(-1, -1)
+    robot = Coord2D(-1, -1)
     grid = utils.Grid2D(
         display_map={EMPTY: ".", BOX_LEFT: "[", BOX_RIGHT: "]", WALL: "#", ROBOT: "@"}
     )
     for y, line in enumerate(grid_lines):
         for x, char in enumerate(line):
-            left = Coord(2 * x, y)
+            left = Coord2D(2 * x, y)
             right = left + DIRECTIONS[">"]
             match char:
                 case "O":

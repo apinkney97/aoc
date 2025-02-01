@@ -1,10 +1,9 @@
+import typing
 from typing import Callable
 
 import platformdirs
 import requests
 from rich import print
-
-from aoc.utils.types import T
 
 APP_NAME = "aoc"
 
@@ -50,11 +49,23 @@ def load_data_raw(year: int, day: int, example: bool) -> list[str]:
     return data
 
 
+@typing.overload
+def parse_data[T](
+    data: list[str], *, fn: Callable[[str], T], strip: bool = True
+) -> list[T]: ...
+
+
+@typing.overload
 def parse_data(
+    data: list[str], *, fn: None = None, strip: bool = True
+) -> list[str]: ...
+
+
+def parse_data[T](
     data: list[str],
     *,
-    strip: bool = True,
     fn: Callable[[str], T] | None = None,
+    strip: bool = True,
 ) -> list[T] | list[str]:
     if strip:
         data = [line.strip() for line in data]
@@ -63,7 +74,6 @@ def parse_data(
         return data
 
     return [fn(line) for line in data]
-
 
 
 def split_by_blank_lines(data: list[str]) -> list[list[str]]:

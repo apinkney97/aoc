@@ -1,8 +1,8 @@
+from aoc.utils import Coord2D
+
+
 def parse_data(data):
     return [[int(c) for c in line] for line in data]
-
-
-Coord = tuple[int, int]
 
 
 def get_neighbours(coord, height, width):
@@ -12,8 +12,8 @@ def get_neighbours(coord, height, width):
 
 
 def part1(data) -> int:
-    coords_by_height: dict[int, set[Coord]] = {}
-    reachable_peaks_by_coord: dict[Coord, set[Coord]] = {}
+    coords_by_height: dict[int, set[Coord2D]] = {}
+    reachable_peaks_by_coord: dict[Coord2D, set[Coord2D]] = {}
 
     for y, line in enumerate(data):
         for x, height in enumerate(line):
@@ -39,12 +39,12 @@ def part1(data) -> int:
 
 
 def part2(data) -> int:
-    coords_by_height: dict[int, set[Coord]] = {}
-    scores_by_coord: dict[Coord, int] = {}
+    coords_by_height: dict[int, set[Coord2D]] = {}
+    scores_by_coord: dict[Coord2D, int] = {}
 
     for y, line in enumerate(data):
         for x, height in enumerate(line):
-            coord = x, y
+            coord = Coord2D(x, y)
             coords_by_height.setdefault(height, set()).add(coord)
             if height == 9:
                 scores_by_coord[coord] = 1

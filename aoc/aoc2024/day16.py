@@ -2,14 +2,14 @@ from enum import Enum
 from typing import NamedTuple
 
 from aoc.utils import BACKGROUND_BLOCK, FOREGROUND_BLOCK, PQ, Grid2D
-from aoc.utils.coords import Coord, Vector
+from aoc.utils.coords import Coord2D, Vector2D
 
 
 class Direction(Enum):
-    NORTH = Vector(0, -1)
-    EAST = Vector(1, 0)
-    SOUTH = Vector(0, 1)
-    WEST = Vector(-1, 0)
+    NORTH = Vector2D(0, -1)
+    EAST = Vector2D(1, 0)
+    SOUTH = Vector2D(0, 1)
+    WEST = Vector2D(-1, 0)
 
 
 TURNS = {
@@ -26,7 +26,7 @@ PART_2 = -1
 
 
 class Node(NamedTuple):
-    coord: Coord
+    coord: Coord2D
     direction: Direction
 
 
@@ -41,7 +41,7 @@ def parse_data(data):
     )
     for y, line in enumerate(data):
         for x, char in enumerate(line):
-            coord = Coord(x, y)
+            coord = Coord2D(x, y)
             if char == "#":
                 maze[coord] = WALL
             elif char == "S":

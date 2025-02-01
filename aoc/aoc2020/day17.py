@@ -1,13 +1,8 @@
-from typing import NamedTuple, Set
+from typing import Set
 
 from cachetools import cached
 
-
-class Coord(NamedTuple):
-    x: int
-    y: int
-    z: int
-    w: int
+from aoc.utils import Coord4D
 
 
 def parse_data(data):
@@ -15,7 +10,7 @@ def parse_data(data):
     for x, row in enumerate(data):
         for y, char in enumerate(row):
             if char == "#":
-                grid.add(Coord(x, y, 0, 0))
+                grid.add(Coord4D(x, y, 0, 0))
     return grid
 
 
@@ -23,25 +18,25 @@ CACHE = {}
 
 
 @cached(CACHE)
-def get_neighbours(coord: Coord, dimensions) -> Set[Coord]:
+def get_neighbours(coord: Coord4D, dimensions) -> Set[Coord4D]:
     neighbours = set()
     for x in range(coord.x - 1, coord.x + 2):
         for y in range(coord.y - 1, coord.y + 2):
             for z in range(coord.z - 1, coord.z + 2):
                 if dimensions == 3:
-                    new_coord = Coord(x, y, z, 0)
+                    new_coord = Coord4D(x, y, z, 0)
                     if new_coord != coord:
                         neighbours.add(new_coord)
                 elif dimensions == 4:
                     for w in range(coord.w - 1, coord.w + 2):
-                        new_coord = Coord(x, y, z, w)
+                        new_coord = Coord4D(x, y, z, w)
                         if new_coord != coord:
                             neighbours.add(new_coord)
 
     return neighbours
 
 
-def step(grid: Set[Coord], dimensions) -> Set[Coord]:
+def step(grid: Set[Coord4D], dimensions) -> Set[Coord4D]:
     next_grid = set()
 
     to_check = set(grid)

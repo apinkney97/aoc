@@ -1,10 +1,6 @@
 import itertools
-import typing
 
-
-class Coord(typing.NamedTuple):
-    x: int
-    y: int
+from aoc.utils import Coord2D
 
 
 def build_grid(data):
@@ -15,15 +11,15 @@ def build_grid(data):
         parts = line.split(" -> ")
         for part in parts:
             x, y = part.split(",")
-            parsed_line.append(Coord(int(x), int(y)))
+            parsed_line.append(Coord2D(int(x), int(y)))
 
         for c1, c2 in itertools.pairwise(parsed_line):
             if c1.x == c2.x:
                 for y in range(*sorted([c1.y, c2.y])):
-                    grid[Coord(c1.x, y)] = "#"
+                    grid[Coord2D(c1.x, y)] = "#"
             elif c1.y == c2.y:
                 for x in range(*sorted([c1.x, c2.x])):
-                    grid[Coord(x, c1.y)] = "#"
+                    grid[Coord2D(x, c1.y)] = "#"
 
             grid[c1] = "#"
             grid[c2] = "#"
@@ -32,15 +28,15 @@ def build_grid(data):
 
 
 def drop(grid, limit):
-    curr = Coord(500, 0)
+    curr = Coord2D(500, 0)
 
     while True:
         if curr.y > limit:
             return False
 
-        down = Coord(curr.x, curr.y + 1)
-        dl = Coord(curr.x - 1, curr.y + 1)
-        dr = Coord(curr.x + 1, curr.y + 1)
+        down = Coord2D(curr.x, curr.y + 1)
+        dl = Coord2D(curr.x - 1, curr.y + 1)
+        dr = Coord2D(curr.x + 1, curr.y + 1)
 
         if down not in grid:
             curr = down
@@ -54,12 +50,12 @@ def drop(grid, limit):
 
 
 def drop2(grid, limit):
-    curr = Coord(500, 0)
+    curr = Coord2D(500, 0)
 
     while True:
-        down = Coord(curr.x, curr.y + 1)
-        dl = Coord(curr.x - 1, curr.y + 1)
-        dr = Coord(curr.x + 1, curr.y + 1)
+        down = Coord2D(curr.x, curr.y + 1)
+        dl = Coord2D(curr.x - 1, curr.y + 1)
+        dr = Coord2D(curr.x + 1, curr.y + 1)
 
         above_ground = curr.y < limit + 1
 

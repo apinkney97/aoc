@@ -18,6 +18,7 @@ aoc = 'aoc.__main__:main'
 dev = [
     "mypy>=1.14.1",
     "pytest>=8.3.4",
+    "pytest-cov>=6.0.0",
     "ruff>=0.8.4",
     "types-requests>=2.32.0.20241016",
 ]
@@ -26,9 +27,28 @@ dev = [
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 
+[tool.coverage.report]
+exclude_also = [
+    "def __repr__",
+    "if self.debug:",
+    "if settings.DEBUG",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if 0:",
+    "if __name__ == .__main__.:",
+    "if (typing\\.)TYPE_CHECKING:",
+    "class .*\\bProtocol\\):",
+    "@(abc\\.)?abstractmethod",
+]
+
 [tool.ruff.lint]
 # Enable isort rules.
 extend-select = ["I"]
 
 [tool.mypy]
 files = ["aoc"]
+#strict = true
+
+[[tool.mypy.overrides]]
+module = "networkx.*"
+ignore_missing_imports = true

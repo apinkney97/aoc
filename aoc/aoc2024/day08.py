@@ -1,6 +1,6 @@
 import itertools
 
-from aoc.utils.coords import Coord
+from aoc.utils.coords import Coord2D
 
 
 def parse_data(data):
@@ -8,14 +8,14 @@ def parse_data(data):
     for y, line in enumerate(data):
         for x, c in enumerate(line):
             if c != ".":
-                nodes.setdefault(c, []).append(Coord(x, y))
+                nodes.setdefault(c, []).append(Coord2D(x, y))
 
     width = len(data[0])
     height = len(data)
     return nodes, width, height
 
 
-def find_antinodes(nodes: list[Coord], max_x: int, max_y: int) -> set[Coord]:
+def find_antinodes(nodes: list[Coord2D], max_x: int, max_y: int) -> set[Coord2D]:
     antinodes = set()
 
     for node_1, node_2 in itertools.combinations(nodes, 2):
@@ -32,7 +32,7 @@ def find_antinodes(nodes: list[Coord], max_x: int, max_y: int) -> set[Coord]:
     return antinodes
 
 
-def find_all_antinodes(nodes: list[Coord], max_x: int, max_y: int) -> set[Coord]:
+def find_all_antinodes(nodes: list[Coord2D], max_x: int, max_y: int) -> set[Coord2D]:
     antinodes = set()
 
     for node_1, node_2 in itertools.combinations(nodes, 2):

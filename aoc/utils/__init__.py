@@ -1,6 +1,14 @@
 from aoc.utils.cmp import safe_max, safe_min
-from aoc.utils.coords import manhattan_border, manhattan_limit
-from aoc.utils.grid import Coord2D, Grid2D, Grid3D
+from aoc.utils.coords import (
+    Coord2D,
+    Coord3D,
+    Coord4D,
+    Vector2D,
+    manhattan_border,
+    manhattan_limit,
+    neighbours,
+)
+from aoc.utils.grid import Grid2D, Grid3D
 from aoc.utils.input import load_data_raw, parse_data, split_by_blank_lines
 from aoc.utils.output import (
     BACKGROUND_BLOCK,
@@ -8,14 +16,13 @@ from aoc.utils.output import (
     NEAR_BG_BLOCK,
     NEAR_FG_BLOCK,
 )
+from aoc.utils.pq import PQ
 from aoc.utils.setdeque import SetDeque
-from aoc.utils.types import T, TNum
+from aoc.utils.types import TNum
 from aoc.utils.utils import (
-    PQ,
     log,
     magnitude,
     manhattan,
-    neighbours,
     pprint,
     product,
     rotate_anticlockwise,
@@ -29,6 +36,9 @@ __all__ = [
     "safe_max",
     "safe_min",
     "Coord2D",
+    "Coord3D",
+    "Coord4D",
+    "Vector2D",
     "Grid2D",
     "Grid3D",
     "load_data_raw",
@@ -39,7 +49,6 @@ __all__ = [
     "NEAR_BG_BLOCK",
     "NEAR_FG_BLOCK",
     "SetDeque",
-    "T",
     "TNum",
     "PQ",
     "log",

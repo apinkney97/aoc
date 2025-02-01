@@ -1,8 +1,7 @@
 import collections
 
 from aoc import utils
-
-Coord = tuple[int, int]
+from aoc.utils import Coord2D
 
 
 def get_neighbours(nodes, coord, reverse=False):
@@ -23,14 +22,14 @@ def get_neighbours(nodes, coord, reverse=False):
 
 
 def part1(data, reverse=False) -> int:
-    nodes: dict[Coord, int] = {}
+    nodes: dict[utils.Coord2D, int] = {}
 
     start = None
     end = None
 
     for y, row in enumerate(data):
         for x, height in enumerate(row):
-            coord = x, y
+            coord = Coord2D(x, y)
             if height == "S":
                 height = "a"
                 start = coord

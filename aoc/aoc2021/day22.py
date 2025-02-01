@@ -61,6 +61,8 @@ def part1(data) -> int:
 
 
 def part2(data) -> int:
+    return -1
+    # TODO: finish
     g = utils.Grid3D(default_val=0)
     for action in data:
         value = 0 if action.action == "off" else 1
