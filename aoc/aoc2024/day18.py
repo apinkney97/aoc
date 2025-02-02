@@ -5,8 +5,10 @@ WALL = 1
 
 SIZE = 7 if EXAMPLE else 71
 
+type Data = list[Coord2D]
 
-def parse_data(data):
+
+def parse_data(data: list[str]) -> Data:
     return [Coord2D(*tuple(map(int, line.split(",")))) for line in data]
 
 
@@ -37,7 +39,7 @@ def solve(grid: Grid2D) -> int:
     return -1
 
 
-def part1(data) -> int:
+def part1(data: Data) -> int:
     limit = 12 if EXAMPLE else 1024
 
     grid = Grid2D()
@@ -54,7 +56,7 @@ def part1(data) -> int:
     return solve(grid)
 
 
-def part2(data) -> str:
+def part2(data: Data) -> str:
     grid = Grid2D()
     for coord in data:
         grid[coord] = WALL

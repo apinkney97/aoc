@@ -19,16 +19,19 @@ touch "${dir_name}/__init__.py"
 module_name=$(printf 'day%02d' "${day}")
 
 cat > "${dir_name}/${module_name}.py" <<EOF
-def parse_data(data):
+type Data = ...
+
+
+def parse_data(data: list[str]) -> Data:
     return data
 
 
-def part1(data) -> int:
+def part1(data: Data) -> int:
     result = 0
     return result
 
 
-def part2(data) -> int:
+def part2(data: Data) -> int:
     result = 0
     return result
 EOF

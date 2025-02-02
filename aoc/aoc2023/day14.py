@@ -1,15 +1,18 @@
+from collections.abc import Iterable
 from itertools import groupby
 
 from aoc.utils import rotate_anticlockwise, rotate_clockwise
 
+type Data = list[list[str]]
 
-def parse_data(data):
-    data = rotate_anticlockwise(data)
-    return data
+
+def parse_data(data: list[str]) -> Data:
+    return rotate_anticlockwise(data)
 
 
 def tilt_line_left(line: list[str]) -> list[str]:
-    out = []
+    out: list[str] = []
+    group: Iterable[str]
     for key, group in groupby(line, lambda x: x == "#"):
         if not key:
             group = sorted(group, reverse=True)
@@ -30,7 +33,7 @@ def get_score(line: list[str]) -> int:
     return score
 
 
-def part1(data: list[list[str]]) -> int:
+def part1(data: Data) -> int:
     score = 0
     for line in data:
         tilted = tilt_line_left(line)
@@ -39,7 +42,7 @@ def part1(data: list[list[str]]) -> int:
     return score
 
 
-def part2(data) -> int:
+def part2(data: Data) -> int:
     state_to_pos: dict[str, int] = {get_key(data): 0}
     states = [data]
 

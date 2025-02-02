@@ -1,10 +1,12 @@
 from aoc import utils
 
+type Data = tuple[dict[int, set[int]], list[list[int]]]
 
-def parse_data(data):
+
+def parse_data(data: list[str]) -> Data:
     rules, runs = utils.split_by_blank_lines(data)
 
-    rule_map = {}
+    rule_map: dict[int, set[int]] = {}
     for rule in rules:
         before, after = rule.split("|")
         rule_map.setdefault(int(after), set()).add(int(before))
@@ -25,7 +27,7 @@ def is_valid(run: list[int], rules: dict[int, set[int]]) -> bool:
     return True
 
 
-def part1(data) -> int:
+def part1(data: Data) -> int:
     result = 0
     rules, runs = data
 
@@ -47,7 +49,7 @@ def get_first(numbers: set[int], rules: dict[int, set[int]]) -> tuple[int, set[i
     raise ValueError
 
 
-def part2(data) -> int:
+def part2(data: Data) -> int:
     result = 0
     rules, runs = data
 

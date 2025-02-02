@@ -30,7 +30,10 @@ class Node(NamedTuple):
     direction: Direction
 
 
-def parse_data(data):
+type Data = tuple[Grid2D, Coord2D, Coord2D]
+
+
+def parse_data(data: list[str]) -> Data:
     start = end = None
     maze = Grid2D(
         display_map={
@@ -49,10 +52,11 @@ def parse_data(data):
             elif char == "E":
                 end = coord
 
+    assert start is not None and end is not None
     return maze, start, end
 
 
-def part1(data) -> int:
+def part1(data: Data) -> int:
     maze, start_coord, end_coord = data
     step_cost = 1
     turn_cost = 1000
@@ -102,6 +106,7 @@ def part1(data) -> int:
                 queue.add_item(new_node, priority=new_cost)
 
     visited = set()
+    assert isinstance(end_node, Node)
     to_visit: list[Node] = [end_node]
 
     while to_visit:
@@ -119,5 +124,5 @@ def part1(data) -> int:
     return costs[end_node]
 
 
-def part2(data) -> int:
+def part2(data: Data) -> int:
     return PART_2

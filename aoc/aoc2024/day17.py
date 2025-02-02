@@ -58,7 +58,7 @@ class Computer:
         self.pc = 0
         self.out: list[int] = []
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"Computer(a={self.a}, b={self.b}, c={self.c})"
 
     def evaluate_operand(self, op: Op, operand: int) -> int:
@@ -104,7 +104,7 @@ class Computer:
         return self.out
 
 
-def parse_data(data):
+def parse_data(data: list[str]) -> Computer:
     a = int(data[0].split()[-1])
     b = int(data[1].split()[-1])
     c = int(data[2].split()[-1])
@@ -118,7 +118,7 @@ def part1(data: Computer) -> str:
     return ",".join(str(n) for n in result)
 
 
-def part2(data) -> int:
+def part2(data: Computer) -> int:
     computer = data
     b = computer.b
     c = computer.c

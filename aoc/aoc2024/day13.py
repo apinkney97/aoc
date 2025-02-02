@@ -7,8 +7,10 @@ from aoc.utils.coords import Coord2D, Vector2D
 A_COST = 3
 B_COST = 1
 
+type Data = list[tuple[Vector2D, Vector2D, Coord2D]]
 
-def parse_data(data):
+
+def parse_data(data: list[str]) -> Data:
     parsed = []
 
     for button_a, button_b, prize in utils.split_by_blank_lines(data):
@@ -26,7 +28,7 @@ def parse_data(data):
     return parsed
 
 
-def part1(data, extra=0) -> int:
+def part1(data: Data, extra: int = 0) -> int:
     result = 0
 
     for a, b, prize in data:
@@ -44,5 +46,5 @@ def part1(data, extra=0) -> int:
     return result
 
 
-def part2(data) -> int:
+def part2(data: Data) -> int:
     return part1(data, 10000000000000)

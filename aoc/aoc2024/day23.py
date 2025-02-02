@@ -1,10 +1,13 @@
 from networkx import Graph, find_cliques
 
+type Data = list[tuple[str, str]]
 
-def parse_data(data):
+
+def parse_data(data: list[str]) -> Data:
     pairs = []
     for line in data:
-        pairs.append(tuple(line.split("-")))
+        a, b = line.split("-")
+        pairs.append((a, b))
     return pairs
 
 
@@ -21,7 +24,7 @@ def find_triples(edges: dict[str, set[str]]) -> list[tuple[str, str, str]]:
     return sorted(seen)
 
 
-def part1(data) -> int:
+def part1(data: Data) -> int:
     edges: dict[str, set[str]] = {}
     for a, b in data:
         edges.setdefault(a, set()).add(b)
@@ -34,7 +37,7 @@ def part1(data) -> int:
     return result
 
 
-def part2(data) -> str:
+def part2(data: Data) -> str:
     graph = Graph()
     for a, b in data:
         graph.add_edge(a, b)

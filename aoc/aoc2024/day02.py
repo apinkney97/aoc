@@ -1,4 +1,7 @@
-def parse_data(data):
+type Data = list[list[int]]
+
+
+def parse_data(data: list[str]) -> Data:
     reports = []
     for line in data:
         reports.append([int(i) for i in line.split()])
@@ -22,7 +25,7 @@ def safe(report: list[int]) -> bool:
     return False
 
 
-def part1(data) -> int:
+def part1(data: Data) -> int:
     result = 0
     for report in data:
         if safe(report):
@@ -30,7 +33,7 @@ def part1(data) -> int:
     return result
 
 
-def part2(data) -> int:
+def part2(data: Data) -> int:
     result = 0
     for report in data:
         if safe(report):

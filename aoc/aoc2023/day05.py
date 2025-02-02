@@ -137,7 +137,7 @@ def part2(data) -> int:
     # Seeds are now ranges
     seeds, maps = data
 
-    seed_ranges = utils.PQ()
+    seed_ranges: utils.PQ[Range] = utils.PQ()
     while seeds:
         size = seeds.pop()
         start = seeds.pop()
@@ -145,10 +145,10 @@ def part2(data) -> int:
 
     # Split each seed range into more ranges
     for map_type in MapType:
-        new_ranges = utils.PQ()
+        new_ranges: utils.PQ[Range] = utils.PQ()
 
         # Find which seed ranges overlap which map ranges
-        overlapping = {}
+        overlapping: dict[Range, list[MapRange]] = {}
         for seed_range in seed_ranges:
             for map_range in maps[map_type]:
                 if seed_range.overlaps(map_range):

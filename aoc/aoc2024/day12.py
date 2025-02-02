@@ -7,8 +7,10 @@ RIGHT = Vector2D(1, 0)
 
 DIRECTIONS = [UP, LEFT, DOWN, RIGHT]
 
+type Data = dict[Coord2D, str]
 
-def parse_data(data):
+
+def parse_data(data: list[str]) -> Data:
     grid = {}
     for y, row in enumerate(data):
         for x, cell in enumerate(row):
@@ -16,7 +18,7 @@ def parse_data(data):
     return grid
 
 
-def get_regions(data) -> list[set[Coord2D]]:
+def get_regions(data: Data) -> list[set[Coord2D]]:
     unvisited = set(data)
 
     regions = []
@@ -41,7 +43,7 @@ def get_regions(data) -> list[set[Coord2D]]:
     return regions
 
 
-def part1(data) -> int:
+def part1(data: Data) -> int:
     regions = get_regions(data)
 
     result = 0
@@ -59,7 +61,7 @@ def part1(data) -> int:
     return result
 
 
-def part2(data) -> int:
+def part2(data: Data) -> int:
     """
     Number of sides == number of vertices
 

@@ -9,11 +9,14 @@ class FilePart(NamedTuple):
     id: int
 
     @property
-    def next(self):
+    def next(self) -> int:
         return self.start + self.length
 
 
-def parse_data(data):
+type Data = list[FilePart]
+
+
+def parse_data(data: list[str]) -> Data:
     files = []
     pos = 0
 
@@ -26,7 +29,7 @@ def parse_data(data):
     return files
 
 
-def part1(data) -> int:
+def part1(data: Data) -> int:
     files: deque[FilePart] = deque(data)
     defragged_files = [files.popleft()]
 
@@ -52,7 +55,7 @@ def part1(data) -> int:
     return result
 
 
-def part2(data: list[FilePart]) -> int:
+def part2(data: Data) -> int:
     gaps: DefaultDict[int, list[int]] = defaultdict(list)
 
     for file1, file2 in zip(data, data[1:]):

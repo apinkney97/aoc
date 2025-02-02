@@ -1,8 +1,10 @@
 from collections import Counter
 from typing import Generator
 
+type Data = list[int]
 
-def parse_data(data):
+
+def parse_data(data: list[str]) -> Data:
     return [int(i) for i in data]
 
 
@@ -13,7 +15,7 @@ def get_next_num(num: int) -> int:
     return num
 
 
-def get_next_nth(num, n):
+def get_next_nth(num: int, n: int) -> int:
     for _ in range(n):
         num = get_next_num(num)
     return num
@@ -35,7 +37,7 @@ def get_all_prices(start: int) -> Generator[tuple[int, tuple[int, ...]]]:
             yield price, tuple(diffs[-4:])
 
 
-def part1(data) -> int:
+def part1(data: Data) -> int:
     result = 0
     for num in data:
         num = get_next_nth(num, 2000)
@@ -43,7 +45,7 @@ def part1(data) -> int:
     return result
 
 
-def part2(data) -> int:
+def part2(data: Data) -> int:
     counts: Counter[tuple[int, ...]] = Counter()
 
     for num in data:

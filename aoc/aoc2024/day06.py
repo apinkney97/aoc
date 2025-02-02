@@ -2,14 +2,17 @@ import itertools
 
 DIRECTIONS = [(0, -1), (1, 0), (0, 1), (-1, 0)]
 
+type Data = tuple[list[list[str]], tuple[int, int]]
 
-def parse_data(data):
+
+def parse_data(data: list[str]) -> Data:
     start = None
     for y, line in enumerate(data):
         for x, char in enumerate(line):
             if char == "^":
                 start = (x, y)
     grid = [[c for c in line] for line in data]
+    assert start is not None
     return grid, start
 
 
@@ -21,13 +24,13 @@ class LoopError(Exception):
     pass
 
 
-def is_wall(grid, x, y):
+def is_wall(grid: list[list[str]], x: int, y: int) -> bool:
     if y < 0 or y >= len(grid) or x < 0 or x >= len(grid[0]):
         raise OutOfBoundsError
     return grid[y][x] == "#"
 
 
-def get_visited(grid, start) -> set[tuple[int, int]]:
+def get_visited(grid: list[list[str]], start: tuple[int, int]) -> set[tuple[int, int]]:
     dirs = itertools.cycle(DIRECTIONS)
     dx, dy = next(dirs)
     visited = {start}
@@ -52,12 +55,12 @@ def get_visited(grid, start) -> set[tuple[int, int]]:
         return visited
 
 
-def part1(data) -> int:
+def part1(data: Data) -> int:
     grid, start = data
     return len(get_visited(grid, start))
 
 
-def part2(data) -> int:
+def part2(data: Data) -> int:
     grid, start = data
     result = 0
 

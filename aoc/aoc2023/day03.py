@@ -19,11 +19,11 @@ def part1(data) -> int:
         for number in numbers:
             n = Number(int(number.group(0)))
             for x in range(number.start(), number.end()):
-                numbers_by_coord[(x, y)] = n
+                numbers_by_coord[utils.Coord2D(x, y)] = n
 
         symbols = re.finditer(r"[^.\d]", line)
         for symbol in symbols:
-            symbols_by_coord[(symbol.start(), y)] = symbol.group(0)
+            symbols_by_coord[utils.Coord2D(symbol.start(), y)] = symbol.group(0)
 
     part_numbers = set()
 
@@ -43,11 +43,11 @@ def part2(data) -> int:
         for number in numbers:
             n = Number(int(number.group(0)))
             for x in range(number.start(), number.end()):
-                numbers_by_coord[(x, y)] = n
+                numbers_by_coord[utils.Coord2D(x, y)] = n
 
         gears = re.finditer(r"\*", line)
         for gear in gears:
-            gears_coords.append((gear.start(), y))
+            gears_coords.append(utils.Coord2D(gear.start(), y))
 
     total = 0
 

@@ -19,14 +19,16 @@ DIRECTIONS = {
     "<": Vector2D(-1, 0),
 }
 
+type Data = tuple[list[str], list[str]]
 
-def parse_data(data):
+
+def parse_data(data: list[str]) -> Data:
     grid_lines, moves_lines = utils.split_by_blank_lines(data)
 
     return grid_lines, moves_lines
 
 
-def part1(data) -> int:
+def part1(data: Data) -> int:
     grid_lines, moves_lines = data
     robot = Coord2D(-1, -1)
     grid = utils.Grid2D(display_map={EMPTY: ".", BOX: "O", WALL: "#", ROBOT: "@"})
@@ -119,7 +121,7 @@ def find_affected_cells(
     raise ValueError(f"Can't move cell {coord=}: {this_cell=}")
 
 
-def part2(data) -> int:
+def part2(data: Data) -> int:
     grid_lines, moves_lines = data
     robot = Coord2D(-1, -1)
     grid = utils.Grid2D(

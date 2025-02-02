@@ -1,11 +1,13 @@
 from collections import Counter
 
+type Data = list[int]
 
-def parse_data(data):
+
+def parse_data(data: list[str]) -> Data:
     return [int(i) for i in data[0].split()]
 
 
-def part1(data, blinks=25) -> int:
+def part1(data: Data, blinks: int = 25) -> int:
     stones: Counter[int] = Counter(data)
 
     for _ in range(blinks):
@@ -27,5 +29,5 @@ def part1(data, blinks=25) -> int:
     return sum(stones.values())
 
 
-def part2(data) -> int:
+def part2(data: Data) -> int:
     return part1(data, blinks=75)

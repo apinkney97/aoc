@@ -3,8 +3,10 @@ import operator
 
 from aoc.utils import split_by_blank_lines, transpose
 
+type Data = list[list[str]]
 
-def parse_data(data):
+
+def parse_data(data: list[str]) -> Data:
     return split_by_blank_lines(data)
 
 
@@ -43,7 +45,7 @@ def find_common_reflection_indices(pattern: list[str]) -> dict[int, set[int]]:
     return reflections_per_line
 
 
-def part1(data) -> int:
+def part1(data: Data) -> int:
     result = 0
     for pattern in data:
         # Check horizontal slices
@@ -56,7 +58,7 @@ def part1(data) -> int:
             result += horizontal_indices.pop()
         else:
             vertical_indices_per_line = find_common_reflection_indices(
-                transpose(pattern)
+                ["".join(line) for line in transpose(pattern)]
             )
             vertical_indices = functools.reduce(
                 operator.and_, vertical_indices_per_line.values()
@@ -68,14 +70,13 @@ def part1(data) -> int:
 
 def find_smudged_reflections(pattern: list[str]) -> int | None:
     indices_per_line = find_common_reflection_indices(pattern)
-    lines_per_index = {}
+    lines_per_index: dict[int, list[int]] = {}
     for line, refl_indices in indices_per_line.items():
         for refl_index in refl_indices:
             lines_per_index.setdefault(refl_index, []).append(line)
 
     for refl_index, lines in lines_per_index.items():
-        lines = set(lines)
-        missing_lines = set(indices_per_line) - lines
+        missing_lines = set(indices_per_line) - set(lines)
 
         if len(missing_lines) == 1:
             missing_line = missing_lines.pop()
@@ -89,7 +90,7 @@ def find_smudged_reflections(pattern: list[str]) -> int | None:
     return None
 
 
-def part2(data) -> int:
+def part2(data: Data) -> int:
     result = 0
     for pattern in data:
         horizontal_match = find_smudged_reflections(pattern)
@@ -100,6 +101,7 @@ def part2(data) -> int:
             vertical_match = find_smudged_reflections(
                 ["".join(line) for line in transpose(pattern)]
             )
+            assert vertical_match is not None
             result += 100 * vertical_match
 
     return result

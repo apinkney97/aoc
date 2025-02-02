@@ -2,10 +2,12 @@ import functools
 
 from aoc import utils
 
-TOWELS = {}
+TOWELS: set[str] = set()
+
+type Data = list[str]
 
 
-def parse_data(data):
+def parse_data(data: list[str]) -> Data:
     global TOWELS
     towels, patterns = utils.split_by_blank_lines(data)
     TOWELS = set(towels[0].split(", "))
@@ -13,7 +15,7 @@ def parse_data(data):
 
 
 @functools.cache
-def string_match(pattern, start, end, towel):
+def string_match(pattern: str, start: int, end: int, towel: str) -> bool:
     return pattern[start:end] == towel
 
 
@@ -37,7 +39,7 @@ def match(pattern: str) -> bool:
 
 
 @functools.cache
-def match_all(pattern: str, offset: int) -> bool:
+def match_all(pattern: str, offset: int) -> int:
     matches = 0
     for towel in TOWELS:
         towel_len = len(towel)
@@ -50,7 +52,7 @@ def match_all(pattern: str, offset: int) -> bool:
     return matches
 
 
-def part1(data) -> int:
+def part1(data: Data) -> int:
     patterns = data
     result = 0
     for pattern in patterns:
@@ -59,7 +61,7 @@ def part1(data) -> int:
     return result
 
 
-def part2(data) -> int:
+def part2(data: Data) -> int:
     patterns = data
     result = 0
     for i, pattern in enumerate(patterns):

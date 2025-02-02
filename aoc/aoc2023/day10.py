@@ -86,18 +86,18 @@ def get_loop_tiles(
         y += dy
         tiles_in_loop.add((x, y))
 
-    start_directions = set(start_directions)
-    if start_directions == {Direction.NORTH, Direction.SOUTH}:
+    sds = set(start_directions)
+    if sds == {Direction.NORTH, Direction.SOUTH}:
         start_tile = "|"
-    elif start_directions == {Direction.EAST, Direction.WEST}:
+    elif sds == {Direction.EAST, Direction.WEST}:
         start_tile = "-"
-    elif start_directions == {Direction.NORTH, Direction.EAST}:
+    elif sds == {Direction.NORTH, Direction.EAST}:
         start_tile = "L"
-    elif start_directions == {Direction.NORTH, Direction.WEST}:
+    elif sds == {Direction.NORTH, Direction.WEST}:
         start_tile = "J"
-    elif start_directions == {Direction.SOUTH, Direction.WEST}:
+    elif sds == {Direction.SOUTH, Direction.WEST}:
         start_tile = "7"
-    elif start_directions == {Direction.SOUTH, Direction.EAST}:
+    elif sds == {Direction.SOUTH, Direction.EAST}:
         start_tile = "F"
     else:
         raise Exception("uh oh")

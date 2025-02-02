@@ -8,6 +8,9 @@ GATES: dict[str, Gate] = {}
 
 
 class Gate:
+    _left = "None"
+    _right = "None"
+
     def value(self) -> int:
         raise NotImplementedError
 
@@ -53,7 +56,10 @@ class XOR(Gate):
         return int((left or right) and not (left and right))
 
 
-def parse_data(data):
+type Data = list[tuple[str, Gate]]
+
+
+def parse_data(data: list[str]) -> Data:
     wires, gates = utils.split_by_blank_lines(data)
     for wire in wires:
         name, value = wire.split(": ")
@@ -68,7 +74,7 @@ def parse_data(data):
     return sorted(z_gates, reverse=True)
 
 
-def part1(data) -> int:
+def part1(data: Data) -> int:
     result = 0
     for name, gate in data:
         result <<= 1
@@ -76,7 +82,7 @@ def part1(data) -> int:
     return result
 
 
-def to_dot():
+def to_dot() -> None:
     print("digraph g {")
     for name, gate in GATES.items():
         gate_type = type(gate).__name__
@@ -97,9 +103,9 @@ def to_dot():
     print("}")
 
 
-def part2(data) -> str:
+def part2(data: Data) -> str:
     # I did this by eyeballing the output graph rendered with graphviz, and filling in the pairs to swap below.
-    swaps = [
+    swaps = [  # type: ignore[var-annotated]
         # ("xxx", "yyy"),
         # ("aaa", "bbb"),
         # ("ppp", "qqq"),

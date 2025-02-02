@@ -2,9 +2,11 @@ import itertools
 
 from aoc.utils.coords import Coord2D
 
+type Data = tuple[dict[str, list[Coord2D]], int, int]
 
-def parse_data(data):
-    nodes = {}
+
+def parse_data(data: list[str]) -> Data:
+    nodes: dict[str, list[Coord2D]] = {}
     for y, line in enumerate(data):
         for x, c in enumerate(line):
             if c != ".":
@@ -51,7 +53,7 @@ def find_all_antinodes(nodes: list[Coord2D], max_x: int, max_y: int) -> set[Coor
     return antinodes
 
 
-def part1(data) -> int:
+def part1(data: Data) -> int:
     nodes, width, height = data
     all_antinodes = set()
     for node_name, coords in nodes.items():
@@ -60,7 +62,7 @@ def part1(data) -> int:
     return len(all_antinodes)
 
 
-def part2(data) -> int:
+def part2(data: Data) -> int:
     nodes, width, height = data
     all_antinodes = set()
     for node_name, coords in nodes.items():

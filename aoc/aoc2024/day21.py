@@ -5,11 +5,7 @@ import re
 from aoc.utils import Coord2D
 
 
-def parse_data(data):
-    return data
-
-
-def find_dpad_paths():
+def find_dpad_paths() -> dict[tuple[str, str], list[str]]:
     """
      ^A
     <v>
@@ -53,7 +49,7 @@ def find_dpad_paths():
     return paths
 
 
-def find_numpad_paths():
+def find_numpad_paths() -> dict[tuple[str, str], list[str]]:
     """
     789
     456
@@ -110,7 +106,7 @@ NUMPAD_PATHS = find_numpad_paths()
 
 
 @functools.cache
-def get_min_path_len(keys: str, depth: int):
+def get_min_path_len(keys: str, depth: int) -> int:
     if depth == 0:
         return len(keys)
 
@@ -118,12 +114,14 @@ def get_min_path_len(keys: str, depth: int):
 
     parts = re.findall(r"[<>v^]*A", keys)
     for part in parts:
-        best_len += min(get_min_path_len(ks, depth - 1) for ks in expand(part))
+        best_len += min(
+            get_min_path_len(ks, depth - 1) for ks in expand(part, DPAD_PATHS)
+        )
 
     return best_len
 
 
-def expand(keys: str, moves=DPAD_PATHS) -> list[str]:
+def expand(keys: str, moves: dict[tuple[str, str], list[str]]) -> list[str]:
     bits = []
 
     pos = "A"
@@ -133,19 +131,14 @@ def expand(keys: str, moves=DPAD_PATHS) -> list[str]:
         pos = key
 
     candidates = []
-    for keys in itertools.product(*bits):
-        candidate = "".join(keys)
+    for keys_ in itertools.product(*bits):
+        candidate = "".join(keys_)
         candidates.append(candidate)
 
     return candidates
 
 
-def prune_long(paths):
-    min_len = min(len(p) for p in paths)
-    return [p for p in paths if len(p) == min_len]
-
-
-def part1(data, depth=2) -> int:
+def part1(data: list[str], depth: int = 2) -> int:
     result = 0
 
     for line in data:
@@ -159,5 +152,5 @@ def part1(data, depth=2) -> int:
     return result
 
 
-def part2(data) -> int:
+def part2(data: list[str]) -> int:
     return part1(data, 25)

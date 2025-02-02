@@ -3,7 +3,7 @@ import itertools
 
 def get_sizes(universe: list[str], expand: int) -> tuple[list[int], list[int]]:
     row_sizes = []
-    cols = [set() for _ in universe[0]]
+    cols: list[set[str]] = [set() for _ in universe[0]]
 
     for line in universe:
         if set(line) == {"."}:

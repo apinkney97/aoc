@@ -43,4 +43,5 @@ def part2(data) -> int:
             print(f"{last_win=}")
             break
 
+    assert last_win is not None and first_win is not None
     return last_win - first_win + 1

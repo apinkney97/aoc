@@ -26,12 +26,16 @@ def part2(data) -> int:
 
     total = 0
     for line in data:
-        first_digit = matcher.search(line).group(0)
+        match = matcher.search(line)
+        assert match is not None
+        first_digit = match.group(0)
         first_digit = numbers.get(first_digit, first_digit)
 
         line = line[::-1]
 
-        last_digit = rev_matcher.search(line).group(0)[::-1]
+        match = rev_matcher.search(line)
+        assert match is not None
+        last_digit = match.group(0)[::-1]
         last_digit = numbers.get(last_digit, last_digit)
 
         total += 10 * int(first_digit) + int(last_digit)

@@ -1,7 +1,9 @@
 from aoc import utils
 
+type Data = tuple[list[list[int]], list[list[int]]]
 
-def parse_data(data):
+
+def parse_data(data: list[str]) -> Data:
     keys = []
     locks = []
     for lines in utils.split_by_blank_lines(data):
@@ -20,7 +22,7 @@ def parse_data(data):
     return locks, keys
 
 
-def part1(data) -> int:
+def part1(data: Data) -> int:
     result = 0
     locks, keys = data
     for lock in locks:
@@ -33,5 +35,5 @@ def part1(data) -> int:
     return result
 
 
-def part2(data) -> str:
+def part2(data: Data) -> str:
     return "*"

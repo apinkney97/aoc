@@ -9,18 +9,21 @@ if config.EXAMPLE:
 else:
     BOUNDS = Coord2D(101, 103)
 
+type Data = list[tuple[Coord2D, Vector2D]]
 
-def parse_data(data):
+
+def parse_data(data: list[str]) -> Data:
     parsed = []
     for line in data:
         match = re.fullmatch(r"p=(\d+),(\d+) v=([\d-]+),([\d-]+)", line)
+        assert match is not None
         pos = Coord2D(int(match[1]), int(match[2]))
         vec = Vector2D(int(match[3]), int(match[4]))
         parsed.append((pos, vec))
     return parsed
 
 
-def get_positions(data, steps):
+def get_positions(data: Data, steps: int) -> set[Coord2D]:
     positions = set()
     for pos, vec in data:
         vec = vec * steps
@@ -31,7 +34,7 @@ def get_positions(data, steps):
     return positions
 
 
-def get_safe_score(positions):
+def get_safe_score(positions: set[Coord2D]) -> int:
     tl = 0
     tr = 0
     bl = 0
@@ -55,11 +58,11 @@ def get_safe_score(positions):
     return tl * tr * bl * br
 
 
-def part1(data) -> int:
+def part1(data: Data) -> int:
     return get_safe_score(get_positions(data, steps=100))
 
 
-def print_board(positions):
+def print_board(positions: set[Coord2D]) -> None:
     for y in range(BOUNDS.y):
         for x in range(BOUNDS.x):
             if Coord2D(x, y) in positions:
@@ -69,7 +72,7 @@ def print_board(positions):
         print()
 
 
-def part2(data) -> int:
+def part2(data: Data) -> int:
     for steps in range(10000):
         positions = get_positions(data, steps=steps)
         if len(positions) == len(data):

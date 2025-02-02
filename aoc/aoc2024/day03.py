@@ -1,11 +1,7 @@
 import re
 
 
-def parse_data(data):
-    return data
-
-
-def part1(data) -> int:
+def part1(data: list[str]) -> int:
     matcher = re.compile(r"mul\((\d+),(\d+)\)")
     result = 0
     for line in data:
@@ -14,7 +10,7 @@ def part1(data) -> int:
     return result
 
 
-def part2(data) -> int:
+def part2(data: list[str]) -> int:
     matcher = re.compile(
         r"""
             (mul) \( (\d+) , (\d+) \)
