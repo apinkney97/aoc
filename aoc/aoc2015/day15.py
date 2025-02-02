@@ -12,13 +12,16 @@ class Ingredient(typing.NamedTuple):
     calories: int
 
 
-def parse_data(data):
+type Data = list[Ingredient]
+
+
+def parse_data(data: list[str]) -> Data:
     # Example:
     # Butterscotch: capacity -1, durability -2, flavor 6, texture 3, calories 8
     ingredient_re = re.compile(
         r".*: \w+ (-?\d+), \w+ (-?\d+), \w+ (-?\d+), \w+ (-?\d+), \w+ (-?\d+)"
     )
-    data = utils.parse_data(data, fn=ingredient_re.fullmatch)
+    matches = utils.parse_data(data, fn=ingredient_re.fullmatch)
 
     return [
         Ingredient(
@@ -28,11 +31,12 @@ def parse_data(data):
             texture=int(match.group(4)),
             calories=int(match.group(5)),
         )
-        for match in data
+        for match in matches
+        if match is not None
     ]
 
 
-def bake(ingredients, *quantity):
+def bake(ingredients: Data, *quantity: int) -> tuple[int, int]:
     zipped = list(zip(ingredients, quantity))
 
     score = utils.product(
@@ -49,7 +53,7 @@ def bake(ingredients, *quantity):
     return score, calories
 
 
-def part1(data, calories=None) -> int:
+def part1(data: Data, calories: int | None = None) -> int:
     best = 0
     if len(data) == 2:
         for i in range(101):
@@ -70,5 +74,5 @@ def part1(data, calories=None) -> int:
     return best
 
 
-def part2(data) -> int:
+def part2(data: Data) -> int:
     return part1(data, calories=500)

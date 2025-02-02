@@ -1,4 +1,7 @@
-def parse_data(data):
+type Data = int
+
+
+def parse_data(data: list[str]) -> Data:
     return int(data[0])
 
 
@@ -12,7 +15,7 @@ def factorise(number: int) -> set[int]:
     return factors
 
 
-def part1(data) -> int:
+def part1(data: Data) -> int:
     for house in range(1, 1000000):
         presents = 10 * sum(factorise(house))
         if presents >= data:
@@ -20,7 +23,7 @@ def part1(data) -> int:
     return -1
 
 
-def part2(data) -> int:
+def part2(data: Data) -> int:
     for house in range(1, 1000000):
         presents = 11 * sum(
             factor for factor in factorise(house) if house <= factor * 50

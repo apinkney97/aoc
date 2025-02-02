@@ -1,8 +1,11 @@
-def parse_data(data):
+type Data = str
+
+
+def parse_data(data: list[str]) -> Data:
     return data[0]
 
 
-def part1(data) -> int:
+def part1(data: Data) -> int:
     x = 0
     y = 0
     visited = {(x, y)}
@@ -24,7 +27,7 @@ def part1(data) -> int:
     return len(visited)
 
 
-def part2(data) -> int:
+def part2(data: Data) -> int:
     x = [0, 0]
     y = [0, 0]
     visited = {(0, 0)}

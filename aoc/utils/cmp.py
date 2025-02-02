@@ -8,6 +8,12 @@ if typing.TYPE_CHECKING:
 NullableComparable = typing.Optional["SupportsRichComparisonT"]
 
 
+class CmpFn(typing.Protocol):
+    def __call__(
+        self, *args: NullableComparable[typing.Any]
+    ) -> NullableComparable[typing.Any]: ...
+
+
 def safe_min(*args: NullableComparable[typing.Any]) -> NullableComparable[typing.Any]:
     filtered = [arg for arg in args if arg is not None]
     if not filtered:

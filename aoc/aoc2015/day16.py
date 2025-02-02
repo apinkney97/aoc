@@ -16,14 +16,18 @@ class Sue(typing.NamedTuple):
     perfumes: int | None = None
 
 
-def parse_data(data):
+type Data = list[Sue]
+
+
+def parse_data(data: list[str]) -> Data:
     sues = []
 
     for line in data:
         match = re.fullmatch(
             r"Sue (\d+): (\w+): (\d+), (\w+): (\d+), (\w+): (\d+)", line
         )
-        num = match.group(1)
+        assert match is not None
+        num = int(match.group(1))
         prop1_name = match.group(2)
         prop1_val = int(match.group(3))
         prop2_name = match.group(4)
@@ -58,7 +62,7 @@ MATCH_SUE = Sue(
 )
 
 
-def part1(data) -> int:
+def part1(data: Data) -> int:
     sues = data
 
     for field in Sue._fields:
@@ -74,7 +78,7 @@ def part1(data) -> int:
     return -1
 
 
-def part2(data) -> int:
+def part2(data: Data) -> int:
     sues = data
 
     # GT cats trees

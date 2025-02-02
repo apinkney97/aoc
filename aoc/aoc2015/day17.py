@@ -2,14 +2,14 @@ import itertools
 
 from aoc import config, utils
 
-
-def parse_data(data):
-    data = utils.parse_data(data, fn=int)
-
-    return data
+type Data = list[int]
 
 
-def part1(data) -> int:
+def parse_data(data: list[str]) -> Data:
+    return utils.parse_data(data, fn=int)
+
+
+def part1(data: Data) -> int:
     count = 0
     for r in range(len(data)):
         for comb in itertools.combinations(data, r + 1):
@@ -18,7 +18,7 @@ def part1(data) -> int:
     return count
 
 
-def part2(data) -> int:
+def part2(data: Data) -> int:
     count = 0
     for r in range(len(data)):
         for comb in itertools.combinations(data, r + 1):

@@ -1,15 +1,22 @@
 import re
+import typing
 
 from aoc import utils
 
+type Data = list[re.Match[str]]
 
-def parse_data(data):
+
+def parse_data(data: list[str]) -> Data:
     match = re.compile(
         r"(?P<name>\w+) can fly (?P<speed>\d+) km/s for (?P<time>\d+) "
         r"seconds, but then must rest for (?P<rest>\d+) seconds\."
     )
 
-    return utils.parse_data(data, fn=match.fullmatch)
+    return [
+        match
+        for match in utils.parse_data(data, fn=lambda s: match.fullmatch(s))
+        if match is not None
+    ]
 
 
 class Reindeer:
@@ -22,7 +29,7 @@ class Reindeer:
 
         self.score = 0
 
-    def run(self):
+    def run(self) -> typing.Generator[typing.Self]:
         while True:
             for _ in range(self._move_time):
                 self.position += self._speed
@@ -34,7 +41,7 @@ class Reindeer:
 MAX_SCORE = -1
 
 
-def part1(data):
+def part1(data: Data) -> int:
     reindeer = []
     for d in data:
         reindeer.append(
@@ -61,5 +68,5 @@ def part1(data):
     return max(r.position for r in reindeer)
 
 
-def part2(data):
+def part2(data: Data) -> int:
     return MAX_SCORE

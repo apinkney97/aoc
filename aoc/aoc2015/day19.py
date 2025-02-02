@@ -1,9 +1,11 @@
 import itertools
 import re
 
+type Data = tuple[str, dict[str, list[str]]]
 
-def parse_data(data):
-    rules = {}
+
+def parse_data(data: list[str]) -> Data:
+    rules: dict[str, list[str]] = {}
     for line in data:
         if not line:
             break
@@ -14,7 +16,7 @@ def parse_data(data):
     return molecule, rules
 
 
-def part1(data) -> int:
+def part1(data: Data) -> int:
     input_mol, rules = data
 
     new_molecules = set()
@@ -30,7 +32,7 @@ def part1(data) -> int:
     return len(new_molecules)
 
 
-def part2(data) -> int:
+def part2(data: Data) -> int:
     target = data[0]
     inverted_rules: dict[str, str] = {}
     for src in data[1]:

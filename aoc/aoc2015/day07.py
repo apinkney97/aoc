@@ -5,18 +5,21 @@ from aoc import utils
 
 INSTRUCTIONS_RE = re.compile(r"(?P<input>.*) -> (?P<output>[a-z]+)")
 
+type Data = dict[str, Gate]
+
 
 class Gate(NamedTuple):
     type: str
     args: List[str]
 
 
-def parse_data(data) -> Dict[str, Gate]:
-    data = utils.parse_data(data, fn=INSTRUCTIONS_RE.fullmatch)
+def parse_data(data: list[str]) -> Data:
+    matches = utils.parse_data(data, fn=INSTRUCTIONS_RE.fullmatch)
 
-    parsed_data: Dict[str, Gate] = {}
-    for item in data:
-        raw_input = item["input"]
+    parsed_data: Data = {}
+    for match in matches:
+        assert match is not None
+        raw_input = match["input"]
         parts = raw_input.split()
         if len(parts) == 1:
             gate = Gate(type="LITERAL", args=[parts[0]])
@@ -25,21 +28,21 @@ def parse_data(data) -> Dict[str, Gate]:
         elif len(parts) == 3:
             gate = Gate(type=parts[1], args=[parts[0], parts[2]])
         else:
-            raise Exception(f"Bad item: {item}")
+            raise Exception(f"Bad item: {match}")
 
-        parsed_data[item["output"]] = gate
+        parsed_data[match["output"]] = gate
     return parsed_data
 
 
-def _get_value(values: Dict[str, int], arg: str):
+def _get_value(values: Dict[str, int], arg: str) -> int | None:
     if arg.isdigit():
         return int(arg)
     return values.get(arg)
 
 
-def evaluate(data):
+def evaluate(data: Data) -> dict[str, int]:
     data = dict(data)
-    values = {}
+    values: dict[str, int] = {}
     passes = 0
     while data:
         passes += 1
@@ -84,12 +87,12 @@ def evaluate(data):
     return values
 
 
-def part1(data) -> int:
+def part1(data: Data) -> int:
     values = evaluate(data)
     return values["a"]
 
 
-def part2(data) -> int:
+def part2(data: Data) -> int:
     values = evaluate(data)
     data = dict(data)
     data["b"] = Gate(type="LITERAL", args=[str(values["a"])])

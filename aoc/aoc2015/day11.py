@@ -1,8 +1,11 @@
 import re
 import string
+import typing
+
+type Data = str
 
 
-def parse_data(data):
+def parse_data(data: list[str]) -> Data:
     return data[0]
 
 
@@ -12,7 +15,7 @@ LETTER_TO_VALUE = {letter: value for value, letter in VALUE_TO_LETTER.items()}
 PAIR_RE = re.compile(r"(.)\1")
 
 
-def enumerate_lower_str(start: str):
+def enumerate_lower_str(start: str) -> typing.Generator[str]:
     padding = len(start)
     val = str_to_num(start)
     while True:
@@ -48,7 +51,7 @@ def _num_to_str(number: int) -> str:
     return VALUE_TO_LETTER[m]
 
 
-def get_passwords(data):
+def get_passwords(data: Data) -> typing.Generator[str]:
     for candidate in enumerate_lower_str(data):
         if any(c in candidate for c in "iol"):
             continue
@@ -63,11 +66,11 @@ def get_passwords(data):
         yield candidate
 
 
-def part1(data) -> str:
+def part1(data: Data) -> str:
     return next(get_passwords(data))
 
 
-def part2(data) -> str:
+def part2(data: Data) -> str:
     gp = get_passwords(data)
     next(gp)
     return next(gp)

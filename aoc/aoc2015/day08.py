@@ -1,4 +1,7 @@
-def part1(data) -> int:
+type Data = list[str]
+
+
+def part1(data: Data) -> int:
     sum_code = 0
     sum_mem = 0
     for line in data:
@@ -8,7 +11,7 @@ def part1(data) -> int:
     return sum_code - sum_mem
 
 
-def part2(data) -> int:
+def part2(data: Data) -> int:
     sum_code = 0
     sum_escaped = 0
     for line in data:

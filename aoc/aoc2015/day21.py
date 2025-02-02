@@ -5,8 +5,10 @@ from typing import NamedTuple
 
 from aoc import utils
 
+type Data = tuple[int, int, int]
 
-def parse_data(data):
+
+def parse_data(data: list[str]) -> Data:
     boss_hp = int(data[0].split()[2])
     boss_dp = int(data[1].split()[1])
     boss_ap = int(data[2].split()[1])
@@ -81,7 +83,7 @@ def play_one(player1: Player, player2: Player) -> Player:
             return player2
 
 
-def choose_items(maximise_cost=False) -> list[tuple[tuple[int, int], int]]:
+def choose_items(maximise_cost: bool = False) -> list[tuple[tuple[int, int], int]]:
     # exactly one weapon
     # zero or one armour
     # zero, one, or two rings
@@ -111,7 +113,9 @@ def choose_items(maximise_cost=False) -> list[tuple[tuple[int, int], int]]:
     return by_price
 
 
-def play_many(boss_stats, my_items, winner_is_me) -> int:
+def play_many(
+    boss_stats: Data, my_items: list[tuple[tuple[int, int], int]], winner_is_me: bool
+) -> int:
     for (dam, arm), price in my_items:
         me = Player("meee", 100, dam, arm)
         boss = Player("boss", *boss_stats)
@@ -124,9 +128,9 @@ def play_many(boss_stats, my_items, winner_is_me) -> int:
     raise Exception("No winner")
 
 
-def part1(data) -> int:
+def part1(data: Data) -> int:
     return play_many(data, choose_items(), winner_is_me=True)
 
 
-def part2(data) -> int:
+def part2(data: Data) -> int:
     return play_many(data, choose_items(maximise_cost=True), winner_is_me=False)

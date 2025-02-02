@@ -1,12 +1,16 @@
 from aoc import utils
 
+type Data = utils.Grid2D
 
-def parse_data(data):
-    data = utils.parse_data(data, fn=lambda line: [0 if c == "." else 1 for c in line])
 
-    bounds = (0, len(data[0]), 0, len(data))
+def parse_data(data: list[str]) -> Data:
+    parsed = utils.parse_data(
+        data, fn=lambda line: [0 if c == "." else 1 for c in line]
+    )
+
+    bounds = (0, len(parsed[0]), 0, len(parsed))
     grid = utils.Grid2D(display_map={0: ".", 1: "#"}, bounds=bounds)
-    for y, row in enumerate(data):
+    for y, row in enumerate(parsed):
         for x, val in enumerate(row):
             grid[utils.Coord2D(x, y)] = val
 
@@ -14,6 +18,7 @@ def parse_data(data):
 
 
 def light_corners(grid: utils.Grid2D) -> None:
+    assert grid._bounds is not None
     xmin, xmax, ymin, ymax = grid._bounds
     xmax -= 1
     ymax -= 1
@@ -47,14 +52,14 @@ def step(grid: utils.Grid2D) -> utils.Grid2D:
     return new_grid
 
 
-def part1(data) -> int:
+def part1(data: Data) -> int:
     grid = data
     for _ in range(100):
         grid = step(grid)
     return len(grid)
 
 
-def part2(data) -> int:
+def part2(data: Data) -> int:
     grid = data
     light_corners(grid)
     for _ in range(100):
