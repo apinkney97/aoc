@@ -1,11 +1,14 @@
-def split(expr):
+type Data = list[str]
+
+
+def split(expr: str) -> list[str]:
     expr = expr.replace("(", " ( ")
     expr = expr.replace(")", " ) ")
     return expr.split()
 
 
-def evaluate(postfix):
-    stack = []
+def evaluate(postfix: list[str | int]) -> int:
+    stack: list[int] = []
     for c in postfix:
         if isinstance(c, int):
             stack.append(c)
@@ -20,11 +23,11 @@ def evaluate(postfix):
     return stack[0]
 
 
-def to_postfix(expr, plus_has_precedence=False):
+def to_postfix(expr: str, plus_has_precedence: bool = False) -> list[str | int]:
     tokens = split(expr)
 
-    postfix = []
-    ops = []
+    postfix: list[str | int] = []
+    ops: list[str] = []
 
     for t in tokens:
         if t.isnumeric():
@@ -48,9 +51,9 @@ def to_postfix(expr, plus_has_precedence=False):
     return postfix
 
 
-def part1(data) -> int:
+def part1(data: Data) -> int:
     return sum(evaluate(to_postfix(expr)) for expr in data)
 
 
-def part2(data) -> int:
+def part2(data: Data) -> int:
     return sum(evaluate(to_postfix(expr, plus_has_precedence=True)) for expr in data)

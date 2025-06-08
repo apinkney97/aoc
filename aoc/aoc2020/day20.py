@@ -1,12 +1,16 @@
+from __future__ import annotations
+
 import operator
 import re
 from collections import Counter
 from functools import reduce
 from itertools import chain
-from typing import Dict, List, NamedTuple, NewType
+from typing import NamedTuple, NewType
 
 TileId = NewType("TileId", int)
 Edge = NewType("Edge", str)
+
+type Data = list[Tile]
 
 
 class Edges(NamedTuple):
@@ -17,7 +21,7 @@ class Edges(NamedTuple):
 
 
 class Tile:
-    def __init__(self, tile_id: int, data: List[str]):
+    def __init__(self, tile_id: int, data: list[str]) -> None:
         self.tile_id = TileId(tile_id)
         self._data = data
 
@@ -28,13 +32,13 @@ class Tile:
         self.is_edge = False
 
     @property
-    def flipped(self):
+    def flipped(self) -> bool:
         return self.flipped
 
-    def flip(self):
+    def flip(self) -> None:
         self._flipped = not self._flipped
 
-    def rotate(self):
+    def rotate(self) -> None:
         self._rotation = (self._rotation + 1) % 4
 
     @property
@@ -56,7 +60,7 @@ class Tile:
 
         return Edges(*rotated_edges)
 
-    def _get_transformed_data(self, data):
+    def _get_transformed_data(self, data: list[str]) -> list[str]:
         if self._flipped:
             data = [line[::-1] for line in data]
 
@@ -64,7 +68,7 @@ class Tile:
             data = [line[::-1] for line in data[::-1]]
         elif self._rotation % 2 == 1:
             # transpose the lists
-            new_rows = [[] for _ in range(len(data[0]))]
+            new_rows: list[list[str]] = [[] for _ in range(len(data[0]))]
             for row in reversed(data):
                 for i, col in enumerate(row):
                     new_rows[i].append(col)
@@ -74,23 +78,23 @@ class Tile:
         return data
 
     @property
-    def centre(self):
+    def centre(self) -> list[str]:
         data = [line[1:-1] for line in self._data[1:-1]]
         data = self._get_transformed_data(data)
         return data
 
     @property
-    def data(self):
+    def data(self) -> list[str]:
         return self._get_transformed_data(self._data)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"Tile(id={self.tile_id})"
 
 
-def parse_data(data) -> List[Tile]:
+def parse_data(data: list[str]) -> list[Tile]:
     tiles = []
 
-    tile_data = []
+    tile_data: list[str] = []
     tile_id = 0
     for line in data:
         if not line:
@@ -109,9 +113,9 @@ def parse_data(data) -> List[Tile]:
     return tiles
 
 
-def edges_to_tiles(data: List[Tile]) -> Dict[Edge, List[TileId]]:
+def edges_to_tiles(data: list[Tile]) -> dict[Edge, list[TileId]]:
     # map edges (and their reflections) to tiles they belong to
-    edges = {}
+    edges: dict[Edge, list[TileId]] = {}
     for tile in data:
         for edge in tile.edges:
             edges.setdefault(edge, []).append(tile.tile_id)
@@ -120,9 +124,9 @@ def edges_to_tiles(data: List[Tile]) -> Dict[Edge, List[TileId]]:
     return edges
 
 
-def get_counts(edges: Dict[Edge, List[TileId]]) -> Dict[TileId, int]:
+def get_counts(edges: dict[Edge, list[TileId]]) -> dict[TileId, int]:
     # count the number of edges for each tile that have no matching pair
-    counts = Counter()
+    counts: Counter[TileId] = Counter()
     for edge in edges:
         n_edges = len(edges[edge])
         if n_edges == 1:
@@ -132,7 +136,7 @@ def get_counts(edges: Dict[Edge, List[TileId]]) -> Dict[TileId, int]:
     return dict(counts)
 
 
-def part1(data) -> int:
+def part1(data: Data) -> int:
     edges = edges_to_tiles(data)
     counts = get_counts(edges)
 
@@ -150,10 +154,12 @@ def part1(data) -> int:
     return result
 
 
-def _add_match(tiles, row, other, horizontal):
+def _add_match(
+    tiles: dict[TileId, Tile], row: list[Tile], other: Tile, horizontal: bool
+) -> None:
     # need to match top to bottom of above
     to_match = other.edges.right if horizontal else other.edges.bottom
-    to_match = to_match[::-1]
+    to_match = Edge(to_match[::-1])
 
     for tile in tiles.values():
         tile_edges = set(tile.edges)
@@ -175,7 +181,7 @@ def _add_match(tiles, row, other, horizontal):
             print(tile, tile.edges)
 
 
-def part2(data) -> int:
+def part2(data: Data) -> int:
     edge_length = int(len(data) ** 0.5)
     # print(edge_length)
     edges = edges_to_tiles(data)
@@ -183,7 +189,7 @@ def part2(data) -> int:
 
     tiles = {tile.tile_id: tile for tile in data}
 
-    corners = []
+    corners: list[Tile] = []
 
     for tile_id, count in counts.items():
         tile = tiles[tile_id]
@@ -208,7 +214,7 @@ def part2(data) -> int:
     grid = []
 
     for r in range(edge_length):
-        row = []
+        row: list[Tile] = []
         grid.append(row)
         for c in range(edge_length):
             if r == c == 0:
@@ -252,11 +258,9 @@ def part2(data) -> int:
     for _ in range(3):
         t.rotate()
 
-    data = t.data
-
     monsters = 0
 
-    for three_lines in zip(data, data[1:], data[2:]):
+    for three_lines in zip(t.data, t.data[1:], t.data[2:]):
         all_indexes = []
         for re_, line in zip(monster_res, three_lines):
             all_indexes.append({match.start() for match in re_.finditer(line)})

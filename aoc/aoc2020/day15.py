@@ -1,9 +1,12 @@
-def parse_data(data):
+type Data = list[int]
+
+
+def parse_data(data: list[str]) -> Data:
     return [int(i) for i in data[0].split(",")]
 
 
-def mem_game(data, n):
-    seen = {}
+def mem_game(data: Data, n: int) -> int:
+    seen: dict[int, list[int]] = {}
     for i, d in enumerate(data):
         seen.setdefault(d, []).append(i)
 
@@ -20,9 +23,9 @@ def mem_game(data, n):
     return last
 
 
-def part1(data) -> int:
+def part1(data: Data) -> int:
     return mem_game(data, 2020)
 
 
-def part2(data) -> int:
+def part2(data: Data) -> int:
     return mem_game(data, 30000000)

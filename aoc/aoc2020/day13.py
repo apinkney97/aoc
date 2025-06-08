@@ -1,11 +1,13 @@
 from aoc import utils
 
+type Data = tuple[int, list[int]]
 
-def parse_data(data):
+
+def parse_data(data: list[str]) -> Data:
     return int(data[0]), [int(a if a != "x" else 0) for a in data[1].split(",")]
 
 
-def part1(data) -> int:
+def part1(data: Data) -> int:
     now, buses = data
 
     results = {}
@@ -23,7 +25,7 @@ def part1(data) -> int:
 
 
 # shamelessly borrowed from https://rosettacode.org/wiki/Chinese_remainder_theorem#Python_3.6
-def chinese_remainder(remainders):
+def chinese_remainder(remainders: dict[int, int]) -> int:
     total = 0
     prod = utils.product(remainders.keys())
     for bus, remainder in remainders.items():
@@ -32,7 +34,7 @@ def chinese_remainder(remainders):
     return total % prod
 
 
-def mul_inv(a, b):
+def mul_inv(a: int, b: int) -> int:
     b0 = b
     x0, x1 = 0, 1
     if b == 1:
@@ -46,8 +48,8 @@ def mul_inv(a, b):
     return x1
 
 
-def part2(data) -> int:
-    remainders = {}
+def part2(data: Data) -> int:
+    remainders: dict[int, int] = {}
     for i, bus in enumerate(data[1]):
         if bus:
             remainder = (bus - i) % bus

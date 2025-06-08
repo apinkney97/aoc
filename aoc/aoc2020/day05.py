@@ -1,3 +1,6 @@
+type Data = list[str]
+
+
 def to_id(seat: str) -> int:
     binary = (
         seat.replace("B", "1").replace("F", "0").replace("L", "0").replace("R", "1")
@@ -5,14 +8,14 @@ def to_id(seat: str) -> int:
     return int(binary, 2)
 
 
-def part1(data) -> int:
+def part1(data: Data) -> int:
     max_seat = 0
     for row in data:
         max_seat = max(max_seat, to_id(row))
     return max_seat
 
 
-def part2(data) -> int:
+def part2(data: Data) -> int:
     all_seats = {to_id(row) for row in data}
 
     missing = set(range(max(all_seats) + 1)) - all_seats

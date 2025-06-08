@@ -1,23 +1,25 @@
 import operator
 from functools import reduce
 
+type Data = list[tuple[set[str], set[str]]]
 
-def parse_data(data):
+
+def parse_data(data: list[str]) -> Data:
     parsed = []
 
     for line in data:
-        ingredients, allergens = line.split(" (contains ")
-        ingredients = set(ingredients.split())
-        allergens = set(allergens[:-1].split(", "))
+        ingredients_raw, allergens_raw = line.split(" (contains ")
+        ingredients = set(ingredients_raw.split())
+        allergens = set(allergens_raw[:-1].split(", "))
         parsed.append((ingredients, allergens))
 
     return parsed
 
 
-def part1(data) -> int:
+def part1(data: Data) -> int:
     # Each allergen is found in exactly one ingredient.
 
-    allergen_to_recipes = {}
+    allergen_to_recipes: dict[str, list[set[str]]] = {}
     all_ingredients = set()
 
     for recipe, allergens in data:
@@ -64,5 +66,5 @@ def part1(data) -> int:
     return count
 
 
-def part2(data):
+def part2(data: Data) -> str:
     return "See answer printed above"

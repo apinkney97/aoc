@@ -1,7 +1,9 @@
 from aoc import utils
 
+type Data = list[tuple[str, int]]
 
-def parse_data(data):
+
+def parse_data(data: list[str]) -> Data:
     return utils.parse_data(data, fn=lambda x: (x[0], int(x[1:])))
 
 
@@ -15,7 +17,7 @@ COMPASS_POINTS = {
 }
 
 
-def part1(data) -> int:
+def part1(data: Data) -> int:
     angle = 0
     x, y = 0, 0
 
@@ -43,7 +45,7 @@ def part1(data) -> int:
     return abs(x) + abs(y)
 
 
-def part2(data) -> int:
+def part2(data: Data) -> int:
     dx = 10
     dy = 1
 

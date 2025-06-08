@@ -1,20 +1,32 @@
-from typing import Dict, Optional
+from __future__ import annotations
+
+type Data = list[int]
 
 
 class LinkedCup:
-    def __init__(self, val: int):
+    def __init__(self, val: int) -> None:
         self.val: int = val
-        self.next: Optional[LinkedCup] = None
+        self._next: LinkedCup | None = None
 
-    def __repr__(self):
+    @property
+    def next(self) -> LinkedCup:
+        if self._next is None:
+            raise Exception("No next value")
+        return self._next
+
+    @next.setter
+    def next(self, value: LinkedCup) -> None:
+        self._next = value
+
+    def __repr__(self) -> str:
         return f"Cup({self.val})"
 
 
-def parse_data(data):
+def parse_data(data: list[str]) -> Data:
     return [int(n) for n in data[0]]
 
 
-def get_dest(n: int, max_item: int):
+def get_dest(n: int, max_item: int) -> int:
     n = (n - 1) % max_item
     if n == 0:
         n = max_item
@@ -22,7 +34,7 @@ def get_dest(n: int, max_item: int):
 
 
 def add_linked_cup(
-    value: int, cups_map: Dict[int, LinkedCup], prev: LinkedCup
+    value: int, cups_map: dict[int, LinkedCup], prev: LinkedCup
 ) -> LinkedCup:
     new_cup = LinkedCup(value)
     cups_map[value] = new_cup
@@ -30,7 +42,7 @@ def add_linked_cup(
     return new_cup
 
 
-def move_cups(current: LinkedCup, cups_map: Dict[int, LinkedCup], max_val: int) -> None:
+def move_cups(current: LinkedCup, cups_map: dict[int, LinkedCup], max_val: int) -> None:
     removed = [current.next, current.next.next, current.next.next.next]
     removed_vals = {r.val for r in removed}
 
@@ -47,7 +59,7 @@ def move_cups(current: LinkedCup, cups_map: Dict[int, LinkedCup], max_val: int) 
     dest.next = removed[0]
 
 
-def part1(data) -> str:
+def part1(data: Data) -> str:
     current = LinkedCup(data[0])
     cups_map = {data[0]: current}
 
@@ -69,7 +81,7 @@ def part1(data) -> str:
     return "".join(str(v) for v in vals)
 
 
-def part2(data) -> int:
+def part2(data: Data) -> int:
     max_val = 1_000_000
 
     current = LinkedCup(data[0])

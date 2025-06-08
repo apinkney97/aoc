@@ -1,14 +1,16 @@
 from aoc import utils
 
-
-def parse_data(data):
-    data = utils.parse_data(data, fn=int) + [0]
-    data.sort()
-    data.append(data[-1] + 3)
-    return data
+type Data = list[int]
 
 
-def part1(data) -> int:
+def parse_data(data: list[str]) -> Data:
+    data_parsed = utils.parse_data(data, fn=int) + [0]
+    data_parsed.sort()
+    data_parsed.append(data_parsed[-1] + 3)
+    return data_parsed
+
+
+def part1(data: Data) -> int:
     ones = 0
     threes = 0
     for i, j in zip(data, data[1:]):
@@ -21,7 +23,7 @@ def part1(data) -> int:
     return ones * threes
 
 
-def part2(data) -> int:
+def part2(data: Data) -> int:
     # Diffs only seem to be 3 or 1
     # Can't remove any with a diff of 3
     # Can remove any with a diff of 1 as long as the remaining gap is <= 3

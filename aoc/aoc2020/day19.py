@@ -1,7 +1,9 @@
 import re
 
+type Data = tuple[dict[str, list[list[str]]], list[str]]
 
-def parse_data(data):
+
+def parse_data(data: list[str]) -> Data:
     it = iter(data)
 
     rules = {}
@@ -19,7 +21,7 @@ def parse_data(data):
     return rules, strings
 
 
-def resolve_rule(rules, rule_id: str):
+def resolve_rule(rules: dict[str, list[list[str]]], rule_id: str) -> str:
     if rule_id.startswith('"'):
         # Not really a rule id, it's a literal
         return rule_id[1:-1]
@@ -35,7 +37,7 @@ def resolve_rule(rules, rule_id: str):
     )
 
 
-def part1(data) -> int:
+def part1(data: Data) -> int:
     rules, strings = data
     matches = 0
     r = re.compile(resolve_rule(rules, "0"))
@@ -45,7 +47,7 @@ def part1(data) -> int:
     return matches
 
 
-def part2(data) -> int:
+def part2(data: Data) -> int:
     rules, strings = data
     rule_42 = resolve_rule(rules, "42")
     rule_31 = resolve_rule(rules, "31")

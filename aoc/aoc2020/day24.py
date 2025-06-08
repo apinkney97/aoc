@@ -1,16 +1,17 @@
 from __future__ import annotations
 
+from functools import cache
 from typing import Set
-
-from cachetools import cached
 
 from aoc.utils import Coord2D, Vector2D
 
+type Data = list[list[str]]
 
-def parse_data(data):
+
+def parse_data(data: list[str]) -> Data:
     lines = []
     for line in data:
-        directions = []
+        directions: list[str] = []
         lines.append(directions)
         li = iter(line)
         for c in li:
@@ -31,10 +32,8 @@ VECTORS = {
     "se": Vector2D(1, -1),
 }
 
-CACHE = {}
 
-
-@cached(CACHE)
+@cache
 def get_neighbours(coord: Coord2D) -> Set[Coord2D]:
     ns = set()
     for vector in VECTORS.values():
@@ -42,7 +41,7 @@ def get_neighbours(coord: Coord2D) -> Set[Coord2D]:
     return ns
 
 
-def init_tiles(data) -> Set[Coord2D]:
+def init_tiles(data: Data) -> Set[Coord2D]:
     tiles: Set[Coord2D] = set()
     start = Coord2D(0, 0)
     for line in data:
@@ -57,7 +56,7 @@ def init_tiles(data) -> Set[Coord2D]:
     return tiles
 
 
-def part1(data) -> int:
+def part1(data: Data) -> int:
     tiles = init_tiles(data)
     return len(tiles)
 
@@ -81,7 +80,7 @@ def step(tiles: Set[Coord2D]) -> Set[Coord2D]:
     return next_grid
 
 
-def part2(data) -> int:
+def part2(data: Data) -> int:
     tiles = init_tiles(data)
 
     for i in range(100):

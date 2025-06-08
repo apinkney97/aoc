@@ -1,12 +1,10 @@
 from itertools import count
 
-from aoc import utils
+type Data = list[int]
 
 
-def parse_data(data):
-    data = utils.parse_data(data, fn=int)
-
-    return data
+def parse_data(data: list[str]) -> Data:
+    return [int(line) for line in data]
 
 
 def transform(subject: int, loop_size: int) -> int:
@@ -23,11 +21,13 @@ def find_loop_size(expected: int) -> int:
             return i
         value = (value * 7) % 20201227
 
+    raise Exception("No solution found")
 
-def part1(data) -> int:
+
+def part1(data: Data) -> int:
     loop_size = find_loop_size(data[0])
     return transform(data[1], loop_size)
 
 
-def part2(data) -> str:
+def part2(data: Data) -> str:
     return "*"

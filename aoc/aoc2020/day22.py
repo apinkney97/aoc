@@ -1,10 +1,11 @@
 from collections import deque
-from typing import Deque, Tuple
 
 from aoc import utils
 
+type Data = tuple[tuple[int, ...], tuple[int, ...]]
 
-def parse_data(data) -> Tuple[Tuple[int, ...], Tuple[int, ...]]:
+
+def parse_data(data: list[str]) -> Data:
     di = iter(data)
 
     p1_cards = []
@@ -28,7 +29,7 @@ def parse_data(data) -> Tuple[Tuple[int, ...], Tuple[int, ...]]:
     return tuple(p1_cards), tuple(p2_cards)
 
 
-def part1(data) -> int:
+def part1(data: Data) -> int:
     p1 = deque(data[0])
     p2 = deque(data[1])
 
@@ -49,7 +50,7 @@ def part1(data) -> int:
 GAME = 0
 
 
-def recursive_combat(p1: Deque[int], p2: Deque[int]) -> int:
+def recursive_combat(p1: deque[int], p2: deque[int]) -> int:
     global GAME
     GAME += 1
     this_game = GAME
@@ -104,7 +105,7 @@ def recursive_combat(p1: Deque[int], p2: Deque[int]) -> int:
     return game_winner
 
 
-def part2(data) -> int:
+def part2(data: Data) -> int:
     p1 = deque(data[0])
     p2 = deque(data[1])
 

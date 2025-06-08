@@ -1,11 +1,17 @@
+from typing import Callable, Generator
+
 from aoc import utils
 
+type Data = list[list[str]]
 
-def parse_data(data):
+
+def parse_data(data: list[str]) -> Data:
     return utils.parse_data(data, fn=list)
 
 
-def get_adjacent_neighbours(row, col, data):
+def get_adjacent_neighbours(
+    row: int, col: int, data: Data
+) -> Generator[str, None, None]:
     for i in range(row - 1, row + 2):
         for j in range(col - 1, col + 2):
             if i < 0 or j < 0 or (i, j) == (row, col):
@@ -16,7 +22,9 @@ def get_adjacent_neighbours(row, col, data):
                 pass
 
 
-def get_visible_neighbours(row, col, data):
+def get_visible_neighbours(
+    row: int, col: int, data: Data
+) -> Generator[str, None, None]:
     directions = [
         (0, 1),
         (0, -1),
@@ -47,12 +55,16 @@ def get_visible_neighbours(row, col, data):
                 break
 
 
-def step(data, neighbour_fn, limit):
-    new_data = []
+def step(
+    data: Data,
+    neighbour_fn: Callable[[int, int, Data], Generator[str, None, None]],
+    limit: int,
+) -> tuple[bool, Data]:
+    new_data: Data = []
     changed = False
 
     for row in range(len(data)):
-        new_row = []
+        new_row: list[str] = []
         new_data.append(new_row)
 
         for col in range(len(data[row])):
@@ -81,7 +93,11 @@ def step(data, neighbour_fn, limit):
     return changed, new_data
 
 
-def run(data, neighbour_fn, limit):
+def run(
+    data: Data,
+    neighbour_fn: Callable[[int, int, Data], Generator[str, None, None]],
+    limit: int,
+) -> int:
     changed = True
 
     while changed:
@@ -90,9 +106,9 @@ def run(data, neighbour_fn, limit):
     return sum(row.count("#") for row in data)
 
 
-def part1(data) -> int:
+def part1(data: Data) -> int:
     return run(data, neighbour_fn=get_adjacent_neighbours, limit=4)
 
 
-def part2(data) -> int:
+def part2(data: Data) -> int:
     return run(data, neighbour_fn=get_visible_neighbours, limit=5)

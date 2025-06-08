@@ -2,6 +2,8 @@ import enum
 
 from aoc import utils
 
+type Data = list[tuple[Instruction, int]]
+
 
 class Instruction(enum.Enum):
     NOP = "nop"
@@ -9,15 +11,15 @@ class Instruction(enum.Enum):
     ACC = "acc"
 
 
-def parse_data(data):
-    def _parse(data_line: str):
+def parse_data(data: list[str]) -> Data:
+    def _parse(data_line: str) -> tuple[Instruction, int]:
         inst, _, val = data_line.partition(" ")
         return Instruction(inst), int(val)
 
     return utils.parse_data(data, fn=_parse)
 
 
-def run(data):
+def run(data: Data) -> tuple[bool, int, int]:
     acc = 0
     pc = 0
     visited = set()
@@ -53,20 +55,22 @@ def run(data):
         pc += inc
 
 
-def part1(data) -> int:
+def part1(data: Data) -> int:
     return run(data)[2]
 
 
-def part2(data) -> int:
+def part2(data: Data) -> int:
     for i, (inst, val) in enumerate(data):
         if inst is Instruction.ACC:
             continue
 
         data_copy = list(data)
         new_inst = Instruction.NOP if inst is Instruction.JMP else Instruction.JMP
-        data_copy[i] = [new_inst, val]
+        data_copy[i] = (new_inst, val)
 
         terminated, pc, acc = run(data_copy)
 
         if terminated:
             return acc
+
+    raise Exception("No solution found")

@@ -1,5 +1,7 @@
 import re
 
+type Data = list[dict[str, str]]
+
 HCL_RE = re.compile(r"^#[0-9a-f]{6}$")
 
 
@@ -15,9 +17,9 @@ FIELDS = {
 }
 
 
-def parse_data(data):
+def parse_data(data: list[str]) -> Data:
     parsed = []
-    passport = {}
+    passport: dict[str, str] = {}
     for line in data:
         if not line:
             parsed.append(passport)
@@ -30,7 +32,7 @@ def parse_data(data):
     return parsed
 
 
-def part1(data) -> int:
+def part1(data: Data) -> int:
     valid = 0
     for passport in data:
         missing = FIELDS.keys() - passport.keys()
@@ -40,7 +42,7 @@ def part1(data) -> int:
     return valid
 
 
-def part2(data) -> int:
+def part2(data: Data) -> int:
     valid = 0
     for passport in data:
         if not 1920 <= int(passport.get("byr", 0)) <= 2002:

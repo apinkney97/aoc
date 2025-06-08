@@ -1,9 +1,15 @@
 import re
 from itertools import chain
-from typing import Dict, List, Set
+from typing import NamedTuple
 
 
-def parse_data(data):
+class Data(NamedTuple):
+    fields: dict[str, set[int]]
+    my_ticket: list[int]
+    tickets: list[list[int]]
+
+
+def parse_data(data: list[str]) -> Data:
     di = iter(data)
 
     field_re = re.compile(
@@ -14,6 +20,7 @@ def parse_data(data):
         if not line:
             break
         match = field_re.fullmatch(line)
+        assert match is not None
         values = set(
             chain(
                 range(int(match["a"]), int(match["b"]) + 1),
@@ -24,7 +31,7 @@ def parse_data(data):
 
     next(di)
 
-    def _parse_ticket(ticket: str) -> List[int]:
+    def _parse_ticket(ticket: str) -> list[int]:
         return [int(i) for i in ticket.split(",")]
 
     my_ticket = _parse_ticket(next(di))
@@ -36,40 +43,37 @@ def parse_data(data):
     for line in di:
         tickets.append(_parse_ticket(line))
 
-    return {"fields": fields, "my_ticket": my_ticket, "tickets": tickets}
+    return Data(fields=fields, my_ticket=my_ticket, tickets=tickets)
 
 
-def part1(data) -> int:
+def part1(data: Data) -> int:
     invalid_sum = 0
-    fields = data["fields"]
-    for ticket in data["tickets"]:
+    for ticket in data.tickets:
         for val in ticket:
-            if not any(val in allowed for allowed in fields.values()):
+            if not any(val in allowed for allowed in data.fields.values()):
                 invalid_sum += val
 
     return invalid_sum
 
 
-def part2(data) -> int:
-    fields = data["fields"]
+def part2(data: Data) -> int:
+    collected_values: list[set[int]] = [set() for _ in range(len(data.tickets[0]))]
 
-    collected_values = [set() for _ in range(len(data["tickets"][0]))]
-
-    for ticket in data["tickets"]:
+    for ticket in data.tickets:
         for val in ticket:
-            if not any(val in allowed for allowed in fields.values()):
+            if not any(val in allowed for allowed in data.fields.values()):
                 break
 
         else:
             for s, val in zip(collected_values, ticket):
                 s.add(val)
 
-    values_by_field: Dict[int, Set[int]] = {
+    values_by_field: dict[int, set[int]] = {
         i: val for i, val in enumerate(collected_values)
     }
 
     matched = {}
-    fields = dict(fields)
+    fields = dict(data.fields)
     # Go through each set of values; if it can only match one field spec it must be that one
     while fields:
         for i, vals in values_by_field.items():
@@ -89,10 +93,9 @@ def part2(data) -> int:
 
     print(matched)
 
-    my_ticket = data["my_ticket"]
     res = 1
     for field_name, pos in matched.items():
         if field_name.startswith("departure"):
-            res *= my_ticket[pos]
+            res *= data.my_ticket[pos]
 
     return res

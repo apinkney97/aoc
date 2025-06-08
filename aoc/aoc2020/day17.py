@@ -1,11 +1,12 @@
+from functools import cache
 from typing import Set
-
-from cachetools import cached
 
 from aoc.utils import Coord4D
 
+type Data = Set[Coord4D]
 
-def parse_data(data):
+
+def parse_data(data: list[str]) -> Data:
     grid = set()
     for x, row in enumerate(data):
         for y, char in enumerate(row):
@@ -14,11 +15,8 @@ def parse_data(data):
     return grid
 
 
-CACHE = {}
-
-
-@cached(CACHE)
-def get_neighbours(coord: Coord4D, dimensions) -> Set[Coord4D]:
+@cache
+def get_neighbours(coord: Coord4D, dimensions: int) -> Set[Coord4D]:
     neighbours = set()
     for x in range(coord.x - 1, coord.x + 2):
         for y in range(coord.y - 1, coord.y + 2):
@@ -36,7 +34,7 @@ def get_neighbours(coord: Coord4D, dimensions) -> Set[Coord4D]:
     return neighbours
 
 
-def step(grid: Set[Coord4D], dimensions) -> Set[Coord4D]:
+def step(grid: Set[Coord4D], dimensions: int) -> Set[Coord4D]:
     next_grid = set()
 
     to_check = set(grid)
@@ -55,7 +53,7 @@ def step(grid: Set[Coord4D], dimensions) -> Set[Coord4D]:
     return next_grid
 
 
-def part1(data) -> int:
+def part1(data: Data) -> int:
     grid = data
 
     for _ in range(6):
@@ -64,7 +62,7 @@ def part1(data) -> int:
     return len(grid)
 
 
-def part2(data) -> int:
+def part2(data: Data) -> int:
     grid = data
 
     for _ in range(6):

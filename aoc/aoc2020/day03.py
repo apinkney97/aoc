@@ -1,5 +1,7 @@
 from aoc import utils
 
+type Data = list[str]
+
 
 def check_slope(data: list[str], dx: int, dy: int) -> int:
     trees = 0
@@ -17,11 +19,11 @@ def check_slope(data: list[str], dx: int, dy: int) -> int:
     return trees
 
 
-def part1(data) -> int:
+def part1(data: Data) -> int:
     return check_slope(data, 3, 1)
 
 
-def part2(data) -> int:
+def part2(data: Data) -> int:
     tests = [
         (1, 1),
         (3, 1),

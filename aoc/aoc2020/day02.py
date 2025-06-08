@@ -1,36 +1,54 @@
 import re
+import typing
 from operator import xor
 
-from aoc import utils
+
+class Password(typing.NamedTuple):
+    lower: int
+    upper: int
+    letter: str
+    password: str
 
 
-def parse_data(data):
+type Data = list[Password]
+
+
+def parse_data(data: list[str]) -> Data:
     matcher = re.compile(
         r"^(?P<lower>\d+)-(?P<upper>\d+) (?P<letter>.): (?P<password>.*)$"
     )
 
-    return utils.parse_data(data, fn=matcher.match)
+    passwords = []
+
+    for line in data:
+        match = matcher.match(line)
+        assert match is not None
+        passwords.append(
+            Password(
+                lower=int(match["lower"]),
+                upper=int(match["upper"]),
+                letter=match["letter"],
+                password=match["password"],
+            )
+        )
+
+    return passwords
 
 
-def part1(data) -> int:
+def part1(data: Data) -> int:
     valid = 0
-    for match in data:
-        lower = int(match["lower"])
-        upper = int(match["upper"])
-        letter = match["letter"]
-        password = match["password"]
-        if lower <= password.count(letter) <= upper:
+    for pwd in data:
+        if pwd.lower <= pwd.password.count(pwd.letter) <= pwd.upper:
             valid += 1
     return valid
 
 
-def part2(data) -> int:
+def part2(data: Data) -> int:
     valid = 0
-    for match in data:
-        pos_1 = int(match["lower"]) - 1
-        pos_2 = int(match["upper"]) - 1
-        letter = match["letter"]
-        password = match["password"]
-        if xor(password[pos_1] == letter, password[pos_2] == letter):
+    for pwd in data:
+        if xor(
+            pwd.password[pwd.lower - 1] == pwd.letter,
+            pwd.password[pwd.upper - 1] == pwd.letter,
+        ):
             valid += 1
     return valid

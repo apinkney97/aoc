@@ -1,4 +1,5 @@
 import typing
+import warnings
 from typing import Callable
 
 import platformdirs
@@ -61,6 +62,7 @@ def parse_data(
 ) -> list[str]: ...
 
 
+@warnings.deprecated("No longer required; apply fn directly instead")
 def parse_data[T](
     data: list[str],
     *,
