@@ -1,9 +1,11 @@
 import asyncio
 from enum import Enum, auto
-from typing import Callable, List, Mapping, NamedTuple, Optional, Tuple, Union
+from typing import Any, Callable, Mapping, NamedTuple, overload
+
+type Data = list[int]
 
 
-def parse_data(data):
+def parse_data(data: list[str]) -> Data:
     return [int(i) for i in data[0].split(",")]
 
 
@@ -40,15 +42,15 @@ class Op(Enum):
 
 class OpSpec(NamedTuple):
     type: Op
-    params: List[ParameterDirection]
-    func: Callable
+    params: list[ParameterDirection]
+    func: Callable[..., int | None]
 
 
-def nop(*args):
+def nop(*args: Any) -> None:
     pass
 
 
-OPERATIONS: List[OpSpec] = [
+OPERATIONS: list[OpSpec] = [
     OpSpec(
         type=Op.ADD,
         params=[ParameterDirection.IN, ParameterDirection.IN, ParameterDirection.OUT],
@@ -90,17 +92,17 @@ OPERATION_MAP: Mapping[Op, OpSpec] = {o.type: o for o in OPERATIONS}
 
 
 class BadOpCode(Exception):
-    def __init__(self, opcode, encoded_opcode, state_dump):
+    def __init__(self, opcode: int, encoded_opcode: int, state_dump: str):
         super().__init__(
             f"Unknown opcode: {opcode} (from {encoded_opcode})  {state_dump}"
         )
 
 
 class Memory:
-    def __init__(self, initial_value: List[int]):
-        self._memory = initial_value[:]
+    def __init__(self, initial_value: list[int]) -> None:
+        self._memory: list[int] = initial_value[:]
 
-    def _expand(self, limit_or_slice: Union[int, slice]):
+    def _expand(self, limit_or_slice: int | slice) -> None:
         mem_size = len(self._memory)
 
         if isinstance(limit_or_slice, slice):
@@ -115,27 +117,31 @@ class Memory:
 
             self._memory.extend([0] * (mem_size - len(self._memory)))
 
-    def __getitem__(self, item):
+    @overload
+    def __getitem__(self, item: int) -> int: ...
+    @overload
+    def __getitem__(self, item: slice) -> list[int]: ...
+    def __getitem__(self, item: int | slice) -> int | list[int]:
         self._expand(item)
         return self._memory[item]
 
-    def __setitem__(self, item, value):
+    def __setitem__(self, item: int, value: int) -> None:
         self._expand(item)
         self._memory[item] = value
 
-    def __len__(self):
+    def __len__(self) -> int:
         return len(self._memory)
 
 
 class IntCodeProcessor:
     __instance_counter = 0
 
-    def __init__(self, initial_memory: List[int], verbosity=0):
+    def __init__(self, initial_memory: list[int], verbosity: int = 0) -> None:
         cls = type(self)
         self.id = cls.__instance_counter
         cls.__instance_counter += 1
-        self._stdin = asyncio.Queue()
-        self._stdout = asyncio.Queue()
+        self._stdin: asyncio.Queue[int] = asyncio.Queue()
+        self._stdout: asyncio.Queue[int] = asyncio.Queue()
         self._pc = 0
         self._sp = 0
         self._memory = Memory(initial_memory)
@@ -143,13 +149,13 @@ class IntCodeProcessor:
         self._verbosity = verbosity
 
     @property
-    def state(self):
+    def state(self) -> RunState:
         return self._state
 
     def dump_state(self) -> str:
         return f"{self._pc=} {self._sp=} {len(self._memory)=} {self._state=}"
 
-    def decode_opcode(self, encoded_opcode: int) -> Tuple[OpSpec, List[ParameterMode]]:
+    def decode_opcode(self, encoded_opcode: int) -> tuple[OpSpec, list[ParameterMode]]:
         encoded_modes, opcode = divmod(encoded_opcode, 100)
         try:
             op_enum = Op(opcode)
@@ -165,17 +171,17 @@ class IntCodeProcessor:
 
         return op_spec, modes
 
-    def log(self, *args, verbosity=1):
+    def log(self, *args: Any, verbosity: int = 1) -> None:
         if verbosity <= self._verbosity:
             print(f"{self.id:4d}:", *args)
 
-    async def input(self, val):
+    async def input(self, val: int) -> None:
         await self._stdin.put(val)
 
-    async def output(self):
+    async def output(self) -> int:
         return await self._stdout.get()
 
-    def _get_param_addresses(self, modes: List[ParameterMode]) -> List[int]:
+    def _get_param_addresses(self, modes: list[ParameterMode]) -> list[int]:
         # Given the parameter modes, returns the addresses that should be read from or written to
         param_addrs = []
         for addr, mode in enumerate(modes, start=self._pc + 1):
@@ -192,7 +198,7 @@ class IntCodeProcessor:
 
         return param_addrs
 
-    def _handle_jump(self, op_spec: OpSpec, param_addrs: List[int]):
+    def _handle_jump(self, op_spec: OpSpec, param_addrs: list[int]) -> None:
         check = self._memory[param_addrs[0]]
         jump_to = self._memory[param_addrs[1]]
 
@@ -207,9 +213,7 @@ class IntCodeProcessor:
         else:
             self._pc += len(op_spec.params) + 1
 
-    async def _handle_io(
-        self, op_spec: OpSpec, param_addrs: List[int]
-    ) -> Optional[int]:
+    async def _handle_io(self, op_spec: OpSpec, param_addrs: list[int]) -> int | None:
         if op_spec.type is Op.INP:
             if self._stdin.empty():
                 self.log("Awaiting input")
@@ -229,16 +233,16 @@ class IntCodeProcessor:
 
         raise Exception(f"Unhandled IO operation {op_spec.type.name}")
 
-    def has_output(self):
+    def has_output(self) -> bool:
         return not self._stdout.empty()
 
     def log_instruction(
         self,
         encoded_opcode: int,
         op_spec: OpSpec,
-        param_addrs: List[int],
-        arg_modes: List[ParameterMode],
-    ):
+        param_addrs: list[int],
+        arg_modes: list[ParameterMode],
+    ) -> None:
         if self._verbosity < 2:
             return
 
@@ -252,16 +256,20 @@ class IntCodeProcessor:
             elif arg_mode is ParameterMode.RELATIVE:
                 formatted_args.append(f"<{arg}>")
 
-        formatted_args = ", ".join(formatted_args)
         arg_vals = ", ".join(str(self._memory[addr]) for addr in param_addrs)
 
         self.log(
             f"PC {self._pc:5d} SP: {self._sp:5d}   op: {encoded_opcode:5d}   {op_spec.type.name:4s}"
-            f"{formatted_args:30s}   {str(param_addrs):30s}   {arg_vals}",
+            f"{''.join(formatted_args):30s}   {str(param_addrs):30s}   {arg_vals}",
             verbosity=2,
         )
 
-    async def run(self, noun: int = None, verb: int = None, return_last_output=False):
+    async def run(
+        self,
+        noun: int | None = None,
+        verb: int | None = None,
+        return_last_output: bool = False,
+    ) -> int | None:
         if self._state is not RunState.NOT_STARTED:
             raise Exception(
                 f"Can't run {type(self).__name__} in state {self._state.name}"

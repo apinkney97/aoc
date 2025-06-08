@@ -1,6 +1,6 @@
 import operator
 
-from aoc.aoc2019.intcode import parse_data as parse_data
+type Data = list[int]
 
 OPCODES = {
     1: (4, operator.add),
@@ -8,7 +8,11 @@ OPCODES = {
 }
 
 
-def intcode_eval(memory, noun: int, verb: int) -> int:
+def parse_data(data: list[str]) -> Data:
+    return [int(i) for i in data[0].split(",")]
+
+
+def intcode_eval(memory: Data, noun: int, verb: int) -> int:
     memory = memory[:]
     memory[1] = noun
     memory[2] = verb
@@ -27,11 +31,11 @@ def intcode_eval(memory, noun: int, verb: int) -> int:
     return memory[0]
 
 
-def part1(data) -> int:
+def part1(data: Data) -> int:
     return intcode_eval(data, 12, 2)
 
 
-def part2(data) -> int:
+def part2(data: Data) -> int:
     needle = 19690720
     for noun in range(100):
         for verb in range(100):

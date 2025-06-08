@@ -1,6 +1,4 @@
-from typing import List, Mapping, Tuple
-
-from aoc import utils
+from typing import List, Tuple
 
 DIRECTIONS = {
     "U": (0, 1),
@@ -11,9 +9,11 @@ DIRECTIONS = {
 
 
 Point = Tuple[int, int]
+Distances = dict[Point, int]
+type Data = tuple[Distances, Distances]
 
 
-def parse_data(data):
+def parse_data(data: list[str]) -> Data:
     wire1 = data[0].split(",")
     wire2 = data[1].split(",")
 
@@ -23,7 +23,7 @@ def parse_data(data):
     return w1_points, w2_points
 
 
-def get_points(wire: List[str], start: Point = (0, 0)) -> Mapping[Point, int]:
+def get_points(wire: List[str], start: Point = (0, 0)) -> Distances:
     points = {}
     x, y = start
     dist = 0
@@ -50,32 +50,31 @@ def manhattan_distance(p1: Point, p2: Point) -> int:
     return abs(x1 - x2) + abs(y1 - y2)
 
 
-def part1(data) -> int:
+def part1(data: Data) -> int:
     origin = (0, 0)
 
     w1_points, w2_points = data
 
     intersections = set(w1_points).intersection(set(w2_points))
 
-    min_dist = None
+    distances = []
     for intersection in intersections:
         # if intersection == origin:
         #     continue
         dist = manhattan_distance(intersection, origin)
-        min_dist = utils.safe_min(min_dist, dist)
+        distances.append(dist)
 
-    return min_dist
+    return min(distances)
 
 
-def part2(data) -> int:
+def part2(data: Data) -> int:
     w1_points, w2_points = data
 
     intersections = set(w1_points).intersection(set(w2_points))
 
-    min_dist = None
-
+    distances = []
     for intersection in intersections:
         dist = w1_points[intersection] + w2_points[intersection]
-        min_dist = utils.safe_min(min_dist, dist)
+        distances.append(dist)
 
-    return min_dist
+    return min(distances)

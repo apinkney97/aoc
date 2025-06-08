@@ -1,11 +1,10 @@
 import asyncio
 from collections import Counter
 from enum import Enum
-from typing import MutableMapping
 
 from aoc import utils
 from aoc.aoc2019 import intcode
-from aoc.aoc2019.intcode import parse_data as parse_data
+from aoc.aoc2019.intcode import Data, parse_data  # noqa: F401
 
 # 0 is an empty tile. No game object appears in this tile.
 # 1 is a wall tile. Walls are indestructible barriers.
@@ -32,10 +31,10 @@ DISP = {
 
 
 class Arcade:
-    def __init__(self, memory, add_credit=False):
+    def __init__(self, memory: Data, add_credit: bool = False) -> None:
         if add_credit:
             memory[0] = 2
-        self._grid: MutableMapping[utils.Coord2D, Tile] = {}
+        self._grid: dict[utils.Coord2D, Tile] = {}
         self._processor = intcode.IntCodeProcessor(memory, verbosity=0)
         self._ball_x = 0
         self._paddle_x = 0
@@ -48,17 +47,24 @@ class Arcade:
         self._max_y = None
 
     @property
-    def score(self):
+    def score(self) -> int:
         return self._score
 
     @property
-    def block_count(self):
+    def block_count(self) -> int:
         return Counter(self._grid.values())[Tile.BLOCK]
 
-    def __str__(self):
+    def __str__(self) -> str:
         score = f"## Score: {self.score} ##"
         top = "#" * len(score)
         bits = [top, "\n", score, "\n"]
+        if (
+            self._min_y is None
+            or self._min_x is None
+            or self._max_x is None
+            or self._max_y is None
+        ):
+            raise Exception("Nothing on board")
         for y in range(self._min_y, self._max_y + 1):
             for x in range(self._min_x, self._max_x + 1):
                 tile = self._grid.get(utils.Coord2D(x, y), Tile.EMPTY)
@@ -66,7 +72,7 @@ class Arcade:
             bits.append("\n")
         return "".join(bits)
 
-    async def _read_board_state(self):
+    async def _read_board_state(self) -> None:
         blocks_read = 0
         utils.log(f"{self._processor.state=} {self._processor.has_output()=}")
         while (
@@ -100,7 +106,7 @@ class Arcade:
             self._max_y = utils.safe_max(self._max_y, y)
         # utils.log(f"{blocks_read=} {self._grid=}")
 
-    async def run(self):
+    async def run(self) -> None:
         _ = asyncio.create_task(self._processor.run())
         await self._read_board_state()
         utils.log("Part 1:", Counter(self._grid.values())[Tile.BLOCK])
@@ -122,15 +128,15 @@ class Arcade:
             utils.log(str(self))
 
 
-async def run(memory, add_credit: bool):
+async def run(memory: Data, add_credit: bool) -> Arcade:
     arcade = Arcade(memory, add_credit=add_credit)
     await arcade.run()
     return arcade
 
 
-def part1(data):
+def part1(data: Data) -> int:
     return asyncio.run(run(data, add_credit=False)).block_count
 
 
-def part2(data):
+def part2(data: Data) -> int:
     return asyncio.run(run(data, add_credit=True)).score

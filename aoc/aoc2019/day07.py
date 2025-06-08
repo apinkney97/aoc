@@ -1,12 +1,16 @@
 import asyncio
 from itertools import cycle, permutations
+from typing import Collection
 
-from aoc import utils
-from aoc.aoc2019.intcode import IntCodeProcessor, RunState
-from aoc.aoc2019.intcode import parse_data as parse_data
+from aoc.aoc2019.intcode import (
+    Data,
+    IntCodeProcessor,
+    RunState,
+    parse_data,  # noqa: F401
+)
 
 
-async def intcode_eval(memory, phase_settings) -> int:
+async def intcode_eval(memory: Data, phase_settings: Collection[int]) -> int:
     processors = []
 
     tasks = set()
@@ -28,17 +32,17 @@ async def intcode_eval(memory, phase_settings) -> int:
     return output
 
 
-def part1(data):
-    max_ = None
+def part1(data: Data) -> int:
+    results = []
     for phase_settings in permutations(range(5), 5):
-        max_ = utils.safe_max(max_, asyncio.run(intcode_eval(data, phase_settings)))
+        results.append(asyncio.run(intcode_eval(data, phase_settings)))
 
-    return max_
+    return max(results)
 
 
-def part2(data):
-    max_ = None
+def part2(data: Data) -> int:
+    results = []
     for phase_settings in permutations(range(5, 10), 5):
-        max_ = utils.safe_max(max_, asyncio.run(intcode_eval(data, phase_settings)))
+        results.append(asyncio.run(intcode_eval(data, phase_settings)))
 
-    return max_
+    return max(results)

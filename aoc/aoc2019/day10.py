@@ -3,9 +3,12 @@ import math
 from fractions import Fraction
 from itertools import product
 
+type Data = list[str]
+type Coord = tuple[int, int]
+
 
 class Vector:
-    def __init__(self, origin, destination):
+    def __init__(self, origin: Coord, destination: Coord) -> None:
         self.origin = origin
         self.destination = destination
 
@@ -36,25 +39,25 @@ class Vector:
         self.manhattan = abs(self.dx) + abs(self.dy)
         self.magnitude = math.sqrt(self.dx**2 + self.dy**2)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"{type(self).__name__}({self.origin}, {self.destination})"
 
-    def __str__(self):
+    def __str__(self) -> str:
         direction = str(self.direction)
         manhattan = self.manhattan
         angle = self.angle * 180 / math.pi
         return f"{repr(self):30s} {direction=:10s} {manhattan = :3d}   {angle = :3.0f}"
 
 
-def calculate_visibility(data):
+def calculate_visibility(data: Data) -> tuple[dict[Coord, list[Vector]], int, Coord]:
     asteroid_coords = []
     for y, row in enumerate(data):
         for x, sector in enumerate(row):
             if sector == "#":
                 asteroid_coords.append((x, y))
 
-    visible_asteroids = {}
-    all_vectors = {}
+    visible_asteroids: dict[Coord, set[Coord]] = {}
+    all_vectors: dict[Coord, list[Vector]] = {}
 
     for origin, destination in product(asteroid_coords, asteroid_coords):
         if origin == destination:
@@ -71,15 +74,15 @@ def calculate_visibility(data):
     return all_vectors, max_visible, max_coord
 
 
-def part1(data):
+def part1(data: Data) -> int:
     _, max_visible, _ = calculate_visibility(data)
     return max_visible
 
 
-def part2(data):
+def part2(data: Data) -> int:
     all_vectors, _, max_coord = calculate_visibility(data)
     other_asteroids = sorted(all_vectors[max_coord], key=lambda x: x.magnitude)
-    asteroids_by_angle = {}
+    asteroids_by_angle: dict[float, collections.deque[Coord]] = {}
     for asteroid in other_asteroids:
         asteroids_by_angle.setdefault(asteroid.angle, collections.deque()).append(
             asteroid.destination
@@ -95,3 +98,5 @@ def part2(data):
                 return 100 * coord[0] + coord[1]
             if not len(coords):
                 asteroids_by_angle.pop(angle)
+
+    return -1

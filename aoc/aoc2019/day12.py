@@ -2,7 +2,9 @@ import re
 from dataclasses import dataclass
 from itertools import combinations
 from math import lcm
-from typing import List
+from typing import List, cast
+
+type Data = List[tuple[int, int, int]]
 
 
 @dataclass
@@ -18,24 +20,26 @@ class Body:
     velocity: Triple
 
 
-def parse_data(data):
+def parse_data(data: list[str]) -> Data:
     matcher = re.compile(r"<x=(-?\d+), y=(-?\d+), z=(-?\d+)>")
     parsed = []
     for line in data:
         match = matcher.fullmatch(line)
+        if match is None:
+            continue
         parsed.append((int(match.group(1)), int(match.group(2)), int(match.group(3))))
     return parsed
 
 
-def build_moons(data):
+def build_moons(data: Data) -> list[Body]:
     return [get_moon(*coord) for coord in data]
 
 
-def get_moon(x, y, z, dx=0, dy=0, dz=0) -> Body:
+def get_moon(x: int, y: int, z: int, dx: int = 0, dy: int = 0, dz: int = 0) -> Body:
     return Body(Triple(x, y, z), Triple(dx, dy, dz))
 
 
-def step(moons: List[Body], dimension: str):
+def step(moons: List[Body], dimension: str) -> None:
     # Update velocities
     for moon1, moon2 in combinations(moons, 2):
         p1 = getattr(moon1.position, dimension)
@@ -61,7 +65,7 @@ def step(moons: List[Body], dimension: str):
         setattr(moon.position, dimension, p + v)
 
 
-def get_state(moons: List[Body], dimension: str):
+def get_state(moons: List[Body], dimension: str) -> tuple[int, ...]:
     vals = []
     for moon in moons:
         vals.append(getattr(moon.position, dimension))
@@ -70,14 +74,14 @@ def get_state(moons: List[Body], dimension: str):
     return tuple(vals)
 
 
-def get_energy(moon: Body):
+def get_energy(moon: Body) -> int:
     dimensions = "xyz"
     potential = sum(abs(getattr(moon.position, d)) for d in dimensions)
     kinetic = sum(abs(getattr(moon.velocity, d)) for d in dimensions)
-    return potential * kinetic
+    return cast(int, potential * kinetic)
 
 
-def part1(data):
+def part1(data: Data) -> int:
     moons = build_moons(data)
 
     for i in range(1000):
@@ -87,11 +91,11 @@ def part1(data):
     return sum(get_energy(moon) for moon in moons)
 
 
-def part2(data):
+def part2(data: Data) -> int:
     moons = build_moons(data)
     seen_states = {}
     for dimension in "xyz":
-        seen = set()
+        seen: set[tuple[int, ...]] = set()
         seen_states[dimension] = seen
         state = get_state(moons, dimension)
         while state not in seen:

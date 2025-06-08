@@ -2,8 +2,12 @@ import asyncio
 from enum import Enum
 
 from aoc import utils
-from aoc.aoc2019.intcode import IntCodeProcessor, RunState
-from aoc.aoc2019.intcode import parse_data as parse_data
+from aoc.aoc2019.intcode import (
+    Data,
+    IntCodeProcessor,
+    RunState,
+    parse_data,  # noqa: F401
+)
 
 
 class Direction(Enum):
@@ -22,7 +26,7 @@ VECTORS = {
 
 
 class Painter:
-    def __init__(self, memory, start=0):
+    def __init__(self, memory: Data, start: int = 0) -> None:
         self.processor = IntCodeProcessor(memory)
         self.panels = {}
         self.pos = (0, 0)
@@ -34,13 +38,13 @@ class Painter:
         self._max_x = 0
         self._max_y = 0
 
-    def move_left(self):
+    def move_left(self) -> None:
         self._move(-1)
 
-    def move_right(self):
+    def move_right(self) -> None:
         self._move(1)
 
-    def _move(self, direction: int):
+    def _move(self, direction: int) -> None:
         self.direction = Direction((self.direction.value + direction) % 4)
 
         x, y = self.pos
@@ -55,7 +59,7 @@ class Painter:
 
         self.pos = new_x, new_y
 
-    def __str__(self):
+    def __str__(self) -> str:
         bits = []
         for y in range(self._min_y, self._max_y + 1):
             for x in range(self._min_x, self._max_x + 1):
@@ -89,16 +93,16 @@ class Painter:
         return len(self.panels)
 
 
-async def run(memory, start):
+async def run(memory: Data, start: int) -> int:
     painter = Painter(memory, start)
     result = await painter.run()
     print(str(painter))
     return result
 
 
-def part1(data):
+def part1(data: Data) -> int:
     return asyncio.run(run(data, 0))
 
 
-def part2(data):
+def part2(data: Data) -> int:
     return asyncio.run(run(data, 1))
