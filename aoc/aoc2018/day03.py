@@ -1,12 +1,16 @@
 import re
 
+type Data = list[str]
+type Coord = tuple[int, int]
+
 CLAIM_RE = re.compile(
     r"#(?P<claim_id>\d+) @ (?P<x>\d+),(?P<y>\d+): (?P<w>\d+)x(?P<h>\d+)"
 )
 
 
-def get_claim(claim_str):
+def get_claim(claim_str: str) -> tuple[int, int, int, int, int]:
     claim = CLAIM_RE.match(claim_str)
+    assert claim is not None
     claim_id = int(claim.group("claim_id"))
     x = int(claim.group("x"))
     y = int(claim.group("y"))
@@ -15,9 +19,9 @@ def get_claim(claim_str):
     return claim_id, x, y, w, h
 
 
-def part1(data):
-    taken = set()
-    overlapping = set()
+def part1(data: Data) -> int:
+    taken: set[Coord] = set()
+    overlapping: set[Coord] = set()
 
     for claim in data:
         claim_id, x, y, w, h = get_claim(claim)
@@ -30,12 +34,12 @@ def part1(data):
     return len(overlapping)
 
 
-def part2(data):
+def part2(data: Data) -> set[int]:
     claims = [get_claim(claim) for claim in data]
 
-    taken = {}
-    overlapping = set()
-    claim_ids = set()
+    taken: dict[Coord, int] = {}
+    overlapping: set[int] = set()
+    claim_ids: set[int] = set()
 
     for claim in claims:
         claim_id, x, y, w, h = claim
