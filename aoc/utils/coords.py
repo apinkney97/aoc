@@ -52,7 +52,7 @@ class Coord2D(NamedTuple):
         return NotImplemented
 
     @overload
-    def __sub__(self, other: Coord2D) -> Vector2D: ...  # type: ignore[overload-overlap]  # bug in mypy
+    def __sub__(self, other: Coord2D) -> Vector2D: ...
 
     @overload
     def __sub__(self, other: Vector2D) -> Coord2D: ...

@@ -4,7 +4,7 @@ import pkgutil
 from importlib import import_module
 from zoneinfo import ZoneInfo
 
-from mypy.checker import NamedTuple
+from typing import NamedTuple
 from rich.console import Console
 
 from aoc import config, utils
@@ -20,7 +20,7 @@ class RunConfig(NamedTuple):
     print_input: bool
 
 
-def main():
+def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("day", type=int, nargs="?")
     parser.add_argument(
