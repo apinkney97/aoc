@@ -1,5 +1,9 @@
 import string
 
+type Data = list[str]
+
+type Coord = tuple[int, int]
+
 
 class NoPathFoundError(Exception):
     pass
@@ -8,7 +12,7 @@ class NoPathFoundError(Exception):
 TOTAL_STEPS = -1
 
 
-def get_next_pos(path, been, curr, prev):
+def get_next_pos(path: Data, been: set[Coord], curr: Coord, prev: Coord) -> Coord:
     # always go straight on unless curr is '+'
     x, y = curr
     prev_x, prev_y = prev
@@ -30,11 +34,11 @@ def get_next_pos(path, been, curr, prev):
     raise NoPathFoundError
 
 
-def is_valid_pos(path, x, y):
+def is_valid_pos(path: Data, x: int, y: int) -> bool:
     return 0 <= x < len(path) and 0 <= y < len(path[x])
 
 
-def part1(data):
+def part1(data: Data) -> str:
     path = data
 
     # path = [
@@ -46,6 +50,9 @@ def part1(data):
     #     "     +B-+  +--+ ",
     #  ]
 
+    curr: Coord
+    prev: Coord
+
     for i, c in enumerate(path[0]):
         if c == "|":
             curr = 0, i
@@ -54,7 +61,7 @@ def part1(data):
     else:
         raise NoPathFoundError
 
-    been = set()
+    been: set[Coord] = set()
     letters = []
 
     global TOTAL_STEPS
@@ -74,5 +81,5 @@ def part1(data):
     return "".join(letters)
 
 
-def part2(data):
+def part2(data: Data) -> int:
     return TOTAL_STEPS

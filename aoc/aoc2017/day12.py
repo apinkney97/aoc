@@ -1,4 +1,7 @@
-def parse_data(data):
+type Data = dict[str, set[str]]
+
+
+def parse_data(data: list[str]) -> Data:
     parsed_data = {}
     for line in data:
         val, _, neighbours = line.split(" ", 2)
@@ -6,7 +9,7 @@ def parse_data(data):
     return parsed_data
 
 
-def part1(data):
+def part1(data: Data) -> int:
     seen = set()
     to_expand = ["0"]
 
@@ -20,7 +23,7 @@ def part1(data):
     return len(seen)
 
 
-def part2(data):
+def part2(data: Data) -> int:
     seen = set()
     not_seen = set(data.keys())
     to_expand = {"0"}

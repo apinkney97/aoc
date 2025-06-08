@@ -1,12 +1,14 @@
 from aoc.aoc2017.day10 import knot_hash
 
+type Data = list[str]
 
-def get_grid(data):
+
+def get_grid(data: Data) -> list[list[str]]:
     hashes = [knot_hash(data[0] + "-" + str(i)) for i in range(128)]
     return [list(bin(int(h, 16))[2:].zfill(128)) for h in hashes]
 
 
-def part1(data):
+def part1(data: Data) -> int:
     grid = get_grid(data)
     ones = 0
     for row in grid:
@@ -14,7 +16,7 @@ def part1(data):
     return ones
 
 
-def get_neighbours(i, j):
+def get_neighbours(i: int, j: int) -> list[tuple[int, int]]:
     neighbours = []
     if i != 0:
         neighbours.append((i - 1, j))
@@ -27,7 +29,7 @@ def get_neighbours(i, j):
     return neighbours
 
 
-def flood_fill(grid, i, j, fill="0"):
+def flood_fill(grid: list[list[str]], i: int, j: int, fill: str = "0") -> None:
     to_expand = {(i, j)}
     match = grid[i][j]
     while to_expand:
@@ -38,7 +40,7 @@ def flood_fill(grid, i, j, fill="0"):
                 to_expand.add((i2, j2))
 
 
-def part2(data):
+def part2(data: Data) -> int:
     grid = get_grid(data)
     groups = 0
     for i in range(128):

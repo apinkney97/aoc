@@ -1,14 +1,16 @@
 import re
 
+type Data = str
+
 CANCEL_RE = re.compile("!.")
 GARBAGE_RE = re.compile("<[^>]*>")
 
 
-def parse_data(data):
+def parse_data(data: list[str]) -> Data:
     return data[0]
 
 
-def part1(data):
+def part1(data: Data) -> int:
     data = CANCEL_RE.sub("", data)
     data = GARBAGE_RE.sub("", data)
 
@@ -25,7 +27,7 @@ def part1(data):
     return total
 
 
-def part2(data):
+def part2(data: Data) -> int:
     data = CANCEL_RE.sub("", data)
     total = 0
 

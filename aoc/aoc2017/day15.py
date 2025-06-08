@@ -1,14 +1,18 @@
+from typing import Generator
+
+type Data = list[int]
+
 MUL_A = 16807
 MUL_B = 48271
 MOD = 2147483647
 MASK = 2**16 - 1
 
 
-def parse_data(data):
+def parse_data(data: list[str]) -> Data:
     return [int(line.rsplit(" ", 1)[1]) for line in data]
 
 
-def gen(start, mul, mod=1):
+def gen(start: int, mul: int, mod: int = 1) -> Generator[int, None, None]:
     val = start
     while True:
         val = (val * mul) % MOD
@@ -16,7 +20,7 @@ def gen(start, mul, mod=1):
             yield val
 
 
-def part1(data):
+def part1(data: Data) -> int:
     a_start, b_start = data
     a_gen = gen(a_start, MUL_A)
     b_gen = gen(b_start, MUL_B)
@@ -27,7 +31,7 @@ def part1(data):
     return count
 
 
-def part2(data):
+def part2(data: Data) -> int:
     a_start, b_start = data
     a_gen = gen(a_start, MUL_A, 4)
     b_gen = gen(b_start, MUL_B, 8)

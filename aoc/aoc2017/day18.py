@@ -1,81 +1,79 @@
+from __future__ import annotations
+
 import asyncio
+import typing
 from collections import defaultdict
+from typing import NamedTuple
+
+type Data = list[Instruction]
 
 
-def parse_data(data):
-    instructions = []
-
-    def try_int(val):
-        try:
-            return int(val)
-        except ValueError:
-            return val
-
-    for line in data:
-        instructions.append(tuple(try_int(v) for v in line.split(" ")))
-
-    return instructions
+class Instruction(NamedTuple):
+    name: str
+    arg_1: str
+    arg_2: str | None = None
 
 
-class DuetPlayer:
-    def __init__(self, instructions):
+def parse_data(data: list[str]) -> Data:
+    return [Instruction(*(line.split())) for line in data]
+
+
+class BaseDuetPlayer:
+    def __init__(self, instructions: Data) -> None:
         self.instructions = instructions
-        self.registers = defaultdict(int)
+        self.registers: typing.DefaultDict[str, int] = defaultdict(int)
         self.program_counter = 0
-        self.last_played = None
+        self._last_played: int | None = None
 
-        self.resolve_arg_1 = {"snd", "rcv", "jgz"}
-        self.resolve_arg_2 = {"set", "add", "mul", "mod", "jgz"}
+    @property
+    def last_played(self) -> int:
+        if self._last_played is None:
+            raise Exception("No plays yet")
+        return self._last_played
 
-    def resolve(self, val_or_reg):
-        if isinstance(val_or_reg, int):
-            return val_or_reg
+    def resolve(self, val_or_reg: str) -> int:
+        try:
+            return int(val_or_reg)
+        except ValueError:
+            pass
         return self.registers[val_or_reg]
 
-    def handle_snd(self, val, _):
-        self.last_played = val
+    def handle_set(self, reg: str, val: str) -> bool:
+        self.registers[reg] = self.resolve(val)
         return True
 
-    def handle_set(self, reg, val):
-        self.registers[reg] = val
+    def handle_add(self, reg: str, val: str) -> bool:
+        self.registers[reg] += self.resolve(val)
         return True
 
-    def handle_add(self, reg, val):
-        self.registers[reg] += val
+    def handle_mul(self, reg: str, val: str) -> bool:
+        self.registers[reg] *= self.resolve(val)
         return True
 
-    def handle_mul(self, reg, val):
-        self.registers[reg] *= val
+    def handle_mod(self, reg: str, val: str) -> bool:
+        self.registers[reg] %= self.resolve(val)
         return True
 
-    def handle_mod(self, reg, val):
-        self.registers[reg] %= val
+    def handle_jgz(self, val: str, offset: str) -> bool:
+        if self.resolve(val) > 0:
+            self.program_counter += self.resolve(offset) - 1
         return True
 
-    def handle_rcv(self, val, _):
-        return val == 0
 
-    def handle_jgz(self, val, offset):
-        if val > 0:
-            self.program_counter += offset - 1
+class DuetPlayer(BaseDuetPlayer):
+    def handle_snd(self, val: str, _: typing.Any) -> bool:
+        self._last_played = self.resolve(val)
         return True
 
-    def get_instruction(self):
-        inst, *args = self.instructions[self.program_counter]
-        arg1 = args[0]
-        arg2 = None
-        if inst in self.resolve_arg_1:
-            arg1 = self.resolve(arg1)
-        if inst in self.resolve_arg_2:
-            arg2 = self.resolve(args[1])
-        return inst, arg1, arg2
+    def handle_rcv(self, val: str, _: typing.Any) -> bool:
+        return self.resolve(val) == 0
 
-    def play(self):
+    def play(self) -> None:
         while True:
-            inst, arg1, arg2 = self.get_instruction()
+            instruction = self.instructions[self.program_counter]
 
-            handler = getattr(self, "handle_" + inst)
-            if not handler(arg1, arg2):
+            handler = getattr(self, "handle_" + instruction.name)
+            if not handler(instruction.arg_1, instruction.arg_2):
                 break
 
             self.program_counter += 1
@@ -87,48 +85,50 @@ class DuetPlayer:
                 break
 
 
-deadlock_sentinel = object()
+DEADLOCK_SENTINEL = None
 
 
-class AsyncDuetPlayer(DuetPlayer):
-    def __init__(self, instructions, p, queue, other):
+class AsyncDuetPlayer(BaseDuetPlayer):
+    def __init__(
+        self, instructions: Data, p: int, queue: asyncio.Queue[int | None]
+    ) -> None:
         super().__init__(instructions)
-        self.resolve_arg_1 = {"snd", "jgz"}
         self.id = p
         self.registers["p"] = p
         self.queue = queue
-        self.other = other
         self.send_count = 0
         self.is_waiting = False
 
-    async def handle_snd(self, val, _):
-        self.other.queue.put_nowait(val)
+        self.other = self
+
+    async def handle_snd(self, val: str, _: typing.Any) -> bool:
+        self.other.queue.put_nowait(self.resolve(val))
         self.send_count += 1
         return True
 
-    async def handle_rcv(self, reg, _):
+    async def handle_rcv(self, reg: str, _: typing.Any) -> bool:
         if self.other.is_waiting and self.queue.empty() and self.other.queue.empty():
-            self.other.queue.put_nowait(deadlock_sentinel)
+            self.other.queue.put_nowait(DEADLOCK_SENTINEL)
             return False
 
         self.is_waiting = True
         val = await self.queue.get()
         self.is_waiting = False
 
-        if val is deadlock_sentinel:
+        if val is DEADLOCK_SENTINEL:
             return False
 
         self.registers[reg] = val
         return True
 
-    async def play(self):
+    async def play(self) -> None:
         while True:
-            inst, arg1, arg2 = self.get_instruction()
+            instruction = self.instructions[self.program_counter]
 
-            handler = getattr(self, "handle_" + inst)
-            res = handler(arg1, arg2)
+            handler = getattr(self, "handle_" + instruction.name)
+            res = handler(instruction.arg_1, instruction.arg_2)
 
-            if inst in {"rcv", "snd"}:
+            if instruction.name in {"rcv", "snd"}:
                 res = await res
 
             if not res:
@@ -143,23 +143,24 @@ class AsyncDuetPlayer(DuetPlayer):
                 break
 
 
-def part1(data):
+def part1(data: Data) -> int:
     dp = DuetPlayer(data)
     dp.play()
     return dp.last_played
 
 
-def part2(data):
+def part2(data: Data) -> int:
     return asyncio.run(_part2(data))
 
 
-async def _part2(data):
-    queue0 = asyncio.Queue()
-    queue1 = asyncio.Queue()
+async def _part2(data: Data) -> int:
+    queue0: asyncio.Queue[int | None] = asyncio.Queue()
+    queue1: asyncio.Queue[int | None] = asyncio.Queue()
 
-    dp0 = AsyncDuetPlayer(data, 0, queue0, None)
-    dp1 = AsyncDuetPlayer(data, 1, queue1, dp0)
+    dp0 = AsyncDuetPlayer(data, 0, queue0)
+    dp1 = AsyncDuetPlayer(data, 1, queue1)
     dp0.other = dp1
+    dp1.other = dp0
 
     await asyncio.gather(dp0.play(), dp1.play())
 

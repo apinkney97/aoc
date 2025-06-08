@@ -4,6 +4,8 @@ from typing import List
 
 from aoc import utils
 
+type Data = list[str]
+
 
 @dataclass
 class Vector:
@@ -11,7 +13,7 @@ class Vector:
     y: int
     z: int
 
-    def as_tuple(self):
+    def as_tuple(self) -> tuple[int, int, int]:
         return self.x, self.y, self.z
 
 
@@ -22,27 +24,28 @@ class Particle:
     a: Vector
 
 
-def make_particles(data):
+def make_particles(data: Data) -> list[Particle]:
     particle_re = re.compile(
         r"p=<(?P<px>-?\d+),(?P<py>-?\d+),(?P<pz>-?\d+)>, "
         r"v=<(?P<vx>-?\d+),(?P<vy>-?\d+),(?P<vz>-?\d+)>, "
         r"a=<(?P<ax>-?\d+),(?P<ay>-?\d+),(?P<az>-?\d+)>"
     )
 
-    def process(line: str):
+    def process(line: str) -> Particle:
         match = particle_re.fullmatch(line)
+        assert match is not None
         return Particle(
             p=Vector(int(match["px"]), int(match["py"]), int(match["pz"])),
             v=Vector(int(match["vx"]), int(match["vy"]), int(match["vz"])),
             a=Vector(int(match["ax"]), int(match["ay"]), int(match["az"])),
         )
 
-    data = utils.parse_data(data, fn=process)
+    particles = utils.parse_data(data, fn=process)
 
-    return data
+    return particles
 
 
-def tick(particle: Particle):
+def tick(particle: Particle) -> None:
     particle.v.x += particle.a.x
     particle.v.y += particle.a.y
     particle.v.z += particle.a.z
@@ -52,20 +55,20 @@ def tick(particle: Particle):
     particle.p.z += particle.v.z
 
 
-def part1(data) -> int:
+def part1(data: Data) -> int:
     # It will be one of the particles with the smallest acceleration
     # However it appears there are 3 of them
 
-    data = make_particles(data)
+    particles = make_particles(data)
     min_a = None
     min_accels = {}
 
-    for i, particle in enumerate(data):
+    for i, particle in enumerate(particles):
         mag = utils.magnitude(*particle.a.as_tuple())
         if mag == min_a:
             min_accels[i] = particle
         else:
-            old_min = min_a
+            old_min: int | None = min_a
             min_a = utils.safe_min(min_a, mag)
             if old_min != min_a:
                 min_accels = {i: particle}
@@ -106,6 +109,7 @@ def part1(data) -> int:
         if min_dist == dist:
             min_i = i
 
+    assert min_i is not None
     return min_i
 
 
@@ -125,7 +129,7 @@ def remove_collisions(particles: List[Particle]) -> List[Particle]:
     return list(seen.values())
 
 
-def part2(data) -> int:
+def part2(data: Data) -> int:
     particles = make_particles(data)
 
     ticks_since_collision = 0

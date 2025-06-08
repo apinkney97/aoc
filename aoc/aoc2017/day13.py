@@ -1,4 +1,7 @@
-def parse_data(data):
+type Data = dict[int, int]
+
+
+def parse_data(data: list[str]) -> Data:
     parsed_data = {}
     for line in data:
         layer, depth = line.split(": ")
@@ -6,14 +9,14 @@ def parse_data(data):
     return parsed_data
 
 
-def get_scanner_pos(depth, t):
+def get_scanner_pos(depth: int, t: int) -> int:
     t %= 2 * depth - 2
     if t < depth:
         return t
     return depth - (t % depth) - 2
 
 
-def part1(data):
+def part1(data: Data) -> int:
     layers = data
     severity = 0
     for layer in layers:
@@ -22,7 +25,7 @@ def part1(data):
     return severity
 
 
-def part2(data):
+def part2(data: Data) -> int:
     layers = data
     delay = 0
 

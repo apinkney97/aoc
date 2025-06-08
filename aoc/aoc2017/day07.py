@@ -1,7 +1,12 @@
+from __future__ import annotations
+
+import typing
 from collections import defaultdict, deque
 
+type Data = dict[str, tuple[int, list[str]]]
 
-def parse_data(data):
+
+def parse_data(data: list[str]) -> Data:
     parsed_data = {}
     for line in data:
         bits = line.split(" ")
@@ -13,8 +18,8 @@ def parse_data(data):
     return parsed_data
 
 
-def part1(data):
-    counts = defaultdict(int)
+def part1(data: Data) -> str:
+    counts: typing.DefaultDict[str, int] = defaultdict(int)
     for name, (_, children) in data.items():
         counts[name] += 1
         for child in children:
@@ -27,31 +32,31 @@ def part1(data):
 
 
 class Node:
-    def __init__(self, name, weight, parent):
-        self.kids = []
+    def __init__(self, name: str, weight: int, parent: Node | None):
+        self.kids: list[Node] = []
         self.name = name
         self.weight = weight
         self.parent = parent
 
-    def total_weight(self):
+    def total_weight(self) -> int:
         return self.weight + sum(k.total_weight() for k in self.kids)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return "Node({!r}, {!r})".format(self.name, self.weight)
 
-    def print_tree(self, indent=0):
+    def print_tree(self, indent: int = 0) -> None:
         print((" " * indent) + repr(self) + ("" if self.is_balanced() else "*****"))
         for kid in self.kids:
             kid.print_tree(indent + 1)
 
-    def is_balanced(self):
+    def is_balanced(self) -> bool:
         if len(self.kids) < 2:
             return True
         expected = self.kids[0].total_weight()
         return all(k.total_weight() == expected for k in self.kids)
 
 
-def part2(data):
+def part2(data: Data) -> int:
     root_name = part1(data)
     root = Node(name=root_name, weight=data[root_name][0], parent=None)
 
@@ -74,7 +79,7 @@ def part2(data):
         else:
             break
 
-    nodes = {}
+    nodes: dict[int, list[Node]] = {}
     for node in curr_node.kids:
         nodes.setdefault(node.total_weight(), []).append(node)
 
@@ -86,7 +91,7 @@ def part2(data):
         else:
             good = nodes_list[0]
 
-    if None in (good, bad):
+    if bad is None or good is None:
         raise Exception("Couldn't determine bad node")
 
     return bad.weight - bad.total_weight() + good.total_weight()

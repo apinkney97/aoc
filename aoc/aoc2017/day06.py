@@ -1,8 +1,11 @@
-def parse_data(data):
+type Data = list[int]
+
+
+def parse_data(data: list[str]) -> Data:
     return [int(i) for i in data[0].split("\t")]
 
 
-def part1(data):
+def part1(data: Data) -> int:
     banks = data[:]
     # banks = [0, 2, 7, 0]
     seen = {tuple(banks)}
@@ -22,7 +25,7 @@ def part1(data):
         seen.add(state)
 
 
-def part2(data):
+def part2(data: Data) -> int:
     banks = data[:]
     # banks = [0, 2, 7, 0]
     seen = {tuple(banks): 0}

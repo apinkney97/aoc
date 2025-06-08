@@ -1,11 +1,13 @@
 from math import ceil, sqrt
 
+type Data = int
 
-def parse_data(data):
+
+def parse_data(data: list[str]) -> Data:
     return int(data[0])
 
 
-def part1(data):
+def part1(data: Data) -> int:
     """
     17  16  15  14  13
     18   5   4   3  12
@@ -35,7 +37,7 @@ def part1(data):
     return d1 + d2
 
 
-def part2(data):
+def part2(data: Data) -> int:
     """
     Neighbours:
 

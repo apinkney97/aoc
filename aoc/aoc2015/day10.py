@@ -7,12 +7,12 @@ def parse_data(data: list[str]) -> Data:
 
 def look_and_say(string: str) -> str:
     count = 1
-    curr = None
+    curr = ""
     out = []
 
     for char in string:
         if curr != char:
-            if curr is not None:
+            if curr:
                 out.append((curr, count))
             curr = char
             count = 1
