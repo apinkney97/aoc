@@ -4,6 +4,8 @@ from typing import NamedTuple
 
 from aoc import utils
 
+type Data = list[Action]
+
 
 class Action(NamedTuple):
     action: str
@@ -15,7 +17,7 @@ class Action(NamedTuple):
     z2: int
 
 
-def parse_data(data):
+def parse_data(data: list[str]) -> Data:
     # on x=-34154..-5635,y=-24345..11649,z=71769..88510
     r = re.compile(
         r"""
@@ -26,23 +28,24 @@ def parse_data(data):
         """,
         re.VERBOSE,
     )
-    data = utils.parse_data(data, fn=r.fullmatch)
+    matches = [r.fullmatch(line) for line in data]
 
     return [
         Action(
-            action=d.group("action"),
-            x1=int(d.group("x1")),
-            x2=int(d.group("x2")),
-            y1=int(d.group("y1")),
-            y2=int(d.group("y2")),
-            z1=int(d.group("z1")),
-            z2=int(d.group("z2")),
+            action=m.group("action"),
+            x1=int(m.group("x1")),
+            x2=int(m.group("x2")),
+            y1=int(m.group("y1")),
+            y2=int(m.group("y2")),
+            z1=int(m.group("z1")),
+            z2=int(m.group("z2")),
         )
-        for d in data
+        for m in matches
+        if m is not None
     ]
 
 
-def part1(data) -> int:
+def part1(data: Data) -> int:
     g = utils.Grid3D(default_val=0)
     for action in data:
         if any(
@@ -56,11 +59,11 @@ def part1(data) -> int:
             range(action.y1, action.y2 + 1),
             range(action.z1, action.z2 + 1),
         ):
-            g[coord] = value
+            g[utils.Coord3D(*coord)] = value
     return len(g)
 
 
-def part2(data) -> int:
+def part2(data: Data) -> int:
     return -1
     # TODO: finish
     g = utils.Grid3D(default_val=0)

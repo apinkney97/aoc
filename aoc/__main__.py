@@ -2,9 +2,9 @@ import argparse
 import datetime
 import pkgutil
 from importlib import import_module
+from typing import NamedTuple
 from zoneinfo import ZoneInfo
 
-from typing import NamedTuple
 from rich.console import Console
 
 from aoc import config, utils

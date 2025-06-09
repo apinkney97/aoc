@@ -45,7 +45,7 @@ class PQ[T]:
         self._max_heap = max_heap
         self._allow_updates = allow_updates
 
-    def add_item(self, item: T, priority: int = 0) -> None:
+    def add_item(self, item: T, priority: float | int = 0) -> None:
         """Add a new item or update the priority of an existing item"""
         if item in self._entry_finder:
             # Prevent updates to existing entries

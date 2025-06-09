@@ -1,5 +1,7 @@
 from statistics import median
 
+type Data = list[str]
+
 MATCHES = {
     ")": "(",
     "]": "[",
@@ -15,7 +17,7 @@ BAD_SCORES = {
 }
 
 
-def part1(data) -> int:
+def part1(data: Data) -> int:
     score = 0
     for line in data:
         stack = []
@@ -39,7 +41,7 @@ GOOD_SCORES = {
 }
 
 
-def part2(data) -> int:
+def part2(data: Data) -> float:
     scores = []
     for line in data:
         score = 0

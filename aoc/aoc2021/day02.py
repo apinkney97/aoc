@@ -1,4 +1,7 @@
-def part1(data) -> int:
+type Data = list[str]
+
+
+def part1(data: Data) -> int:
     x = 0
     y = 0
     for line in data:
@@ -13,16 +16,16 @@ def part1(data) -> int:
     return x * y
 
 
-def part2(data) -> int:
+def part2(data: Data) -> int:
     aim = 0
     x = 0
     y = 0
     for line in data:
         match line.split():
             case ["forward", dist]:
-                dist = int(dist)
-                x += dist
-                y += aim * dist
+                dist_ = int(dist)
+                x += dist_
+                y += aim * dist_
             case ["down", dist]:
                 aim += int(dist)
             case ["up", dist]:

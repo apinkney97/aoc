@@ -1,33 +1,35 @@
 from __future__ import annotations
 
+import ast
 import math
 from itertools import permutations
+from typing import Generator
 
 from aoc import utils
 
 # utils.enable_logging()
 
+type RawSnail = tuple[int | RawSnail, int | RawSnail]
+type Data = list[RawSnail]
 
-def parse_data(data):
-    data = utils.parse_data(data, fn=eval)
 
-    return data
+def parse_data(data: list[str]) -> Data:
+    return [ast.literal_eval(line.replace("[", "(").replace("]", ")")) for line in data]
 
 
 class SnailPair:
     @classmethod
-    def from_list(cls, number_list, parent=None) -> SnailPair:
+    def from_list(
+        cls, number_list: RawSnail, parent: SnailPair | None = None
+    ) -> SnailPair:
         pair = cls(0, 0, parent)
 
         left, right = number_list
 
-        if isinstance(left, list):
-            left = cls.from_list(left, parent=pair)
-        if isinstance(right, list):
-            right = cls.from_list(right, parent=pair)
-
-        pair.left = left
-        pair.right = right
+        pair.left = left if isinstance(left, int) else cls.from_list(left, parent=pair)
+        pair.right = (
+            right if isinstance(right, int) else cls.from_list(right, parent=pair)
+        )
 
         return pair
 
@@ -42,21 +44,21 @@ class SnailPair:
         if isinstance(right, SnailPair):
             right.parent = self
 
-        self.parent = parent
-        self.left = left
-        self.right = right
+        self.parent: SnailPair | None = parent
+        self.left: SnailPair | int = left
+        self.right: SnailPair | int = right
 
-    def __add__(self, other):
+    def __add__(self, other: SnailPair) -> SnailPair:
         if not isinstance(other, SnailPair):
             return NotImplemented
         new = SnailPair(self, other)
         new.reduce()
         return new
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"[{self.left},{self.right}]"
 
-    def reduce(self):
+    def reduce(self) -> None:
         """
         To reduce a snailfish number, you must repeatedly do the first
         action in this list that applies to the snailfish number:
@@ -92,12 +94,14 @@ class SnailPair:
                     else:
                         # we know that curr must be a right child
                         if isinstance(curr.parent.left, int):
+                            assert isinstance(pair.left, int)
                             curr.parent.left += pair.left
                             utils.log(f"left add l {pair.left}")
                         else:
                             curr = curr.parent.left
                             while isinstance(curr.right, SnailPair):
                                 curr = curr.right
+                            assert isinstance(pair.left, int)
                             curr.right += pair.left
                             utils.log(f"left add r {pair.left}")
 
@@ -117,15 +121,18 @@ class SnailPair:
                     else:
                         # we know that curr must be a left child
                         if isinstance(curr.parent.right, int):
+                            assert isinstance(pair.right, int)
                             curr.parent.right += pair.right
                             utils.log(f"right add r {pair.right}")
                         else:
                             curr = curr.parent.right
                             while isinstance(curr.left, SnailPair):
                                 curr = curr.left
+                            assert isinstance(pair.right, int)
                             curr.left += pair.right
                             utils.log(f"right add l {pair.right}")
 
+                    assert pair.parent is not None
                     if pair is pair.parent.left:
                         pair.parent.left = 0
                     else:
@@ -162,19 +169,19 @@ class SnailPair:
                     break
 
     @property
-    def depth(self):
+    def depth(self) -> int:
         if self.parent is None:
             return 0
         return self.parent.depth + 1
 
-    def traverse_pairs(self):
+    def traverse_pairs(self) -> Generator[SnailPair, None, None]:
         if isinstance(self.left, SnailPair):
             yield from self.left.traverse_pairs()
         yield self
         if isinstance(self.right, SnailPair):
             yield from self.right.traverse_pairs()
 
-    def traverse(self):
+    def traverse(self) -> Generator[SnailPair | int, None, None]:
         if isinstance(self.left, SnailPair):
             yield from self.left.traverse()
         else:
@@ -186,13 +193,13 @@ class SnailPair:
             yield self.right
 
     @property
-    def magnitude(self):
+    def magnitude(self) -> int:
         left = self.left if isinstance(self.left, int) else self.left.magnitude
         right = self.right if isinstance(self.right, int) else self.right.magnitude
         return 3 * left + 2 * right
 
 
-def part1(data) -> int:
+def part1(data: Data) -> int:
     initial = SnailPair.from_list(data[0])
 
     for n in data[1:]:
@@ -202,7 +209,7 @@ def part1(data) -> int:
     return initial.magnitude
 
 
-def part2(data) -> int:
+def part2(data: Data) -> int:
     max_ = 0
     for a, b in permutations(data, 2):
         n1 = SnailPair.from_list(a)

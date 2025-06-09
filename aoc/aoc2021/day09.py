@@ -1,13 +1,15 @@
+from typing import Generator
+
 from aoc import utils
 
-
-def _parse_data(data):
-    data = utils.parse_data(data, fn=lambda line: [int(c) for c in line])
-
-    return data
+type Data = list[list[int]]
 
 
-def neighbours(x, y, w, h):
+def _parse_data(data: list[str]) -> Data:
+    return [[int(c) for c in line] for line in data]
+
+
+def neighbours(x: int, y: int, w: int, h: int) -> Generator[tuple[int, int]]:
     if x != 0:
         yield x - 1, y
     if x != w - 1:
@@ -18,7 +20,7 @@ def neighbours(x, y, w, h):
         yield x, y + 1
 
 
-def get_low_points(data):
+def get_low_points(data: Data) -> Generator[tuple[int, int]]:
     w = len(data)
     h = len(data[0])
 
@@ -31,24 +33,24 @@ def get_low_points(data):
                 yield x, y
 
 
-def part1(data) -> int:
-    data = _parse_data(data)
+def part1(data: list[str]) -> int:
+    parsed = _parse_data(data)
     score = 0
-    for x, y in get_low_points(data):
-        score += 1 + data[x][y]
+    for x, y in get_low_points(parsed):
+        score += 1 + parsed[x][y]
 
     return score
 
 
-def part2(data) -> int:
+def part2(data: list[str]) -> int:
     basins = []
     w = len(data)
     h = len(data[0])
 
     data_copy = _parse_data(data)
-    data = _parse_data(data)
+    parsed = _parse_data(data)
 
-    for x, y in get_low_points(data):
+    for x, y in get_low_points(parsed):
         stack = [(x, y)]
         size = 0
         seen = set()

@@ -1,9 +1,12 @@
-def parse_data(data):
+type Data = list[tuple[list[set[str]], list[set[str]]]]
+
+
+def parse_data(data: list[str]) -> Data:
     parsed_data = []
     for row in data:
-        sample_digits, output = row.split("|")
-        sample_digits = [set(d) for d in sample_digits.split()]
-        output = [set(d) for d in output.split()]
+        sample_digits_raw, output_raw = row.split("|")
+        sample_digits = [set(d) for d in sample_digits_raw.split()]
+        output = [set(d) for d in output_raw.split()]
         parsed_data.append((sample_digits, output))
 
     return parsed_data
@@ -23,7 +26,7 @@ DIGITS = {
 }
 
 
-def part1(data) -> int:
+def part1(data: Data) -> int:
     count = 0
     for _, output in data:
         for digit in output:
@@ -32,7 +35,7 @@ def part1(data) -> int:
     return count
 
 
-def part2(data) -> int:
+def part2(data: Data) -> int:
     total = 0
 
     for sample_digits, output in data:
@@ -44,7 +47,7 @@ def part2(data) -> int:
         zero_six_nine = []
         two_three_five = []
 
-        segments_to_digits = {}
+        segments_to_digits: dict[str, list[set[str]]] = {}
 
         for digit in sample_digits:
             for segment in digit:
@@ -89,15 +92,15 @@ def part2(data) -> int:
                 known_digits[0] = digit
 
         flattened_digits = {}
-        for digit, segments in known_digits.items():
-            flattened_digits["".join(sorted(segments))] = digit
+        for digit_num, segments in known_digits.items():
+            flattened_digits["".join(sorted(segments))] = digit_num
             pass
 
         n = 0
         for digit in output:
             n *= 10
-            digit = "".join(sorted(digit))
-            n += flattened_digits[digit]
+            digit_str = "".join(sorted(digit))
+            n += flattened_digits[digit_str]
 
         total += n
 

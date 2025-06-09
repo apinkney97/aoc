@@ -1,18 +1,20 @@
 from collections import Counter
 
+type Data = tuple[list[str], dict[tuple[str, str], str]]
 
-def parse_data(data):
+
+def parse_data(data: list[str]) -> Data:
     template = list(data[0])
 
     rules = {}
     for line in data[2:]:
         k, v = line.split(" -> ")
-        rules[tuple(k)] = v
+        rules[(k[0], k[1])] = v
 
     return template, rules
 
 
-def part1(data) -> int:
+def part1(data: Data) -> int:
     template, rules = data
 
     polymer = template
@@ -28,7 +30,7 @@ def part1(data) -> int:
     return max(c.values()) - min(c.values())
 
 
-def part2(data) -> int:
+def part2(data: Data) -> int:
     # every AB -> C construction:
     #   reduces AB pairs by 1
     #   increases AC and BC pairs by 1

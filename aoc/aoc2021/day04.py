@@ -1,7 +1,11 @@
-def parse_data(data):
+type Board = list[int]
+type Data = tuple[list[int], list[Board]]
+
+
+def parse_data(data: list[str]) -> Data:
     called_numbers = [int(i) for i in data[0].split(",")]
     boards = []
-    board = None
+    board: Board = []
 
     for line in data[1:]:
         if not line:
@@ -12,9 +16,9 @@ def parse_data(data):
     return called_numbers, boards
 
 
-def part1(data) -> int:
+def part1(data: Data) -> int:
     called_numbers, boards = data
-    nums_to_boards = {}
+    nums_to_boards: dict[int, list[Board]] = {}
     for board in boards:
         for num in board:
             nums_to_boards.setdefault(num, []).append(board)
@@ -30,7 +34,7 @@ def part1(data) -> int:
     return -999
 
 
-def is_winning(board: list[int], called: set[int]) -> bool:
+def is_winning(board: Board, called: set[int]) -> bool:
     for i in range(5):
         row = board[5 * i : 5 * i + 5]
         if all(num in called for num in row):
@@ -42,9 +46,9 @@ def is_winning(board: list[int], called: set[int]) -> bool:
     return False
 
 
-def part2(data) -> int:
+def part2(data: Data) -> int:
     called_numbers, boards = data
-    nums_to_boards = {}
+    nums_to_boards: dict[int, list[tuple[int, Board]]] = {}
     for i, board in enumerate(boards):
         for num in board:
             nums_to_boards.setdefault(num, []).append((i, board))

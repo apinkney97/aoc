@@ -4,8 +4,10 @@ import dataclasses
 from collections import defaultdict, deque
 from typing import Optional
 
+type Data = tuple[dict[str, list[str]], set[str]]
 
-def parse_data(data):
+
+def parse_data(data: list[str]) -> Data:
     adjacencies = defaultdict(list)
 
     small = set()
@@ -32,7 +34,7 @@ class Node:
     has_double: bool = False
 
 
-def is_ancestor(node: Node, name: str):
+def is_ancestor(node: Node | None, name: str) -> bool:
     while node is not None:
         if node.name == name:
             return True
@@ -40,10 +42,10 @@ def is_ancestor(node: Node, name: str):
     return False
 
 
-def part1(data) -> int:
+def part1(data: Data) -> int:
     start = Node("start", None)
 
-    queue = deque()
+    queue: deque[Node] = deque()
     queue.append(start)
 
     ends = []
@@ -63,10 +65,10 @@ def part1(data) -> int:
     return len(ends)
 
 
-def part2(data) -> int:
+def part2(data: Data) -> int:
     start = Node("start", None)
 
-    queue = deque()
+    queue: deque[Node] = deque()
     queue.append(start)
 
     ends = []

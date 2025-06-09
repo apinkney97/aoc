@@ -1,13 +1,15 @@
 from aoc import utils
 
+type Data = tuple[utils.Grid2D, list[tuple[str, int]]]
 
-def parse_data(data):
+
+def parse_data(data: list[str]) -> Data:
     grid = utils.Grid2D()
     folds = []
     for line in data:
         if "," in line:
             x, y = line.split(",")
-            grid[(int(x), int(y))] = 1
+            grid[utils.Coord2D(int(x), int(y))] = 1
         elif line.startswith("fold along "):
             fold_line = line.split()[-1]
             axis, value = fold_line.split("=")
@@ -22,17 +24,17 @@ def fold(grid: utils.Grid2D, axis: str, value: int) -> utils.Grid2D:
             x = 2 * value - x
         elif axis == "y" and y > value:
             y = 2 * value - y
-        new_grid[(x, y)] = 1
+        new_grid[utils.Coord2D(x, y)] = 1
     return new_grid
 
 
-def part1(data) -> int:
+def part1(data: Data) -> int:
     grid, folds = data
     grid = fold(grid, folds[0][0], folds[0][1])
     return len(grid)
 
 
-def part2(data) -> str:
+def part2(data: Data) -> str:
     grid, folds = data
     for axis, pos in folds:
         grid = fold(grid, axis, pos)

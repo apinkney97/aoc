@@ -1,7 +1,9 @@
 from collections import Counter
 
+type Data = list[str]
 
-def part1(data) -> int:
+
+def part1(data: Data) -> int:
     gamma = ""
     epsilon = ""
     for digits in zip(*data):
@@ -14,8 +16,8 @@ def part1(data) -> int:
     return int(gamma, 2) * int(epsilon, 2)
 
 
-def part2(data) -> int:
-    def most_common(data, pos):
+def part2(data: Data) -> int:
+    def most_common(data: Data, pos: int) -> str:
         c = Counter(d[pos] for d in data)
         return "1" if c["1"] >= c["0"] else "0"
 

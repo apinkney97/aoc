@@ -1,14 +1,14 @@
 from aoc import utils
 from aoc.utils import Coord2D
 
-
-def parse_data(data):
-    data = utils.parse_data(data, fn=lambda line: [int(i) for i in line])
-
-    return data
+type Data = list[list[int]]
 
 
-def part1(data) -> int:
+def parse_data(data: list[str]) -> Data:
+    return [[int(c) for c in line] for line in data]
+
+
+def part1(data: Data) -> int:
     edges: dict[Coord2D, dict[Coord2D, int]] = {}
 
     size = len(data)
@@ -31,7 +31,7 @@ def dijkstra(
     distances: dict[Coord2D, float | int] = {node: float("inf") for node in unvisited}
     distances[start] = 0
 
-    pq = utils.PQ()
+    pq: utils.PQ[Coord2D] = utils.PQ()
     for coord, distance in distances.items():
         pq.add_item(coord, distance)
 
@@ -45,14 +45,14 @@ def dijkstra(
                 pq.add_item(neighbour, new_cost)
         unvisited.remove(current)
 
-    return distances[end]
+    return int(distances[end])
 
 
 def mod_1(n: int) -> int:
     return 1 + ((n - 1) % 9)
 
 
-def part2(data) -> int:
+def part2(data: Data) -> int:
     new_data = []
     for row in data:
         new_row = row[:]

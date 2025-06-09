@@ -1,16 +1,22 @@
 import re
 
-from aoc import utils
+type Data = tuple[int, int, int, int]
 
 
-def parse_data(data):
-    r = re.compile(r"target area: x=(-?\d+)\.\.(-?\d+), y=(-?\d+)\.\.(-?\d+)")
-    data = utils.parse_data(data, fn=r.fullmatch)
-    match = data[0]
-    return tuple(int(match.group(n + 1)) for n in range(4))
+def parse_data(data: list[str]) -> Data:
+    match = re.fullmatch(
+        r"target area: x=(-?\d+)\.\.(-?\d+), y=(-?\d+)\.\.(-?\d+)", data[0]
+    )
+    assert match is not None
+    return (
+        int(match.group(1)),
+        int(match.group(2)),
+        int(match.group(3)),
+        int(match.group(4)),
+    )
 
 
-def part1(data) -> int:
+def part1(data: Data) -> int:
     x1, x2, y1, y2 = data
 
     # dy downwards will equal dy upwards at the same y value
@@ -30,7 +36,7 @@ def part1(data) -> int:
     return global_max_y
 
 
-def part2(data) -> int:
+def part2(data: Data) -> int:
     x1, x2, y1, y2 = data
 
     initial_velocities = set()

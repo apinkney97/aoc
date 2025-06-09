@@ -4,6 +4,8 @@ from abc import ABC, abstractmethod
 
 from aoc import utils
 
+type Data = list[int]
+
 # this is a bit nasty, but avoids needing to add leading zeros
 HEX_TO_BYTES = {
     "0": (0, 0, 0, 0),
@@ -25,8 +27,8 @@ HEX_TO_BYTES = {
 }
 
 
-def parse_data(data):
-    bits = []
+def parse_data(data: list[str]) -> Data:
+    bits: list[int] = []
 
     for c in data[0]:
         bits.extend(HEX_TO_BYTES[c.upper()])
@@ -71,17 +73,17 @@ class Packet(ABC):
         return Operator.deserialize(bits)
 
     @staticmethod
-    def parse_version(bits: list[int]):
+    def parse_version(bits: list[int]) -> int:
         return bits_to_int(bits[0:3])
 
     @staticmethod
-    def parse_type(bits: list[int]):
+    def parse_type(bits: list[int]) -> int:
         return bits_to_int(bits[3:6])
 
-    def bit_length_out(self):
+    def bit_length_out(self) -> int:
         return len(self.serialize())
 
-    def bits_consumed(self):
+    def bits_consumed(self) -> int:
         return self._bits_consumed
 
 
@@ -209,13 +211,15 @@ class Operator(Packet):
                 return 1 if sps[0].value < sps[1].value else 0
             case 7:
                 return 1 if sps[0].value == sps[1].value else 0
+            case _:
+                raise Exception(f"Unhandled type {self._type}")
 
 
-def part1(data) -> int:
+def part1(data: Data) -> int:
     packet = Packet.deserialize(data)
     return packet.version_sum()
 
 
-def part2(data) -> int:
+def part2(data: Data) -> int:
     packet = Packet.deserialize(data)
     return packet.value
