@@ -1,10 +1,13 @@
-def parse_data(data):
+type Data = tuple[list[int], list[int]]
+
+
+def parse_data(data: list[str]) -> Data:
     times = [int(n) for n in data[0].split(":")[1].split()]
     distances = [int(n) for n in data[1].split(":")[1].split()]
     return times, distances
 
 
-def part1(data) -> int:
+def part1(data: Data) -> int:
     result = 1
 
     for time, record in zip(*data):
@@ -19,10 +22,10 @@ def part1(data) -> int:
     return result
 
 
-def part2(data) -> int:
-    time, record = data
-    time = int("".join(str(t) for t in time))
-    record = int("".join(str(r) for r in record))
+def part2(data: Data) -> int:
+    times, records = data
+    time = int("".join(str(t) for t in times))
+    record = int("".join(str(r) for r in records))
     print(time, record)
 
     first_win = last_win = None

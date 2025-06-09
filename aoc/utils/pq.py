@@ -17,14 +17,15 @@ class PQUpdates(enum.Enum):
 class _Removed:
     pass
 
+type Priority = int | float
 
 @dataclass
 class _Entry[T]:
-    priority: int
+    priority: Priority
     count: int
     item: T | _Removed
 
-    def _sort_key(self) -> tuple[int, int]:
+    def _sort_key(self) -> tuple[Priority, int]:
         return self.priority, self.count
 
     def __lt__(self, other: _Entry[T]) -> bool:
@@ -45,7 +46,7 @@ class PQ[T]:
         self._max_heap = max_heap
         self._allow_updates = allow_updates
 
-    def add_item(self, item: T, priority: float | int = 0) -> None:
+    def add_item(self, item: T, priority: Priority = 0) -> None:
         """Add a new item or update the priority of an existing item"""
         if item in self._entry_finder:
             # Prevent updates to existing entries

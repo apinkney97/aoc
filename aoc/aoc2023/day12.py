@@ -1,5 +1,5 @@
 import re
-from collections.abc import Iterable
+from collections.abc import Generator, Collection
 from functools import cache
 
 Line = tuple[str, tuple[int, ...]]
@@ -17,7 +17,7 @@ def parse_data(data: list[str]) -> list[Line]:
 
 
 @cache
-def split_spaces(slop: int, num_gaps: int) -> Iterable[list[int]]:
+def split_spaces(slop: int, num_gaps: int) -> Generator[list[int], None, None]:
     # Return all the ways that N spaces can be split across M gaps
     if num_gaps == 1:
         yield [slop]
@@ -28,7 +28,7 @@ def split_spaces(slop: int, num_gaps: int) -> Iterable[list[int]]:
             yield [pos, *subproblem]
 
 
-def to_string(arrangement, runs):
+def to_string(arrangement: list[int], runs: Collection[int])->str:
     if len(arrangement) - len(runs) != 1:
         raise ValueError("Arrangement must be exactly 1 longer than runs")
     parts = []

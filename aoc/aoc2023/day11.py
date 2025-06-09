@@ -1,5 +1,7 @@
 import itertools
 
+type Data = list[str]
+
 
 def get_sizes(universe: list[str], expand: int) -> tuple[list[int], list[int]]:
     row_sizes = []
@@ -33,7 +35,7 @@ def get_gx_coords(universe: list[str]) -> list[tuple[int, int]]:
     return galaxies
 
 
-def part1(data, expand=2) -> int:
+def part1(data: Data, expand: int = 2) -> int:
     result = 0
 
     row_sizes, col_sizes = get_sizes(data, expand=expand)
@@ -49,5 +51,5 @@ def part1(data, expand=2) -> int:
     return result
 
 
-def part2(data) -> int:
+def part2(data: Data) -> int:
     return part1(data, expand=1000000)

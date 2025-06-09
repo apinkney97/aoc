@@ -5,6 +5,8 @@ from enum import Enum
 
 from aoc import utils
 
+type Data = tuple[list[int], dict[MapType, list[MapRange]]]
+
 
 class MapType(str, Enum):
     seed_to_soil = "seed-to-soil"
@@ -21,7 +23,7 @@ class Range:
     start: int  # inclusive
     end: int  # exclusive
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         if self.start >= self.end:
             raise ValueError(
                 f"Start must be strictly less than end ({self.start = }, {self.end = })"
@@ -35,12 +37,12 @@ class Range:
         this_in_other = other.start <= self.start < other.end
         return other_in_this or this_in_other
 
-    def __eq__(self, other):
+    def __eq__(self, other: Range) -> bool:  # type: ignore [override]
         if type(self) is not type(other):
             return NotImplemented
         return self.start == other.start and self.end == other.end
 
-    def __lt__(self, other):
+    def __lt__(self, other: Range) -> bool:
         if type(self) is not type(other):
             return NotImplemented
         return self.start < other.start
@@ -48,7 +50,9 @@ class Range:
     def __hash__(self) -> int:
         return hash(f"{self.start}:{self.end}")
 
-    def split(self, other, offset=0) -> tuple[Range | None, Range | None, Range | None]:
+    def split(
+        self, other: Range, offset: int = 0
+    ) -> tuple[Range | None, Range | None, Range | None]:
         # Split this range into sections that entirely overlap or don't overlap
         start_before = self.start < other.start
         start_after = self.start >= other.end
@@ -92,13 +96,13 @@ class MapRange(Range):
         return value + self.offset
 
     @property
-    def offset(self):
+    def offset(self) -> int:
         return self.dst - self.start
 
 
-def parse_data(data):
+def parse_data(data: list[str]) -> Data:
     seeds = []
-    maps = {}
+    maps: dict[MapType, list[MapRange]] = {}
     mode = None
     for line in data:
         if line.startswith("seeds:"):
@@ -111,6 +115,7 @@ def parse_data(data):
         else:
             dst, src, size = [int(n) for n in line.split()]
             map_range = MapRange(start=src, dst=dst, end=src + size)
+            assert mode is not None
             maps.setdefault(mode, []).append(map_range)
 
     for map_list in maps.values():
@@ -119,7 +124,7 @@ def parse_data(data):
     return seeds, maps
 
 
-def part1(data) -> int:
+def part1(data: Data) -> int:
     locations = []
     # utils.enable_logging()
     seeds, maps = data
@@ -133,7 +138,7 @@ def part1(data) -> int:
     return min(locations)
 
 
-def part2(data) -> int:
+def part2(data: Data) -> int:
     # Seeds are now ranges
     seeds, maps = data
 

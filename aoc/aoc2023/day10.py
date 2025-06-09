@@ -1,5 +1,7 @@
 import enum
 
+type Data = tuple[tuple[int, int], list[str]]
+
 DISPLAY_MAP = {
     "-": "━",
     "|": "┃",
@@ -50,7 +52,7 @@ def display(lines: list[str]) -> str:
     return "\n".join(out)
 
 
-def parse_data(data):
+def parse_data(data: list[str]) -> Data:
     start_x = -1
     start_y = -1
     for start_y, line in enumerate(data):
@@ -105,13 +107,13 @@ def get_loop_tiles(
     return start_tile, tiles_in_loop
 
 
-def part1(data) -> int:
+def part1(data: Data) -> int:
     start_pos, lines = data
 
     return round(len(get_loop_tiles(start_pos, lines)[1]) / 2)
 
 
-def part2(data) -> int:
+def part2(data: Data) -> int:
     start_pos, lines = data
 
     start_tile, loop_tiles = get_loop_tiles(start_pos, lines)

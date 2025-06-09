@@ -9,7 +9,10 @@ class Draw(NamedTuple):
     blue: int
 
 
-def parse_data(data):
+type Data = list[tuple[int, list[Draw]]]
+
+
+def parse_data(data: list[str]) -> Data:
     # Game 1: 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green
     games = []
     for line in data:
@@ -21,8 +24,8 @@ def parse_data(data):
             balls = draw.split(", ")
             r = g = b = 0
             for ball in balls:
-                num, colour = ball.split()
-                num = int(num)
+                num_raw, colour = ball.split()
+                num = int(num_raw)
                 if colour == "red":
                     r += num
                 elif colour == "green":
@@ -37,7 +40,7 @@ def parse_data(data):
     return games
 
 
-def part1(data) -> int:
+def part1(data: Data) -> int:
     limit_r = 12
     limit_g = 13
     limit_b = 14
@@ -51,7 +54,7 @@ def part1(data) -> int:
     return total
 
 
-def part2(data) -> int:
+def part2(data: Data) -> int:
     total = 0
     for game_id, draws in data:
         min_r = min_g = min_b = 0

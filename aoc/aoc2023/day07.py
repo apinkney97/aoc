@@ -1,7 +1,9 @@
+from __future__ import annotations
+
 import enum
 from collections import Counter
 
-from aoc import utils
+type Data = list[tuple[str, int]]
 
 VALUES = {
     "2": 2,
@@ -34,7 +36,7 @@ class HandType(int, enum.Enum):
 
 
 class Hand:
-    def __init__(self, cards, wild=False):
+    def __init__(self, cards: str, wild: bool = False) -> None:
         if wild:
             values = WILD_VALUES
         else:
@@ -71,30 +73,33 @@ class Hand:
         else:
             self.type = HandType.high_card
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"Card({str(self.values)} [{self.type}]"
 
-    def __eq__(self, other):
+    def __eq__(self, other: Hand) -> bool:  # type: ignore [override]
         return self.values == other.values
 
-    def __lt__(self, other):
+    def __lt__(self, other: Hand) -> bool:
         if self.type != other.type:
             return self.type < other.type
         return self.values < other.values
 
 
-def parse_data(data):
-    data = utils.parse_data(data, fn=lambda s: s.split())
+def parse_data(data: list[str]) -> Data:
+    parsed = []
+    for line in data:
+        parts = line.split()
+        parsed.append((parts[0], int(parts[1])))
 
-    return data
+    return parsed
 
 
-def part1(data) -> int:
+def part1(data: Data) -> int:
     result = 0
 
     hands = []
     for cards, bid in data:
-        hands.append((Hand(cards), int(bid)))
+        hands.append((Hand(cards), bid))
 
     for rank, (hand, bid) in enumerate(sorted(hands), start=1):
         result += rank * bid
@@ -102,12 +107,12 @@ def part1(data) -> int:
     return result
 
 
-def part2(data) -> int:
+def part2(data: Data) -> int:
     result = 0
 
     hands = []
     for cards, bid in data:
-        hands.append((Hand(cards, wild=True), int(bid)))
+        hands.append((Hand(cards, wild=True), bid))
 
     for rank, (hand, bid) in enumerate(sorted(hands), start=1):
         result += rank * bid

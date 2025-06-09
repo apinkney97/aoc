@@ -4,6 +4,8 @@ from typing import NamedTuple
 
 from aoc.utils.coords import Coord2D, Vector2D
 
+type Data = list[str]
+
 
 # [0, 0] is top left
 class Direction(Enum):
@@ -22,7 +24,7 @@ class Beam(NamedTuple):
     dir: Direction
 
 
-def parse_data(data):
+def parse_data(data: list[str]) -> Data:
     return data
 
 
@@ -97,11 +99,11 @@ def reflect(grid: list[str], start_coord: Coord2D, start_direction: Direction) -
     return len(visited)
 
 
-def part1(data) -> int:
+def part1(data: Data) -> int:
     return reflect(data, Coord2D(-1, 0), Direction.right)
 
 
-def part2(data) -> int:
+def part2(data: Data) -> int:
     result = 0
     width = len(data[0])
     height = len(data)

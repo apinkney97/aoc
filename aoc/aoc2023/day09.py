@@ -2,11 +2,11 @@ import itertools
 
 from aoc import utils
 
+type Data = list[list[int]]
 
-def parse_data(data):
-    data = utils.parse_data(data, fn=lambda line: [int(i) for i in line.split()])
 
-    return data
+def parse_data(data: list[str]) -> Data:
+    return [[int(i) for i in line.split()] for line in data]
 
 
 def reduce(line: list[int]) -> list[int]:
@@ -23,9 +23,9 @@ def extrapolate(line: list[int]) -> int:
     return sum(line[-1] for line in next_lines)
 
 
-def part1(data) -> int:
+def part1(data: Data) -> int:
     return sum(extrapolate(line) for line in data)
 
 
-def part2(data) -> int:
+def part2(data: Data) -> int:
     return sum(extrapolate(line[::-1]) for line in data)

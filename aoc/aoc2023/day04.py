@@ -1,4 +1,7 @@
-def parse_data(data):
+type Data = list[int]
+
+
+def parse_data(data: list[str]) -> Data:
     card_wins = []
     for line in data:
         numbers = line.split(":")[1]
@@ -8,7 +11,7 @@ def parse_data(data):
     return card_wins
 
 
-def part1(data) -> int:
+def part1(data: Data) -> int:
     total = 0
     for wins in data:
         if wins:
@@ -16,7 +19,7 @@ def part1(data) -> int:
     return total
 
 
-def part2(data) -> int:
+def part2(data: Data) -> int:
     counts = [1] * len(data)
     for card_id, wins in enumerate(data):
         num_copies = counts[card_id]

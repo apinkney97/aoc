@@ -1,4 +1,7 @@
-def parse_data(data):
+type Data = list[str]
+
+
+def parse_data(data: list[str]) -> Data:
     return data[0].split(",")
 
 
@@ -13,14 +16,14 @@ def hash_(s: str) -> int:
     return current
 
 
-def part1(data) -> int:
+def part1(data: Data) -> int:
     result = 0
     for item in data:
         result += hash_(item)
     return result
 
 
-def part2(data) -> int:
+def part2(data: Data) -> int:
     boxes: list[list[tuple[str, int]]] = [[] for _ in range(256)]
 
     for item in data:
@@ -36,8 +39,8 @@ def part2(data) -> int:
 
         else:
             # Add a lens of this focal length with this label
-            label_to_add, focal_length = item.split("=")
-            focal_length = int(focal_length)
+            label_to_add, focal_length_str = item.split("=")
+            focal_length = int(focal_length_str)
             hash_value = hash_(label_to_add)
             box = boxes[hash_value]
             for i, (label, _) in enumerate(box):

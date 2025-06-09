@@ -1,7 +1,9 @@
 import re
 
+type Data = list[str]
 
-def part1(data) -> int:
+
+def part1(data: Data) -> int:
     total = 0
     for line in data:
         line = re.sub(r"\D", "", line)
@@ -9,7 +11,7 @@ def part1(data) -> int:
     return total
 
 
-def part2(data) -> int:
+def part2(data: Data) -> int:
     numbers = {
         "one": "1",
         "two": "2",

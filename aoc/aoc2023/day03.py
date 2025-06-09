@@ -2,16 +2,18 @@ import re
 
 from aoc import utils
 
+type Data = list[str]
+
 
 class Number:
     def __init__(self, value: int) -> None:
         self.value = value
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"{self.value}"
 
 
-def part1(data) -> int:
+def part1(data: Data) -> int:
     numbers_by_coord = {}
     symbols_by_coord = {}
     for y, line in enumerate(data):
@@ -35,7 +37,7 @@ def part1(data) -> int:
     return sum(pn.value for pn in part_numbers)
 
 
-def part2(data) -> int:
+def part2(data: Data) -> int:
     numbers_by_coord = {}
     gears_coords = []
     for y, line in enumerate(data):
