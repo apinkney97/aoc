@@ -3,19 +3,22 @@ import re
 from aoc import config, utils
 from aoc.utils import Coord2D
 
+type Data = list[tuple[Coord2D, Coord2D]]
 
-def parse_data(data):
+
+def parse_data(data: list[str]) -> Data:
     matcher = re.compile(
         r"Sensor at x=(-?\d+), y=(-?\d+): closest beacon is at x=(-?\d+), y=(-?\d+)"
     )
-    data = utils.parse_data(data, fn=matcher.fullmatch)
+    matches = [matcher.fullmatch(line) for line in data]
 
     return [
         (
-            utils.Coord2D(int(d.group(1)), int(d.group(2))),
-            utils.Coord2D(int(d.group(3)), int(d.group(4))),
+            utils.Coord2D(int(m.group(1)), int(m.group(2))),
+            utils.Coord2D(int(m.group(3)), int(m.group(4))),
         )
-        for d in data
+        for m in matches
+        if m is not None
     ]
 
 

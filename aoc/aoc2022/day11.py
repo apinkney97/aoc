@@ -1,4 +1,5 @@
 import typing
+from collections.abc import Callable
 
 from aoc import config, utils
 
@@ -9,7 +10,15 @@ class Throw(typing.NamedTuple):
 
 
 class Monkey:
-    def __init__(self, number, items, op, divisor, if_true, if_false):
+    def __init__(
+        self,
+        number: int,
+        items: list[int],
+        op: Callable[[int], int],
+        divisor: int,
+        if_true: int,
+        if_false: int,
+    ) -> None:
         self.number = number
         self.items = items
         self.op = op
@@ -19,7 +28,7 @@ class Monkey:
 
         self.inspect_count = 0
 
-    def take_turn(self, modulo=0) -> list[Throw]:
+    def take_turn(self, modulo: int = 0) -> list[Throw]:
         throws = []
         for item in self.items:
             item = self.op(item)
@@ -36,7 +45,7 @@ class Monkey:
         return throws
 
 
-def get_monkeys(example=False):
+def get_monkeys(example: bool = False) -> list[Monkey]:
     if example:
         return [
             Monkey(
@@ -141,7 +150,7 @@ def get_monkeys(example=False):
         ]
 
 
-def part1(data) -> int:
+def part1(data: typing.Any) -> int:
     monkeys = get_monkeys(config.EXAMPLE)
     for _ in range(20):
         for monkey in monkeys:
@@ -152,7 +161,7 @@ def part1(data) -> int:
     return utils.product(sorted([m.inspect_count for m in monkeys])[-2:])
 
 
-def part2(data) -> int:
+def part2(data: typing.Any) -> int:
     monkeys = get_monkeys(config.EXAMPLE)
     modulo = utils.product([m.divisor for m in monkeys])
     for _ in range(10000):

@@ -16,8 +16,10 @@ ROCK = 1
 PAPER = 2
 SCISSORS = 3
 
+type Data = list[str]
 
-def part1(data) -> int:
+
+def part1(data: Data) -> int:
     scores = {
         "A X": ROCK + DRAW,
         "B X": ROCK + LOSE,
@@ -32,7 +34,7 @@ def part1(data) -> int:
     return sum(scores[row] for row in data)
 
 
-def part2(data) -> int:
+def part2(data: Data) -> int:
     # X: lose
     # Y: draw
     # Z: win

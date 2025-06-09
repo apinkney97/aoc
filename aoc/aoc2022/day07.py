@@ -6,43 +6,46 @@ class Command(typing.NamedTuple):
     output: list[str]
 
 
+type Data = list[Command]
+
+
 class BaseFile:
-    def __init__(self, name):
+    def __init__(self, name: str) -> None:
         self.name = name
 
     @property
-    def size(self):
+    def size(self) -> int:
         raise NotImplementedError
 
 
 class File(BaseFile):
-    def __init__(self, name, size):
+    def __init__(self, name: str, size: int):
         super().__init__(name)
         self._size = size
 
     @property
-    def size(self):
+    def size(self) -> int:
         return self._size
 
 
 class Dir(BaseFile):
-    def __init__(self, name, contents: list[BaseFile] = None):
+    def __init__(self, name: str, contents: list[BaseFile] | None = None):
         super().__init__(name)
         self._contents = contents or []
 
     @property
-    def size(self):
+    def size(self) -> int:
         return sum(child.size for child in self._contents)
 
-    def append(self, file: BaseFile):
+    def append(self, file: BaseFile) -> None:
         self._contents.append(file)
 
 
-def parse_data(data):
+def parse_data(data: list[str]) -> Data:
     commands = []
 
     command = ""
-    output = []
+    output: list[str] = []
 
     for line in data:
         if line.startswith("$ "):
@@ -59,13 +62,15 @@ def parse_data(data):
     return commands
 
 
-def to_path(cwd):
+def to_path(cwd: list[str]) -> str:
     return "/" + "/".join(cwd)
 
 
-def get_dirs(commands) -> dict[str, Dir]:
-    cwd = []
+def get_dirs(commands: list[Command]) -> dict[str, Dir]:
+    cwd: list[str] = []
     dirs: dict[str, Dir] = {"/": Dir("/")}
+
+    file: BaseFile
 
     for command in commands:
         if command.command == "cd /":
@@ -87,7 +92,7 @@ def get_dirs(commands) -> dict[str, Dir]:
     return dirs
 
 
-def part1(data) -> int:
+def part1(data: Data) -> int:
     dirs = get_dirs(data)
 
     total = 0
@@ -99,7 +104,7 @@ def part1(data) -> int:
     return total
 
 
-def part2(data) -> int:
+def part2(data: Data) -> int:
     available = 70000000
     need = 30000000
 

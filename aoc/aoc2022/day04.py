@@ -1,7 +1,9 @@
 import re
 
+type Data = list[tuple[set[int], set[int]]]
 
-def parse_data(data):
+
+def parse_data(data: list[str]) -> Data:
     parsed = []
     for line in data:
         parts = [int(part) for part in re.split("[,-]", line)]
@@ -12,7 +14,7 @@ def parse_data(data):
     return parsed
 
 
-def part1(data) -> int:
+def part1(data: Data) -> int:
     total = 0
     for elf1, elf2 in data:
         if elf1.issubset(elf2) or elf1.issuperset(elf2):
@@ -20,7 +22,7 @@ def part1(data) -> int:
     return total
 
 
-def part2(data) -> int:
+def part2(data: Data) -> int:
     total = 0
     for elf1, elf2 in data:
         if elf1 & elf2:

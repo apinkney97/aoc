@@ -2,6 +2,8 @@ import string
 
 import more_itertools
 
+type Data = list[str]
+
 SCORES = {
     letter: score
     for score, letter in enumerate(
@@ -10,7 +12,7 @@ SCORES = {
 }
 
 
-def part1(data) -> int:
+def part1(data: Data) -> int:
     total = 0
     for line in data:
         half = len(line) // 2
@@ -19,7 +21,7 @@ def part1(data) -> int:
     return total
 
 
-def part2(data) -> int:
+def part2(data: Data) -> int:
     total = 0
     for elves in more_itertools.chunked(data, 3):
         common = (set(elves[0]) & set(elves[1]) & set(elves[2])).pop()

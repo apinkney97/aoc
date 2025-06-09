@@ -1,11 +1,15 @@
+from __future__ import annotations
+
 import ast
 import functools
 import itertools
 
 import more_itertools
 
+type Data = list[int | Data]
 
-def parse_data(data):
+
+def parse_data(data: list[str]) -> Data:
     parsed = []
     for line in data:
         if line:
@@ -13,7 +17,7 @@ def parse_data(data):
     return parsed
 
 
-def cmp(left, right):
+def cmp(left: int | Data, right: int | Data) -> int:
     # both ints
     if isinstance(left, int) and isinstance(right, int):
         if left < right:
@@ -41,7 +45,7 @@ def cmp(left, right):
     return 0
 
 
-def part1(data) -> int:
+def part1(data: Data) -> int:
     total = 0
     for i, (left, right) in enumerate(more_itertools.chunked(data, 2), start=1):
         result = cmp(left, right)
@@ -50,9 +54,9 @@ def part1(data) -> int:
     return total
 
 
-def part2(data) -> int:
-    marker_1 = [[2]]
-    marker_2 = [[6]]
+def part2(data: Data) -> int:
+    marker_1: Data = [[2]]
+    marker_2: Data = [[6]]
 
     ordered = sorted(data + [marker_1, marker_2], key=functools.cmp_to_key(cmp))
 

@@ -1,6 +1,9 @@
-def parse_data(data):
+type Data = list[list[int]]
+
+
+def parse_data(data: list[str]) -> Data:
     parsed = []
-    current = []
+    current: list[int] = []
     for row in data:
         if not row:
             parsed.append(current)
@@ -12,9 +15,9 @@ def parse_data(data):
     return parsed
 
 
-def part1(data) -> int:
+def part1(data: Data) -> int:
     return max(sum(elf) for elf in data)
 
 
-def part2(data) -> int:
+def part2(data: Data) -> int:
     return sum(sorted(sum(elf) for elf in data)[-3:])

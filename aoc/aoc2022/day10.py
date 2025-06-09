@@ -1,7 +1,9 @@
 from aoc.utils import BACKGROUND_BLOCK, FOREGROUND_BLOCK
 
+type Data = list[str]
 
-def parse_data(data):
+
+def parse_data(data: list[str]) -> Data:
     instructions = []
     for line in data:
         if line != "noop":
@@ -11,7 +13,7 @@ def parse_data(data):
     return instructions
 
 
-def part1(data) -> int:
+def part1(data: Data) -> int:
     x = 1
 
     total = 0
@@ -25,7 +27,7 @@ def part1(data) -> int:
     return total
 
 
-def part2(data) -> int:
+def part2(data: Data) -> int:
     sprite_x = 1
 
     for cycle, instruction in enumerate(data, start=0):

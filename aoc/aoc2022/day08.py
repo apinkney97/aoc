@@ -1,4 +1,7 @@
-def part1(data) -> int:
+type Data = list[str]
+
+
+def part1(data: Data) -> int:
     h = len(data)
     w = len(data[0])
     visible = 2 * w + 2 * h - 4
@@ -42,7 +45,7 @@ def part1(data) -> int:
     return visible
 
 
-def part2(data) -> int:
+def part2(data: Data) -> int:
     h = len(data)
     w = len(data[0])
 

@@ -1,9 +1,12 @@
-def parse_data(data):
+type Data = list[tuple[str, int]]
+
+
+def parse_data(data: list[str]) -> Data:
     parsed = []
 
     for line in data:
-        direction, distance = line.split()
-        distance = int(distance)
+        direction, distance_raw = line.split()
+        distance = int(distance_raw)
         parsed.append((direction, distance))
 
     return parsed
@@ -37,7 +40,7 @@ def get_tail_pos(head: tuple[int, int], tail: tuple[int, int]) -> tuple[int, int
     return tx, ty
 
 
-def part1(data, rope_len=2) -> int:
+def part1(data: Data, rope_len: int = 2) -> int:
     rope = [(0, 0)] * rope_len
 
     visited = set()
@@ -57,5 +60,5 @@ def part1(data, rope_len=2) -> int:
     return len(visited)
 
 
-def part2(data):
+def part2(data: Data) -> int:
     return part1(data, rope_len=10)

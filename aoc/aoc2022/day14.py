@@ -2,8 +2,11 @@ import itertools
 
 from aoc.utils import Coord2D
 
+type Data = list[str]
+type Grid = dict[Coord2D, str]
 
-def build_grid(data):
+
+def build_grid(data: Data) -> Grid:
     grid = {}
 
     for line in data:
@@ -15,11 +18,11 @@ def build_grid(data):
 
         for c1, c2 in itertools.pairwise(parsed_line):
             if c1.x == c2.x:
-                for y in range(*sorted([c1.y, c2.y])):
-                    grid[Coord2D(c1.x, y)] = "#"
+                for yy in range(*sorted([c1.y, c2.y])):
+                    grid[Coord2D(c1.x, yy)] = "#"
             elif c1.y == c2.y:
-                for x in range(*sorted([c1.x, c2.x])):
-                    grid[Coord2D(x, c1.y)] = "#"
+                for xx in range(*sorted([c1.x, c2.x])):
+                    grid[Coord2D(xx, c1.y)] = "#"
 
             grid[c1] = "#"
             grid[c2] = "#"
@@ -27,7 +30,7 @@ def build_grid(data):
     return grid
 
 
-def drop(grid, limit):
+def drop(grid: Grid, limit: int) -> bool:
     curr = Coord2D(500, 0)
 
     while True:
@@ -49,7 +52,7 @@ def drop(grid, limit):
             return True
 
 
-def drop2(grid, limit):
+def drop2(grid: Grid, limit: int) -> bool:
     curr = Coord2D(500, 0)
 
     while True:
@@ -72,7 +75,7 @@ def drop2(grid, limit):
             return True
 
 
-def part1(data) -> int:
+def part1(data: Data) -> int:
     grid = build_grid(data)
 
     max_y = max(c.y for c in grid)
@@ -87,7 +90,7 @@ def part1(data) -> int:
     return count
 
 
-def part2(data) -> int:
+def part2(data: Data) -> int:
     grid = build_grid(data)
 
     max_y = max(c.y for c in grid)

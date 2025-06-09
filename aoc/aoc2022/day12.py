@@ -1,10 +1,17 @@
 import collections
+from typing import Generator
 
 from aoc import utils
 from aoc.utils import Coord2D
 
+type Data = list[str]
 
-def get_neighbours(nodes, coord, reverse=False):
+type Nodes = dict[utils.Coord2D, str]
+
+
+def get_neighbours(
+    nodes: Nodes, coord: Coord2D, reverse: bool = False
+) -> Generator[Coord2D, None, None]:
     height = ord(nodes[coord])
     for neighbour in utils.neighbours(coord, include_diagonals=False):
         if neighbour not in nodes:
@@ -21,8 +28,8 @@ def get_neighbours(nodes, coord, reverse=False):
                 yield neighbour
 
 
-def part1(data, reverse=False) -> int:
-    nodes: dict[utils.Coord2D, int] = {}
+def part1(data: Data, reverse: bool = False) -> int:
+    nodes: Nodes = {}
 
     start = None
     end = None
@@ -42,11 +49,13 @@ def part1(data, reverse=False) -> int:
     if reverse:
         start = end
 
+    assert start is not None
+
     visited = set()
 
-    parents = {start: None}
+    parents: dict[Coord2D, Coord2D | None] = {start: None}
 
-    queue = collections.deque([start])
+    queue: collections.deque[Coord2D] = collections.deque([start])
     while queue:
         current = queue.popleft()
         if current in visited:
@@ -62,14 +71,14 @@ def part1(data, reverse=False) -> int:
             parents[neighbour] = current
 
     path = []
-    current = end
+    curr = end
 
-    while current is not None:
-        current = parents[current]
-        path.append(current)
+    while curr is not None:
+        curr = parents[curr]
+        path.append(curr)
 
     return len(path) - 1
 
 
-def part2(data) -> int:
+def part2(data: Data) -> int:
     return part1(data, reverse=True)

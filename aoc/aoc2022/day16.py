@@ -2,20 +2,23 @@ import collections
 import itertools
 import re
 
-from aoc import utils
+type Valve = tuple[int, list[str]]
+type Distances = dict[tuple[str, str], int]
+type Data = tuple[dict[str, Valve], Distances]
 
 
-def parse_data(data):
+def parse_data(data: list[str]) -> Data:
     matcher = re.compile(
         r"Valve (..) has flow rate=(\d+); tunnels? leads? to valves? (.*)$"
     )
-    data = utils.parse_data(data, fn=matcher.fullmatch)
+    matches = [matcher.fullmatch(line) for line in data]
 
     valves = {}
-    for row in data:
-        name = row.group(1)
-        flow = int(row.group(2))
-        neighbours = row.group(3).split(", ")
+    for match in matches:
+        assert match is not None
+        name = match.group(1)
+        flow = int(match.group(2))
+        neighbours = match.group(3).split(", ")
 
         valves[name] = (flow, neighbours)
 
@@ -23,14 +26,14 @@ def parse_data(data):
     return valves, dists
 
 
-def get_distances(valves):
+def get_distances(valves: dict[str, Valve]) -> Distances:
     valves_of_interest = sorted(
         [name for name, valve in valves.items() if valve[0] > 0 or name == "AA"]
     )
-    dists = {}
+    dists: Distances = {}
     for start, end in itertools.combinations(valves_of_interest, 2):
         visited = set()
-        parents = {start: None}
+        parents: dict[str, str | None] = {start: None}
         queue = collections.deque([start])
         while queue:
             current = queue.popleft()
@@ -45,22 +48,24 @@ def get_distances(valves):
                 queue.append(neighbour)
                 parents[neighbour] = current
 
-        current = end
+        curr: str | None = end
         dist = 0
-        while current is not None:
-            current = parents[current]
+        while curr is not None:
+            curr = parents[curr]
             dist += 1
         dists[start, end] = dist
 
     return dists
 
 
-def search(valves, dists, time_limit: int) -> dict[frozenset[str], int]:
-    best_by_valves = {}
+def search(
+    valves: dict[str, Valve], dists: Distances, time_limit: int
+) -> dict[frozenset[str], int]:
+    best_by_valves: dict[frozenset[str], int] = {}
 
     useful_valves = [name for name, valve in valves.items() if valve[0] > 0]
 
-    def step(time: int, flow: int, pos: str, open_valves: frozenset[str]):
+    def step(time: int, flow: int, pos: str, open_valves: frozenset[str]) -> None:
         # Open the valve we are on (except AA)
         if time > 0 and pos != "AA":
             flow += time * valves[pos][0]
@@ -77,7 +82,8 @@ def search(valves, dists, time_limit: int) -> dict[frozenset[str], int]:
         for neighbour in useful_valves:
             if neighbour in open_valves:
                 continue
-            dist = dists[tuple(sorted([pos, neighbour]))]
+            key = (pos, neighbour) if pos <= neighbour else (neighbour, pos)
+            dist = dists[key]
             step(
                 time=time - dist,
                 flow=flow,
@@ -90,12 +96,12 @@ def search(valves, dists, time_limit: int) -> dict[frozenset[str], int]:
     return best_by_valves
 
 
-def part1(data) -> int:
+def part1(data: Data) -> int:
     valves, dists = data
     return max(search(valves, dists, 30).values())
 
 
-def part2(data) -> int:
+def part2(data: Data) -> int:
     valves, dists = data
     # Find all "best" paths by open valves
     best_by_valves = search(valves, dists, 26)

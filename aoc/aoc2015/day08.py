@@ -1,3 +1,5 @@
+import ast
+
 type Data = list[str]
 
 
@@ -6,7 +8,7 @@ def part1(data: Data) -> int:
     sum_mem = 0
     for line in data:
         sum_code += len(line)
-        sum_mem += len(eval(line))
+        sum_mem += len(ast.literal_eval(line))
 
     return sum_code - sum_mem
 
