@@ -1,5 +1,5 @@
 import re
-from collections.abc import Generator, Collection
+from collections.abc import Collection, Generator
 from functools import cache
 
 Line = tuple[str, tuple[int, ...]]
@@ -28,7 +28,7 @@ def split_spaces(slop: int, num_gaps: int) -> Generator[list[int], None, None]:
             yield [pos, *subproblem]
 
 
-def to_string(arrangement: list[int], runs: Collection[int])->str:
+def to_string(arrangement: list[int], runs: Collection[int]) -> str:
     if len(arrangement) - len(runs) != 1:
         raise ValueError("Arrangement must be exactly 1 longer than runs")
     parts = []

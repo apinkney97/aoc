@@ -1,7 +1,5 @@
 import itertools
 
-from aoc import utils
-
 type Data = list[list[int]]
 
 

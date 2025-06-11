@@ -17,7 +17,9 @@ class PQUpdates(enum.Enum):
 class _Removed:
     pass
 
+
 type Priority = int | float
+
 
 @dataclass
 class _Entry[T]:
