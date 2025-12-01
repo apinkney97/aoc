@@ -17,6 +17,16 @@ fmt:
 test:
 	uv run pytest
 
+.PHONY: coverage
+## Run tests with coverage
+coverage:
+	uv run pytest -xvv --cov aoc/utils --cov-report term-missing:skip-covered --cov-report html:cov_html
+
+.PHONY: view-cov
+## View coverage report in browser
+view-cov:
+	xdg-open cov_html/index.html
+
 .PHONY: typecheck
 ## Run typechecker
 typecheck:
