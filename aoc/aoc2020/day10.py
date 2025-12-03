@@ -1,10 +1,8 @@
-from aoc import utils
-
 type Data = list[int]
 
 
 def parse_data(data: list[str]) -> Data:
-    data_parsed = utils.parse_data(data, fn=int) + [0]
+    data_parsed = [int(line) for line in data] + [0]
     data_parsed.sort()
     data_parsed.append(data_parsed[-1] + 3)
     return data_parsed

@@ -2,8 +2,6 @@ import re
 from itertools import permutations
 from typing import Generator
 
-from aoc import utils
-
 type Data = dict[str, dict[str, int]]
 
 
@@ -11,7 +9,7 @@ def parse_data(data: list[str]) -> Data:
     re_ = re.compile(
         r"(?P<name1>\w+) would (?P<action>\w+) (?P<n>\d+) happiness units by sitting next to (?P<name2>\w+)\."
     )
-    parsed = utils.parse_data(data, fn=lambda s: re_.fullmatch(s))
+    parsed = [re_.fullmatch(line) for line in data]
     scores: Data = {}
     for row in parsed:
         assert row is not None

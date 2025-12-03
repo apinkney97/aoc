@@ -40,7 +40,7 @@ def make_particles(data: Data) -> list[Particle]:
             a=Vector(int(match["ax"]), int(match["ay"]), int(match["az"])),
         )
 
-    particles = utils.parse_data(data, fn=process)
+    particles = [process(line) for line in data]
 
     return particles
 

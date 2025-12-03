@@ -9,7 +9,7 @@ from aoc.utils.coords import (
     neighbours,
 )
 from aoc.utils.grid import Grid2D, Grid3D
-from aoc.utils.input import load_data_raw, parse_data, split_by_blank_lines
+from aoc.utils.input import load_data_raw, split_by_blank_lines
 from aoc.utils.output import (
     BACKGROUND_BLOCK,
     FOREGROUND_BLOCK,
@@ -42,7 +42,6 @@ __all__ = [
     "Grid2D",
     "Grid3D",
     "load_data_raw",
-    "parse_data",
     "split_by_blank_lines",
     "BACKGROUND_BLOCK",
     "FOREGROUND_BLOCK",

@@ -1,7 +1,3 @@
-import typing
-import warnings
-from typing import Callable
-
 import platformdirs
 import requests
 from rich import print
@@ -48,34 +44,6 @@ def load_data_raw(year: int, day: int, example: bool) -> list[str]:
         data = [line.rstrip("\n") for line in f]
 
     return data
-
-
-@typing.overload
-def parse_data[T](
-    data: list[str], *, fn: Callable[[str], T], strip: bool = True
-) -> list[T]: ...
-
-
-@typing.overload
-def parse_data(
-    data: list[str], *, fn: None = None, strip: bool = True
-) -> list[str]: ...
-
-
-@warnings.deprecated("No longer required; apply fn directly instead")
-def parse_data[T](
-    data: list[str],
-    *,
-    fn: Callable[[str], T] | None = None,
-    strip: bool = True,
-) -> list[T] | list[str]:
-    if strip:
-        data = [line.strip() for line in data]
-
-    if fn is None:
-        return data
-
-    return [fn(line) for line in data]
 
 
 def split_by_blank_lines(data: list[str]) -> list[list[str]]:

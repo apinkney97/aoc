@@ -7,7 +7,7 @@ type Data = list[list[int]]
 
 def parse_data(data: list[str]) -> Data:
     RE = re.compile(r"^(\d+)x(\d+)x(\d+)$")
-    matches = utils.parse_data(data, fn=RE.match)
+    matches = [RE.match(line) for line in data]
     dimensions = [
         sorted(int(item[i]) for i in (1, 2, 3)) for item in matches if item is not None
     ]

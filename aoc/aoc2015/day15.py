@@ -21,7 +21,7 @@ def parse_data(data: list[str]) -> Data:
     ingredient_re = re.compile(
         r".*: \w+ (-?\d+), \w+ (-?\d+), \w+ (-?\d+), \w+ (-?\d+), \w+ (-?\d+)"
     )
-    matches = utils.parse_data(data, fn=ingredient_re.fullmatch)
+    matches = [ingredient_re.fullmatch(line) for line in data]
 
     return [
         Ingredient(

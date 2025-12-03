@@ -1,7 +1,5 @@
 import enum
 
-from aoc import utils
-
 type Data = list[tuple[Instruction, int]]
 
 
@@ -16,7 +14,7 @@ def parse_data(data: list[str]) -> Data:
         inst, _, val = data_line.partition(" ")
         return Instruction(inst), int(val)
 
-    return utils.parse_data(data, fn=_parse)
+    return [_parse(line) for line in data]
 
 
 def run(data: Data) -> tuple[bool, int, int]:

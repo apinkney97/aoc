@@ -1,10 +1,8 @@
-from aoc import utils
-
 type Data = list[tuple[str, int]]
 
 
 def parse_data(data: list[str]) -> Data:
-    return utils.parse_data(data, fn=lambda x: (x[0], int(x[1:])))
+    return [(line[0], int(line[1:])) for line in data]
 
 
 # North is +Y

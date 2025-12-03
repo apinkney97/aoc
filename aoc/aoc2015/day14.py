@@ -1,20 +1,18 @@
 import re
 import typing
 
-from aoc import utils
-
 type Data = list[re.Match[str]]
 
 
 def parse_data(data: list[str]) -> Data:
-    match = re.compile(
+    matcher = re.compile(
         r"(?P<name>\w+) can fly (?P<speed>\d+) km/s for (?P<time>\d+) "
         r"seconds, but then must rest for (?P<rest>\d+) seconds\."
     )
 
     return [
         match
-        for match in utils.parse_data(data, fn=lambda s: match.fullmatch(s))
+        for match in [matcher.fullmatch(line) for line in data]
         if match is not None
     ]
 

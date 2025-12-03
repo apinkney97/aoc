@@ -4,13 +4,11 @@ import re
 from itertools import combinations
 from typing import Generator
 
-from aoc import utils
-
 type Data = list[str | tuple[int, int]]
 
 
 def parse_data(data: list[str]) -> Data:
-    parts = utils.parse_data(data, fn=lambda s: s.partition(" = "))
+    parts = [s.partition(" = ") for s in data]
     mem_re = re.compile(r"mem\[(?P<loc>\d+)]")
 
     parsed_data: Data = []

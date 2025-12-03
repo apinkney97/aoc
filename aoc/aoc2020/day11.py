@@ -1,12 +1,10 @@
 from typing import Callable, Generator
 
-from aoc import utils
-
 type Data = list[list[str]]
 
 
 def parse_data(data: list[str]) -> Data:
-    return utils.parse_data(data, fn=list)
+    return [list(line) for line in data]
 
 
 def get_adjacent_neighbours(

@@ -12,7 +12,7 @@ type Data = list[re.Match[str]]
 
 def parse_data(data: list[str]) -> Data:
     return [
-        match for match in utils.parse_data(data, fn=RE.fullmatch) if match is not None
+        match for match in [RE.fullmatch(line) for line in data] if match is not None
     ]
 
 

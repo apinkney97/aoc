@@ -1,8 +1,6 @@
 import re
 from typing import Dict, List, NamedTuple
 
-from aoc import utils
-
 INSTRUCTIONS_RE = re.compile(r"(?P<input>.*) -> (?P<output>[a-z]+)")
 
 type Data = dict[str, Gate]
@@ -14,7 +12,7 @@ class Gate(NamedTuple):
 
 
 def parse_data(data: list[str]) -> Data:
-    matches = utils.parse_data(data, fn=INSTRUCTIONS_RE.fullmatch)
+    matches = [INSTRUCTIONS_RE.fullmatch(line) for line in data]
 
     parsed_data: Data = {}
     for match in matches:

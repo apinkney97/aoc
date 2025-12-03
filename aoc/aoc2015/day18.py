@@ -4,9 +4,7 @@ type Data = utils.Grid2D
 
 
 def parse_data(data: list[str]) -> Data:
-    parsed = utils.parse_data(
-        data, fn=lambda line: [0 if c == "." else 1 for c in line]
-    )
+    parsed = [[0 if c == "." else 1 for c in line] for line in data]
 
     bounds = (0, len(parsed[0]), 0, len(parsed))
     grid = utils.Grid2D(display_map={0: ".", 1: "#"}, bounds=bounds)

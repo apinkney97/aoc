@@ -1,8 +1,6 @@
 import re
 import typing
 
-from aoc import utils
-
 INSTRUCTION_RE = re.compile(
     r"(?P<action>.*) (?P<x1>\d+),(?P<y1>\d+) through (?P<x2>\d+),(?P<y2>\d+)"
 )
@@ -13,7 +11,7 @@ type Data = list[re.Match[str]]
 def parse_data(data: list[str]) -> Data:
     return [
         match
-        for match in utils.parse_data(data, fn=lambda s: INSTRUCTION_RE.fullmatch(s))
+        for match in [INSTRUCTION_RE.fullmatch(line) for line in data]
         if match is not None
     ]
 
