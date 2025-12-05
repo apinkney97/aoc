@@ -54,7 +54,7 @@ def parse_data(data: list[str]) -> Data:
         if not line:
             break
         start, end = line.split("-")
-        ranges.append(Range(int(start), int(end)))
+        ranges.append(Range(int(start), int(end) + 1))
 
     for line in it:
         ids.append(int(line))
