@@ -38,7 +38,7 @@ def part1(data: Data) -> int:
 
 
 def part2(data: Data) -> str:
-    graph = Graph()
+    graph: Graph[str] = Graph()
     for a, b in data:
         graph.add_edge(a, b)
 

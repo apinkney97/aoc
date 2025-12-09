@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import itertools
-import typing
+import math
 from typing import Generator, Iterable, Iterator, NamedTuple, overload
 
 from aoc.utils.utils import manhattan
@@ -36,6 +36,46 @@ class Vector2D(NamedTuple):
     @property
     def manhattan(self) -> int:
         return manhattan(self.x, self.y)
+
+    @property
+    def magnitude(self) -> float:
+        return math.sqrt(self.x**2 + self.y**2)
+
+
+class Vector3D(NamedTuple):
+    """
+    A relative offset between two points on a 3d grid
+    """
+
+    x: int
+    y: int
+    z: int
+
+    def __add__(self, other: Vector3D) -> Vector3D:  # type: ignore[override]
+        if isinstance(other, Vector3D):
+            return Vector3D(self.x + other.x, self.y + other.y, self.z + other.z)
+        return NotImplemented
+
+    def __sub__(self, other: Vector3D) -> Vector3D:
+        if isinstance(other, Vector3D):
+            return Vector3D(self.x - other.x, self.y - other.y, self.z - other.z)
+        return NotImplemented
+
+    def __mul__(self, other: int) -> Vector3D:  # type: ignore[override]
+        if isinstance(other, int):
+            return Vector3D(self.x * other, self.y * other, self.z * other)
+        return NotImplemented
+
+    def __neg__(self) -> Vector3D:
+        return self * -1
+
+    @property
+    def manhattan(self) -> int:
+        return manhattan(self.x, self.y, self.z)
+
+    @property
+    def magnitude(self) -> float:
+        return math.sqrt(self.x**2 + self.y**2 + self.z**2)
 
 
 class Coord2D(NamedTuple):
@@ -88,6 +128,48 @@ class Coord3D(NamedTuple):
     y: int
     z: int
 
+    def __add__(self, other: Vector3D) -> Coord3D:  # type: ignore[override]
+        if isinstance(other, Vector3D):
+            return Coord3D(self.x + other.x, self.y + other.y, self.z + other.z)
+        return NotImplemented
+
+    @overload
+    def __sub__(self, other: Coord3D) -> Vector3D: ...
+
+    @overload
+    def __sub__(self, other: Vector3D) -> Coord3D: ...
+
+    def __sub__(self, other: Vector3D | Coord3D) -> Coord3D | Vector3D:
+        if isinstance(other, Vector3D):
+            return Coord3D(self.x - other.x, self.y - other.y, self.z - other.z)
+        if isinstance(other, Coord3D):
+            return Vector3D(self.x - other.x, self.y - other.y, self.z - other.z)
+
+        return NotImplemented
+
+    def __mod__(self, other: Vector3D | Coord3D) -> Coord3D:
+        return Coord3D(self.x % other.x, self.y % other.y, self.z % other.z)
+
+    def neighbours(self, include_diagonals: bool = False) -> Generator[Coord3D]:
+        for neighbour in neighbours(
+            (self.x, self.y, self.z), include_diagonals=include_diagonals
+        ):
+            yield Coord3D(neighbour[0], neighbour[1], neighbour[2])
+
+    def in_bounds(self, corner_1: Coord3D, corner_2: Coord3D) -> bool:
+        max_x = max(corner_1.x, corner_2.y)
+        min_x = min(corner_1.x, corner_2.y)
+        max_y = max(corner_1.y, corner_2.y)
+        min_y = min(corner_1.y, corner_2.y)
+        max_z = max(corner_1.z, corner_2.z)
+        min_z = min(corner_1.z, corner_2.z)
+
+        return (
+            (min_x <= self.x <= max_x)
+            and (min_y <= self.y <= max_y)
+            and (min_z <= self.z <= max_z)
+        )
+
 
 class Coord4D(NamedTuple):
     x: int
@@ -122,9 +204,9 @@ def manhattan_limit(centre: Coord2D, radius: int) -> Iterator[Coord2D]:
         yield from manhattan_border(centre, r)
 
 
-@typing.overload
+@overload
 def neighbours(coord: Coord2D, *, include_diagonals: bool) -> Generator[Coord2D]: ...
-@typing.overload
+@overload
 def neighbours(
     coord: Iterable[int], *, include_diagonals: bool
 ) -> Generator[tuple[int, ...]]: ...
